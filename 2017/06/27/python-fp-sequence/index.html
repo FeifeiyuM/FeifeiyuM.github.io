@@ -1,0 +1,778 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="fp,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="Sequences GroupingContainer SequencesContainer sequences can hold items of different types     list, tuple, collections.depue">
+<meta name="keywords" content="fp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fluent Python Study Notes - Built-in Sequences">
+<meta property="og:url" content="https://feifeiyum.github.io/2017/06/27/python-fp-sequence/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="Sequences GroupingContainer SequencesContainer sequences can hold items of different types     list, tuple, collections.depue">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.297Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fluent Python Study Notes - Built-in Sequences">
+<meta name="twitter:description" content="Sequences GroupingContainer SequencesContainer sequences can hold items of different types     list, tuple, collections.depue">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Fluent Python Study Notes - Built-in Sequences | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Fluent Python Study Notes - Built-in Sequences
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-06-27T19:37:22+08:00" content="2017-06-27">
+              2017-06-27
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/06/27/python-fp-sequence/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/06/27/python-fp-sequence/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Sequences-Grouping"><a href="#Sequences-Grouping" class="headerlink" title="Sequences Grouping"></a>Sequences Grouping</h1><h2 id="Container-Sequences"><a href="#Container-Sequences" class="headerlink" title="Container Sequences"></a>Container Sequences</h2><p>Container sequences can hold items of different types   </p>
+<blockquote>
+<p>list, tuple, collections.depue</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="Flat-Sequences"><a href="#Flat-Sequences" class="headerlink" title="Flat Sequences"></a>Flat Sequences</h2><p>Flat Sequences hold items of one type  </p>
+<blockquote>
+<p>str, bytes, bytearray, memoryview, array.array  </p>
+</blockquote>
+<ul>
+<li>Container sequences hold references to the objects they contain, which may be of any type   </li>
+<li>Flat sequences physically store the value of each item, which has its own memory space</li>
+<li>Flat sequences are more compact than Container sequences, while it’s limited to holding primitive values like string, number, bytes</li>
+</ul>
+<h2 id="Mutable-Sequences"><a href="#Mutable-Sequences" class="headerlink" title="Mutable Sequences"></a>Mutable Sequences</h2><blockquote>
+<p>list, bytearray, array.array, collection.deque, memoryview</p>
+</blockquote>
+<h2 id="Immutable-Sequences"><a href="#Immutable-Sequences" class="headerlink" title="Immutable Sequences"></a>Immutable Sequences</h2><blockquote>
+<p>tuple, str, bytes </p>
+</blockquote>
+<h1 id="List"><a href="#List" class="headerlink" title="List"></a>List</h1><h2 id="Listcomps"><a href="#Listcomps" class="headerlink" title="Listcomps"></a>Listcomps</h2><p>listcomps are short of list comprehesions, which is used to build sequences quickly. listcomps can enhance the readability of the python code.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># example one</span></span><br><span class="line">symbols = <span class="string">'feifeiyu'</span></span><br><span class="line">codes1 = []</span><br><span class="line"><span class="keyword">for</span> sy <span class="keyword">in</span> symbols:</span><br><span class="line">    codes1.append(ord(sy))</span><br><span class="line">print(codes)</span><br><span class="line"></span><br><span class="line"><span class="comment"># examples two</span></span><br><span class="line">codes2 = [ord(sy) <span class="keyword">for</span> sy <span class="keyword">in</span> symbols]</span><br><span class="line">print(codes)</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>example two is more readable than example one, because its intent is explicit and its length is short</p>
+</blockquote>
+<p>listcomps do everything the map and filter functions do, without using the python lambda.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># use listcomps</span></span><br><span class="line">symbols = <span class="string">'feifeiyu'</span></span><br><span class="line">ascii = [ord(sy) <span class="keyword">for</span> sy <span class="keyword">in</span> symbols <span class="keyword">if</span> ord(sy) &gt; <span class="number">105</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment"># use map filter</span></span><br><span class="line">ascii2 = list(filter(<span class="keyword">lambda</span> sy: sy &gt; <span class="number">105</span>, map(ord, symbols)))</span><br></pre></td></tr></table></figure></p>
+<h2 id="Cartesian-Products"><a href="#Cartesian-Products" class="headerlink" title="Cartesian Products"></a>Cartesian Products</h2><p>Listcomps can generate lists from the cartesian products of two or more iterables. The items that make up the catesian products are tuples made from items from every input iterable.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># use listcomps</span></span><br><span class="line">colors = [<span class="string">'black'</span>, <span class="string">'white'</span>]</span><br><span class="line">sizes = [<span class="string">'S'</span>, <span class="string">'M'</span>, <span class="string">'L'</span>]</span><br><span class="line">tshirts1 = [(color, size) <span class="keyword">for</span> color <span class="keyword">in</span> colors </span><br><span class="line">                          <span class="keyword">for</span> size <span class="keyword">in</span> sizes]</span><br><span class="line"></span><br><span class="line"><span class="comment"># use for loop</span></span><br><span class="line">tshirts2 = []</span><br><span class="line"><span class="keyword">for</span> color <span class="keyword">in</span> colors:</span><br><span class="line">    <span class="keyword">for</span> size <span class="keyword">in</span> sizes:</span><br><span class="line">        tshirts2.append((color, size))</span><br></pre></td></tr></table></figure>
+<h2 id="Generator-Expressions"><a href="#Generator-Expressions" class="headerlink" title="Generator Expressions"></a>Generator Expressions</h2><p>Tuples, arrays and other types of sequences can be initialized by listcomp, but a genexp (short of generator expressions) saves the memory because it yields items one by one using the iterator protocol instead of building a whole list just to feed another constructor.<br>Genexp use the same syntax as listcomps, but are closed in parenthesis rather than brackets.  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># example one </span></span><br><span class="line">symbols = <span class="string">'feifeiyu'</span></span><br><span class="line">tuple(ord(sy) <span class="keyword">for</span> sy <span class="keyword">in</span> symbols)</span><br><span class="line"></span><br><span class="line"><span class="comment"># example two</span></span><br><span class="line"><span class="keyword">import</span> array</span><br><span class="line">array.array(<span class="string">'I'</span>, (ord(sy) <span class="keyword">for</span> sy <span class="keyword">in</span> symbols))</span><br><span class="line"></span><br><span class="line"><span class="comment"># notes print generator object in console</span></span><br><span class="line">(ord(sy) <span class="keyword">for</span> sy <span class="keyword">in</span> symbols)</span><br><span class="line">&lt;generator object &lt;genexpr&gt; at xxxxx&gt;</span><br><span class="line"></span><br><span class="line"><span class="comment"># example three, use a genexp with a cartesian product</span></span><br><span class="line">colors = [<span class="string">'black'</span>, <span class="string">'whith'</span>]</span><br><span class="line">sizes = [<span class="string">'S'</span>, <span class="string">'M'</span>, <span class="string">'L'</span>]</span><br><span class="line"><span class="keyword">for</span> tshirt <span class="keyword">in</span> (<span class="string">'%s %s'</span> % (color, size) <span class="keyword">for</span> color <span class="keyword">in</span> colors</span><br><span class="line">                                       <span class="keyword">for</span> size <span class="keyword">in</span> sizes)</span><br><span class="line">    print(tshirt)</span><br></pre></td></tr></table></figure>
+<h1 id="Tuples"><a href="#Tuples" class="headerlink" title="Tuples"></a>Tuples</h1><p>Tuples are not just immutable lists, they do double-duty: they can be used ad immutable lists and also as records with field namses.<br>Tuples as records: each item in the tuple holds the data for one field and the postion of the item gives its meaning.<br>If a tuple is just used ad immutable list, the quantity and the order of the items may or may not be important. But when using a tuple as collection of fields, the number of items is often fixed and their order is always vital.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples of tuples used as records</span></span><br><span class="line"><span class="comment"># example one use tuple to express latitude and longitude</span></span><br><span class="line">lax_coordinates = (<span class="number">33.9425</span>, <span class="number">-118.4080</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># use tuple to exporess data about Tokyo</span></span><br><span class="line">city, year, pop, chg, area = (<span class="string">'Tokyo'</span>, <span class="number">2003</span>, <span class="number">32450</span>, <span class="number">0.66</span>, <span class="number">8014</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># contacts</span></span><br><span class="line">contacts = [(<span class="string">'James'</span>, <span class="string">'13212342345'</span>), (<span class="string">'green'</span>, <span class="string">'13512342345'</span>)]</span><br></pre></td></tr></table></figure>
+<h2 id="Tuple-Unpacking"><a href="#Tuple-Unpacking" class="headerlink" title="Tuple Unpacking"></a>Tuple Unpacking</h2><p>Parallel assignment is the most visible form of tuple unpacking, that is assigning items from an iterable to a tuple of variables.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lax_coord = (<span class="number">33.9425</span>, <span class="number">-118.4080</span>)</span><br><span class="line">latitude, longitude = lax_coord <span class="comment">#tuple unpacking</span></span><br></pre></td></tr></table></figure></p>
+<p>Swapping the values of variables without using temporary variable is also a application of tuple unpacking<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># swap values of two variable</span></span><br><span class="line">b, a = a, b</span><br></pre></td></tr></table></figure></p>
+<p>Another example of tuple unpacking is prefixing an argument with a star when calling a function<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">divmod(<span class="number">20</span>, <span class="number">8</span>) <span class="comment"># output (2, 4)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use tuple</span></span><br><span class="line">t = (<span class="number">20</span>, <span class="number">8</span>)</span><br><span class="line">divmod(*t) <span class="comment"># use * to upack tuple, output (2, 4)</span></span><br><span class="line"><span class="comment"># output upacking</span></span><br><span class="line">quo, rem = divmod(*t) <span class="comment"># quo = 2, rem = 4</span></span><br><span class="line"><span class="comment"># Defining function parameters with *args to grab arbitrary excess arguments is a classic python feature</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># dummy variable _</span></span><br><span class="line">_, rem = divmod(*t)</span><br><span class="line"><span class="comment"># rem = 4, </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># nested tuple unpacking</span></span><br><span class="line">name, cc, pop, (lat, long) = (<span class="string">'Tokyo'</span>, <span class="string">'JP'</span>, <span class="number">36.933</span>, (<span class="number">35.689</span>, <span class="number">139.691</span>))</span><br><span class="line"><span class="comment"># restult: name = 'Tokyo', cc = 'JP', pop = 36.933, lat = 35.689, long 139.691</span></span><br></pre></td></tr></table></figure></p>
+<p>Sometimes we only care about certain parts of a tuple when upacking, a dummy variable like _ is used ad placeholder.  </p>
+<p>In python 3, use * to parallel assignment as well<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">a, b, *rest = range(<span class="number">5</span>)</span><br><span class="line"><span class="comment"># output a = 0, b = 1, rest = [2,3,4]</span></span><br><span class="line">a, b, *rest = range(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># output a = 0, b = 1, rest = [2]</span></span><br><span class="line">a, b, *rest = range(<span class="number">2</span>)</span><br><span class="line"><span class="comment"># output a = 0, b = 1, rest = []</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Named-tuples"><a href="#Named-tuples" class="headerlink" title="Named tuples"></a>Named tuples</h2><p>The collections.namedtuple function is a factory that produces subclasses of tuple enhanced with field names and a class name<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> namedtuple</span><br><span class="line"><span class="comment"># Two paramters are required to create a named tuple: a class name and a list of field names</span></span><br><span class="line">City = namedtuple(<span class="string">'City'</span>, <span class="string">'name country population coordinates'</span>)</span><br><span class="line"><span class="comment"># or City = namedtuple('City', ['name', 'country', 'population', 'coordinates'])</span></span><br><span class="line"><span class="comment"># field names can be given as an iterable of strings or as a single string that space-delimited string</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># _fields is a tuple with the field names of the named tuple </span></span><br><span class="line"><span class="comment"># City._fields =&gt; ('name', 'country', 'population', 'coordinates')</span></span><br><span class="line"></span><br><span class="line">tokyo = City(<span class="string">'Tokyo'</span>, <span class="string">'JP'</span>, <span class="number">36.933</span>, (<span class="number">35.689</span>, <span class="number">139.691</span>))</span><br><span class="line"><span class="comment"># tokyo value: City(name='Tokyo', country='JP', population=36.933, coordinates=(35,689, 139.691))</span></span><br><span class="line"><span class="comment"># tokyo.name =&gt; 'Tokyo', tokyo.coordinates =&gt; (35,689, 139.691)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># _make() lets you instantiate a named tuple from a iterable; City(*tokyo)</span></span><br><span class="line"><span class="comment"># _asdict() returns a collections.OrderedDict built from the named tuple instance</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="Slicing"><a href="#Slicing" class="headerlink" title="Slicing"></a>Slicing</h1><p>A common feature of list, tuple, str and all sequence types in python is the support of slicing operations.  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">l = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</span><br><span class="line"><span class="comment"># split at index 2</span></span><br><span class="line">l[:<span class="number">2</span>] <span class="comment"># output =&gt; [1,2]</span></span><br><span class="line">l[<span class="number">2</span>:] <span class="comment"># output =&gt; [3,4,5,6]</span></span><br><span class="line"><span class="comment"># split at index 5 </span></span><br><span class="line">l[:<span class="number">5</span>] <span class="comment"># output =&gt; [1,2,3,4,5]</span></span><br><span class="line">l[<span class="number">5</span>:] <span class="comment"># output =&gt; [6]</span></span><br><span class="line">l[<span class="number">2</span>:<span class="number">4</span>] <span class="comment"># output =&gt; [3,4]</span></span><br></pre></td></tr></table></figure>
+<h2 id="Slice-objects"><a href="#Slice-objects" class="headerlink" title="Slice objects"></a>Slice objects</h2><p>To specify a stride or step in slice: s[a:b:c] a is the start postion, b is the stop postion, c is the step<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">s = <span class="string">'feifeiyu'</span></span><br><span class="line"><span class="comment"># step = 3,</span></span><br><span class="line">s[::<span class="number">3</span>] <span class="comment"># output =&gt; ffy</span></span><br><span class="line"><span class="comment"># if the step is negative, returned items is reversed</span></span><br><span class="line">s[::<span class="number">-3</span>] <span class="comment"># output =&gt; uee</span></span><br><span class="line">s[::<span class="number">-1</span>] <span class="comment"># output =&gt; uyiefief, reverse the string</span></span><br></pre></td></tr></table></figure></p>
+<p>The built-in sequence types in python are one-dimensional, so they support only one index or slice, and not a tuple of them.<br>The [] operator can take multiple indexes or slices separated by commonas. For instance, in the external NumPy package, where items of a 2-dimensional numpy.ndarray can be fetched using the syntax a[i, j] and a 2-dimensional slice obtained with an expresssion like a[m:n, k:l].</p>
+<h2 id="Assigning-to-Slices"><a href="#Assigning-to-Slices" class="headerlink" title="Assigning to Slices"></a>Assigning to Slices</h2><p>Mutable sequences can be grafted, excised and otherwise modified in-place using slice notation on the left side of an assignment statement or as the target of a del statement.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">l = range(<span class="number">10</span>) <span class="comment"># output =&gt; [0,1,2,3,4,5,6,7,8,9]</span></span><br><span class="line">l[<span class="number">2</span>:<span class="number">5</span>] = [<span class="number">20</span>, <span class="number">30</span>] <span class="comment"># output =&gt; [0,1,20,30,5,6,7,8,9]</span></span><br><span class="line"><span class="keyword">del</span> l[<span class="number">5</span>:<span class="number">7</span>] <span class="comment"># output =&gt; [0,1,20,30,5,8,9]</span></span><br><span class="line">l[<span class="number">3</span>::<span class="number">2</span>] = [<span class="number">11</span>, <span class="number">22</span>] <span class="comment"># output =&gt; [0,1,20,11,5,22,9]</span></span><br><span class="line">l[<span class="number">2</span>:<span class="number">5</span>] = [<span class="number">100</span>] <span class="comment"># outpu =&gt; [0,1,100,22,9]</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Using-and-with-sequences"><a href="#Using-and-with-sequences" class="headerlink" title="Using + and * with sequences"></a>Using + and * with sequences</h2><p>Operator + is used to concatenate two operands that have same sequence type. And the two oprands are not modified but a new sequnces is created as result of the concatenation.</p>
+<p>Operator * is used to concatenate multiple copies of the same sequence, multiply it by an integer. A new sequence is created as result.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># operator +</span></span><br><span class="line"><span class="comment"># l1, l2 have the same sequence type</span></span><br><span class="line">l1 = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">l2 = [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</span><br><span class="line">res1 = l1 + l2 </span><br><span class="line"><span class="comment"># l1 =&gt; [1,2,3], l2 =&gt; [4,5,6], both l1, l2 are not modified</span></span><br><span class="line"><span class="comment"># res1 =&gt; [1,2,3,4,5,6]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># operator *</span></span><br><span class="line">res2 = l1 * <span class="number">2</span></span><br><span class="line"><span class="comment"># l1 =&gt; [1,2,3] not modified</span></span><br><span class="line"><span class="comment"># res2 =&gt; [1,2,3,1,2,3]</span></span><br><span class="line">s1 = <span class="string">'fei'</span></span><br><span class="line">s2 = sl * <span class="number">2</span> <span class="comment"># output: s1 =&gt; 'fei', s2 =&gt; 'feifei'</span></span><br><span class="line">s3 = s2 + <span class="string">'yu'</span> <span class="comment"># output: s2 =&gt; 'feifei', s3 =&gt; 'feifeiyu'</span></span><br></pre></td></tr></table></figure>
+<h2 id="Building-lists-of-lists"><a href="#Building-lists-of-lists" class="headerlink" title="Building lists of lists"></a>Building lists of lists</h2><p>Sometimes we need to initialize a list with a certain number of nested list. The best way of doing this is with a listcomp</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># create a list of with 3 lists of 3 items each.</span></span><br><span class="line">board = [[<span class="string">'_'</span>] * <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">3</span>)]</span><br><span class="line"><span class="comment"># board =&gt; [['_', '_', '_'], ['_', '_', '_'], ['_', '_', '_']]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># modify board</span></span><br><span class="line">board[<span class="number">1</span>][<span class="number">2</span>] = <span class="string">'x'</span></span><br><span class="line"><span class="comment"># board =&gt; [['_', '_', '_'], ['_', '_', 'x'], ['_', '_', '_']]</span></span><br></pre></td></tr></table></figure>
+<p>A tempting but wrong shortcut is doing like below.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># The outer list is made of three references to the same inner list.</span></span><br><span class="line">board = [[<span class="string">'-'</span>] * <span class="number">3</span>] * <span class="number">3</span></span><br><span class="line"><span class="comment"># board =&gt; [['_', '_', '_'], ['_', '_', '_'], ['_', '_', '_']] </span></span><br><span class="line"><span class="comment"># before board is changed, all seems right</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># modify board</span></span><br><span class="line">board[<span class="number">1</span>][<span class="number">2</span>] = <span class="string">'x'</span></span><br><span class="line"><span class="comment"># board =&gt; [['_', '_', 'x'], ['_', '_', 'x'], ['_', '_', 'x']]</span></span><br><span class="line"><span class="comment"># all rows are aliases referring to the same object.</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="Augmented-assignment-with-sequences"><a href="#Augmented-assignment-with-sequences" class="headerlink" title="Augmented assignment with sequences"></a>Augmented assignment with sequences</h2><p>The augmented assignment operators: +=, *=, -= …  </p>
+<p>The sepcial method that makes += work is <strong>iadd</strong>(for “in-place addition”), is <strong>iadd</strong> is not implemented, python fall back to calling <strong>add</strong>. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># number</span></span><br><span class="line">n = <span class="number">2</span></span><br><span class="line">n += <span class="number">3</span> <span class="comment"># n =&gt; 5</span></span><br><span class="line"><span class="comment"># string</span></span><br><span class="line">s = <span class="string">'fei'</span></span><br><span class="line">s += <span class="string">'fei'</span> <span class="comment"># s =&gt; 'feifei'</span></span><br><span class="line"><span class="comment"># sequence</span></span><br><span class="line">l = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">l += [<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>] <span class="comment"># l =&gt; [1,2,3,4,5,6]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># use *=</span></span><br><span class="line">l *= <span class="number">2</span> <span class="comment"># l =&gt; [1,2,3,4,5,6,1,2,3,4,5,6]</span></span><br></pre></td></tr></table></figure>
+<p>Note: Repeated concatenation of immutable sequence is inefficient, because instead of just appending new items, the interpreter has to copy the whole target sequence to create a new one with the new items concatenated.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># example for augmented assignment for a mutable item in tuples</span></span><br><span class="line"><span class="comment"># raise TypeError</span></span><br><span class="line"><span class="comment"># value of t is changed</span></span><br><span class="line">t = (<span class="number">1</span>, <span class="number">2</span>, [<span class="number">3</span>, <span class="number">4</span>])</span><br><span class="line">t[<span class="number">2</span>] += [<span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line">Traceback (most recent call last):</span><br><span class="line">File <span class="string">"&lt;stdin&gt;"</span>, line <span class="number">1</span>, <span class="keyword">in</span> &lt;module&gt;</span><br><span class="line">TypeError: <span class="string">'tuple'</span> object does <span class="keyword">not</span> support item assignment</span><br><span class="line"><span class="comment"># output: t =&gt; (1,2,[3,4,5,6])</span></span><br></pre></td></tr></table></figure>
+<p>Note:</p>
+<ul>
+<li>Putting mutable items in tuple is not a good idea</li>
+<li>Augmented assignment is not an atomic operation</li>
+</ul>
+<h2 id="list-sort-and-the-sorted-built-in-function"><a href="#list-sort-and-the-sorted-built-in-function" class="headerlink" title="list.sort and the sorted built-in function"></a>list.sort and the sorted built-in function</h2><p>The list.sort method sorts a list in-place, without making a copy. It returns None to remind us that it changes the target object, and does not create a new list.  </p>
+<p>In contrast, the built-in function sorted creates a new list and returns it. sorted accepts any iterable objects as arguments, include immutable sequences and generators.</p>
+<p>Both list.sort and sorted take two optional, keyword-only arguments: key and reverse.  </p>
+<ul>
+<li>reverse: if True, the items are returned in descending order. default is False  </li>
+<li>key: A one-argument function that will be applied to each item to produce its sorting key.</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># examples of sorted</span></span><br><span class="line">fruits = [<span class="string">'grap'</span>, <span class="string">'raspberry'</span>, <span class="string">'apple'</span>, <span class="string">'banana'</span>]</span><br><span class="line"><span class="comment"># sorted by the first charactor ascii value of a world</span></span><br><span class="line">sorted(fruits) <span class="comment"># output =&gt; ['apple', 'banana', 'grape', 'raspberry']</span></span><br><span class="line">sorted(fruits, reverse=<span class="literal">True</span>) <span class="comment"># output =&gt; ['raspberry', 'grape', 'banana', 'apple']</span></span><br><span class="line"><span class="comment"># sorted by the length of each world</span></span><br><span class="line">sorted(fruits, key=len) <span class="comment"># output =&gt; ['grape', 'apple', 'banana', 'raspberry']</span></span><br><span class="line">sorted(fruits, key=len, reverse=<span class="literal">True</span>) <span class="comment"># ouput =&gt; ['raspberry', 'banana', 'grape', 'apple']</span></span><br><span class="line"><span class="comment"># finally, the order in fruits is not changed</span></span><br><span class="line">fruits <span class="comment"># output =&gt; ['grap', 'raspberry', 'apple', 'banana'] </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># examples of list.sort</span></span><br><span class="line">fruits.sort() <span class="comment"># output None</span></span><br><span class="line"><span class="comment"># order in fruits is changed. </span></span><br><span class="line">fruits <span class="comment"># output =&gt; ['apple', 'banana', 'grape', 'raspberry']</span></span><br><span class="line">fruits.sort(key=len, reverse=<span class="literal">True</span>) <span class="comment"># output None</span></span><br><span class="line">fruits <span class="comment"># output =&gt; ['raspberry', 'banana', 'grape', 'apple']</span></span><br></pre></td></tr></table></figure>
+<h2 id="Managing-ordered-sequences-with-bisect"><a href="#Managing-ordered-sequences-with-bisect" class="headerlink" title="Managing ordered sequences with bisect"></a>Managing ordered sequences with bisect</h2><p>The bisect module offers two main functions <strong>bisect</strong> and <strong>insort</strong>, they use the binary search algorithm to quickly find an insert items in any sorted sequence</p>
+<h3 id="bisect"><a href="#bisect" class="headerlink" title="bisect"></a>bisect</h3><p>bisect(haystack, needle) does a binary search for needle in haystack which must be a sorted sequence, to locate the position where needle can be inserted while maintaining haystack in ascending order. In other words, all items appearing up to that position are less or equal to the needle.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># usage of bisect</span></span><br><span class="line"><span class="keyword">import</span> bisect</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">grade</span><span class="params">(score, breakpoints=[<span class="number">60</span>, <span class="number">70</span>, <span class="number">80</span>, <span class="number">90</span>], grades=<span class="string">'FDCBA'</span>)</span>:</span></span><br><span class="line">    <span class="comment"># get position of socre in breakpoints</span></span><br><span class="line">    i = bisect.bisect(breakpoints, score)</span><br><span class="line">    <span class="keyword">return</span> grades[i]</span><br><span class="line"></span><br><span class="line">[grade(score) <span class="keyword">for</span> score <span class="keyword">in</span> [<span class="number">33</span>, <span class="number">99</span>, <span class="number">77</span>, <span class="number">70</span>, <span class="number">89</span>, <span class="number">90</span>, <span class="number">100</span>]]</span><br><span class="line"></span><br><span class="line"><span class="comment">#output =&gt; ['raspberry', 'banana', 'grape', 'apple']</span></span><br></pre></td></tr></table></figure>
+<h3 id="Inserting-with-bisect-insort"><a href="#Inserting-with-bisect-insort" class="headerlink" title="Inserting with bisect.insort"></a>Inserting with bisect.insort</h3><p>Sorting is expensive, so once a sequence has sorted, it’s good to keep it that way.<br>insort(seq, item) inserts item in to seq so as to keep seq in ascending order.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># usage of </span></span><br><span class="line"><span class="keyword">import</span> bisect</span><br><span class="line"><span class="keyword">import</span> random </span><br><span class="line">my_list = []</span><br><span class="line">random.seed(<span class="number">1729</span>)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">7</span>):</span><br><span class="line">    new_item = random.randrange(<span class="number">14</span>)</span><br><span class="line">    bisect.insort(my_list, new_item)</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'%2d -&gt;'</span> % (new_item, my_list)</span><br></pre></td></tr></table></figure>
+<h1 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a>Arrays</h1><p>For numbbers, array.array is more efficient than a list, it supports all mutable sequence operations(include .pop, .insert, and .extend), and additional methods for fast loading and saving such as .frombytes and .tofile.  </p>
+<p>When creating an array a typecode must be provided which determine the underlying C type used to store each item in the array.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> array <span class="keyword">import</span> array</span><br><span class="line"><span class="keyword">from</span> random <span class="keyword">import</span> random</span><br><span class="line"><span class="comment"># 'd' is a typecode mean double-precision floats</span></span><br><span class="line">floats = array(<span class="string">'d'</span>, (random() <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">100</span>)))</span><br><span class="line">floats[<span class="number">0</span>] <span class="comment"># output =&gt; 0.7810596079396112</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 'b' is another typecode mean signed char -128 ~ 127</span></span><br><span class="line">integer = array(<span class="string">'b'</span>, [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>])</span><br><span class="line">integer[<span class="number">2</span>] <span class="comment"># output =&gt; 3</span></span><br></pre></td></tr></table></figure>
+<p>array.tofile and array.fromfile are easy to write or read numbers from files, and they are very fast.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">fp = open(<span class="string">'float.bin'</span>, <span class="string">'wb'</span>)</span><br><span class="line">floats.tofile(fp)</span><br><span class="line">fp.close()</span><br><span class="line">floats2 = array(<span class="string">'d'</span>)</span><br><span class="line">fp = open(<span class="string">'floats.bin'</span>, <span class="string">'rb'</span>)</span><br><span class="line"><span class="comment"># read 50 numbers from binary file</span></span><br><span class="line">floats.fromfile(fp, <span class="number">50</span>)</span><br><span class="line">fp.close()</span><br></pre></td></tr></table></figure></p>
+<h1 id="Memory-Views"><a href="#Memory-Views" class="headerlink" title="Memory Views"></a>Memory Views</h1><p>The built-in <strong>memoryview</strong> class is a shared-memory sequence type that lets you handle slices of arrays without copying bytes.<br>Using notation similar to the array module, the memoryview.cast method lets you change the way multiple bytes are read or written as units without moving bits around.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># build a array of 5 short signed integers (typecode 'h')</span></span><br><span class="line"><span class="comment"># not work in python 2.7</span></span><br><span class="line">numbers = array.array(<span class="string">'h'</span>, [<span class="number">-2</span>, <span class="number">-1</span>, <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>])</span><br><span class="line">memv = memoryview(numbers)</span><br><span class="line">len(memv) <span class="comment"># output =&gt; 5</span></span><br><span class="line">memv[<span class="number">1</span>] <span class="comment"># output =&gt; -1</span></span><br></pre></td></tr></table></figure>
+<h1 id="Deques-and-other-queues"><a href="#Deques-and-other-queues" class="headerlink" title="Deques and other queues"></a>Deques and other queues</h1><p>The .append and .pop methods make a list usable as stack or a queue. But inserting and removing from the left of a list is costly because the entire list must be shifted.</p>
+<p>The class cllections.deque is a thread-safe double-ended queue designed for fast inserting and removing from both ends.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> deque</span><br><span class="line">dq = deque(range(<span class="number">12</span>), maxlen=<span class="number">10</span>)</span><br><span class="line">dq <span class="comment"># output deque([2, 3, 4, 5, 6, 7, 8, 9, 10, 11], maxlen=10), not start with 0</span></span><br><span class="line">dq.rotate(<span class="number">3</span>)</span><br><span class="line">dq <span class="comment"># output deque([9, 10, 11, 2, 3, 4, 5, 6, 7, 8], maxlen=10)</span></span><br><span class="line">dq.appendleft(<span class="number">-1</span>)</span><br><span class="line">dq <span class="comment"># output deque([-1, 9, 10, 11, 2, 3, 4, 5, 6, 7], maxlen=10) </span></span><br><span class="line">dq.extend([<span class="number">11</span>,<span class="number">22</span>,<span class="number">33</span>])</span><br><span class="line">dq <span class="comment"># output deque([11, 2, 3, 4, 5, 6, 7, 11, 22, 33], maxlen=10)</span></span><br></pre></td></tr></table></figure>
+<p>Besides deques, other python standard library packages implement queues</p>
+<h2 id="queue"><a href="#queue" class="headerlink" title="queue"></a>queue</h2><p>Provides the synchronized classes Queue, LifoQueue and PriorityQueue. These are used for safe communication between threads.</p>
+<h2 id="multiprocessing"><a href="#multiprocessing" class="headerlink" title="multiprocessing"></a>multiprocessing</h2><p>Implements its own bounded Queue, very similar to queue.Queue but designed for inter-process communictaion.</p>
+<h2 id="asyncio"><a href="#asyncio" class="headerlink" title="asyncio"></a>asyncio</h2><p>Newly added to python 3.4, asyncio provides Queue, LifoQueue, PriorityQueue and JoinableQueue with APIs inspired by the class queue and multiprocessing, but adapted for managing tasks in synchronous programming</p>
+<h2 id="heapq"><a href="#heapq" class="headerlink" title="heapq"></a>heapq</h2><p>In contrast to the previous three modules, heapq does not implement a queue class, but provides functions like heappush and heappop that let you use a mutable sequence as a heap queue or priority queue</p>
+<h1 id="END"><a href="#END" class="headerlink" title="END"></a>END</h1>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/fp/" rel="tag">#fp</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/13/front-ylazyload/" rel="next" title="图片懒加载组件 Ylazyload">
+                <i class="fa fa-chevron-left"></i> 图片懒加载组件 Ylazyload
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/09/python-fp-dictsets/" rel="prev" title="Fluent Python Study Notes - Dictionaries and Sets">
+                Fluent Python Study Notes - Dictionaries and Sets <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/06/27/python-fp-sequence/" data-title="Fluent Python Study Notes - Built-in Sequences" data-url="https://feifeiyum.github.io/2017/06/27/python-fp-sequence/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Sequences-Grouping"><span class="nav-number">1.</span> <span class="nav-text">Sequences Grouping</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Container-Sequences"><span class="nav-number">1.1.</span> <span class="nav-text">Container Sequences</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Flat-Sequences"><span class="nav-number">1.2.</span> <span class="nav-text">Flat Sequences</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Mutable-Sequences"><span class="nav-number">1.3.</span> <span class="nav-text">Mutable Sequences</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Immutable-Sequences"><span class="nav-number">1.4.</span> <span class="nav-text">Immutable Sequences</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#List"><span class="nav-number">2.</span> <span class="nav-text">List</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Listcomps"><span class="nav-number">2.1.</span> <span class="nav-text">Listcomps</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cartesian-Products"><span class="nav-number">2.2.</span> <span class="nav-text">Cartesian Products</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generator-Expressions"><span class="nav-number">2.3.</span> <span class="nav-text">Generator Expressions</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tuples"><span class="nav-number">3.</span> <span class="nav-text">Tuples</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Tuple-Unpacking"><span class="nav-number">3.1.</span> <span class="nav-text">Tuple Unpacking</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Named-tuples"><span class="nav-number">3.2.</span> <span class="nav-text">Named tuples</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Slicing"><span class="nav-number">4.</span> <span class="nav-text">Slicing</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Slice-objects"><span class="nav-number">4.1.</span> <span class="nav-text">Slice objects</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Assigning-to-Slices"><span class="nav-number">4.2.</span> <span class="nav-text">Assigning to Slices</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Using-and-with-sequences"><span class="nav-number">4.3.</span> <span class="nav-text">Using + and * with sequences</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Building-lists-of-lists"><span class="nav-number">4.4.</span> <span class="nav-text">Building lists of lists</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Augmented-assignment-with-sequences"><span class="nav-number">4.5.</span> <span class="nav-text">Augmented assignment with sequences</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#list-sort-and-the-sorted-built-in-function"><span class="nav-number">4.6.</span> <span class="nav-text">list.sort and the sorted built-in function</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Managing-ordered-sequences-with-bisect"><span class="nav-number">4.7.</span> <span class="nav-text">Managing ordered sequences with bisect</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bisect"><span class="nav-number">4.7.1.</span> <span class="nav-text">bisect</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Inserting-with-bisect-insort"><span class="nav-number">4.7.2.</span> <span class="nav-text">Inserting with bisect.insort</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Arrays"><span class="nav-number">5.</span> <span class="nav-text">Arrays</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Memory-Views"><span class="nav-number">6.</span> <span class="nav-text">Memory Views</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Deques-and-other-queues"><span class="nav-number">7.</span> <span class="nav-text">Deques and other queues</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#queue"><span class="nav-number">7.1.</span> <span class="nav-text">queue</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#multiprocessing"><span class="nav-number">7.2.</span> <span class="nav-text">multiprocessing</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#asyncio"><span class="nav-number">7.3.</span> <span class="nav-text">asyncio</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#heapq"><span class="nav-number">7.4.</span> <span class="nav-text">heapq</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#END"><span class="nav-number">8.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,1113 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="html,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="HTML5 是HTML最新修订的版本， 2014年由 W3C联盟与WHATWG完成标准制定HTML5 设计的目的是为了在移动设备上支持多媒体浏览器支持： Firefox、Chrome、Opera、Safari 4+、Internet Explorer 9+">
+<meta name="keywords" content="html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="html5-基础介绍">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/12/25/base-html5-intro/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="HTML5 是HTML最新修订的版本， 2014年由 W3C联盟与WHATWG完成标准制定HTML5 设计的目的是为了在移动设备上支持多媒体浏览器支持： Firefox、Chrome、Opera、Safari 4+、Internet Explorer 9+">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/h5-video.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/h5-element.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/h5-datalist.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/h5-autocomp.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/h5-input2.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/h5-storage.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/h5-canvas.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/h5-svg.png">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.291Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="html5-基础介绍">
+<meta name="twitter:description" content="HTML5 是HTML最新修订的版本， 2014年由 W3C联盟与WHATWG完成标准制定HTML5 设计的目的是为了在移动设备上支持多媒体浏览器支持： Firefox、Chrome、Opera、Safari 4+、Internet Explorer 9+">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/html/h5-video.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> html5-基础介绍 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                html5-基础介绍
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-12-25T16:17:56+08:00" content="2016-12-25">
+              2016-12-25
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/base/" itemprop="url" rel="index">
+                    <span itemprop="name">base</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/25/base-html5-intro/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/25/base-html5-intro/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>HTML5 是HTML最新修订的版本， 2014年由 W3C联盟与WHATWG完成标准制定<br>HTML5 设计的目的是为了在移动设备上支持多媒体<br>浏览器支持： Firefox、Chrome、Opera、Safari 4+、Internet Explorer 9+<br><a id="more"></a></p>
+</blockquote>
+<h2 id="H5-新特性"><a href="#H5-新特性" class="headerlink" title="H5 新特性"></a>H5 新特性</h2><blockquote>
+<p>用于绘画的 canvas<br>用于媒体播放的 video 和 audio 元素<br>对本地离线存储更好的支持<br>新的HTML标签： article, footer, header, nav, section 等<br>新的表单控件： calender, date, time， search, email 等  </p>
+</blockquote>
+<h2 id="HTML5-新标签"><a href="#HTML5-新标签" class="headerlink" title="HTML5 新标签"></a>HTML5 新标签</h2><p><strong>多媒体元素</strong></p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;audio&gt;</td>
+<td>定义音频内容</td>
+</tr>
+<tr>
+<td>&lt;video&gt;</td>
+<td>定义视频内容</td>
+</tr>
+<tr>
+<td>&lt;source&gt;</td>
+<td>定义&lt;audio&gt; or &lt;video&gt; 多媒体资源</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<blockquote>
+<p>&lt;audio&gt; 标签的使用:<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">audio</span> <span class="attr">controls</span> <span class="attr">autoplay</span>&gt;</span>  //显示控制条， 自动播放</span><br><span class="line">  <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">"horse.mp3"</span> <span class="attr">type</span>=<span class="string">"audio/mpeg"</span>&gt;</span></span><br><span class="line">  您的浏览器不支持 audio 元素。</span><br><span class="line"><span class="tag">&lt;/<span class="name">audio</span>&gt;</span></span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>&lt;audio&gt; 标签属性</p>
+</blockquote>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>autoplay</td>
+<td>音频文件就绪后自动播放</td>
+</tr>
+<tr>
+<td>controls</td>
+<td>显示音频控件（例如：播放/暂停按钮）</td>
+</tr>
+<tr>
+<td>loop</td>
+<td>单曲循环</td>
+</tr>
+<tr>
+<td>muted</td>
+<td>默认静音</td>
+</tr>
+<tr>
+<td>src</td>
+<td>定义音频文件的地址</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<blockquote>
+<audio controls autoplay><br>  <source src="horse.mp3" type="audio/mpeg"><br>  您的浏览器不支持 audio 元素。<br></audio>
+</blockquote>
+<blockquote>
+<p>&lt;video&gt; 标签使用<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">video</span> <span class="attr">width</span>=<span class="string">"120"</span> <span class="attr">height</span>=<span class="string">"80"</span> <span class="attr">poster</span>=<span class="string">"/images/w3html5.gif"</span> &gt;</span> controls autoplay &gt;</span><br><span class="line">  <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">"movie.mp4"</span> <span class="attr">type</span>=<span class="string">"video/mp4"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">source</span> <span class="attr">src</span>=<span class="string">"movie.ogg"</span> <span class="attr">type</span>=<span class="string">"video/ogg"</span>&gt;</span></span><br><span class="line">  您的浏览器不支持 video 标签。</span><br><span class="line"><span class="tag">&lt;/<span class="name">video</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>&lt;video&gt; 标签属性</p>
+</blockquote>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>autoplay</td>
+<td>视频文件就绪后自动播放</td>
+</tr>
+<tr>
+<td>controls</td>
+<td>显示视频控件（例如：播放/暂停按钮）</td>
+</tr>
+<tr>
+<td>loop</td>
+<td>单曲循环</td>
+</tr>
+<tr>
+<td>muted</td>
+<td>默认静音</td>
+</tr>
+<tr>
+<td>src</td>
+<td>定义音频文件的地址</td>
+</tr>
+<tr>
+<td>poster</td>
+<td>设置下载视频时的封面图片</td>
+</tr>
+<tr>
+<td>width</td>
+<td>设置视频播放器的宽度</td>
+</tr>
+<tr>
+<td>height</td>
+<td>设置视频播放器的高度</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<blockquote>
+<p><img src="/images/html/h5-video.png" alt="video">  </p>
+</blockquote>
+<p><strong>新的标签</strong></p>
+<blockquote>
+<p>浏览器支持：Internet Explorer 9+, Firefox, Chrome, Safari 和 Opera  </p>
+</blockquote>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;header&gt;</td>
+<td>描述html文档的头部区域</td>
+</tr>
+<tr>
+<td>&lt;footer&gt;</td>
+<td>描述文档底部区域</td>
+</tr>
+<tr>
+<td>&lt;nav&gt;</td>
+<td>描述导航链接部分区域 (场景：友情链接，头部导航)</td>
+</tr>
+<tr>
+<td>&lt;aside&gt;</td>
+<td>定义页面主内容之外的区域(场景： 侧边栏)</td>
+</tr>
+<tr>
+<td>&lt;section&gt;</td>
+<td>定义文档中的节，区段等内容</td>
+</tr>
+<tr>
+<td>&lt;article&gt;</td>
+<td>定义独立的内容</td>
+</tr>
+<tr>
+<td>&lt;figure&gt;</td>
+<td>定义特殊的内容(场景: 图像，图表，代码等)</td>
+</tr>
+<tr>
+<td>&lt;figcaption&gt;</td>
+<td>&lt;figure&gt; 标签的标题</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<blockquote>
+<p><img src="/images/html/h5-element.png" alt="new-element"><br>在低版本浏览器支持，添加如下样式<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">header</span>, <span class="selector-tag">section</span>, <span class="selector-tag">footer</span>, <span class="selector-tag">aside</span>, <span class="selector-tag">nav</span>, <span class="selector-tag">article</span>, <span class="selector-tag">figure</span></span><br><span class="line">&#123; </span><br><span class="line">    <span class="attribute">display</span>: block; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p><strong>表单元素</strong></p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>标签</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;datalist&gt;</td>
+<td>定义选项列表， 配合input使用</td>
+</tr>
+<tr>
+<td>&lt;keygen&gt;</td>
+<td>用于表单的密钥对生成器字段</td>
+</tr>
+<tr>
+<td>&lt;output&gt;</td>
+<td>定义不同类型的输出, 浏览器支持不好</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<blockquote>
+<p>1、&lt;datalist&gt; 标签<br>&lt;datalist&gt; 可以用户在自动完成域中开始输入时给出提示(自动补全), IE9-,Safari不支持</p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">list</span>=<span class="string">"search-engine"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">datalist</span>  <span class="attr">id</span>=<span class="string">"search-engine"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"google"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"baidu"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">option</span> <span class="attr">value</span>=<span class="string">"bing"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">datalist</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><img src="/images/html/h5-datalist.png" alt="datalist"></p>
+</blockquote>
+<blockquote>
+<p>2、&lt;keygen&gt; 标签<br>&lt;keygen&gt; 标签提供一种验证用户的可靠方法。当表单提交时，会生成一个私钥， 一个公钥，私钥存储在客户端，公钥发送到服务器<br>使用成本高， IE 不支持。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"/sub"</span> <span class="attr">method</span>=<span class="string">"post"</span>&gt;</span></span><br><span class="line">&gt; 密码: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"password"</span> <span class="attr">name</span>=<span class="string">"pwd"</span>&gt;</span></span><br><span class="line">&gt; 加密: <span class="tag">&lt;<span class="name">keygen</span> <span class="attr">name</span>=<span class="string">"security"</span>&gt;</span></span><br><span class="line">&gt;  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span>&gt;</span></span><br><span class="line">&gt; <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>3、&lt;output&gt; 标签<br>用于不同类型的输出，比如计算或脚本输出<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&gt; <span class="tag">&lt;<span class="name">form</span> <span class="attr">oninput</span>=<span class="string">"x.value=parseInt(a.value)+parseInt(b.value)"</span>&gt;</span>0</span><br><span class="line">&gt;   <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"range"</span> <span class="attr">id</span>=<span class="string">"a"</span> <span class="attr">value</span>=<span class="string">"50"</span>&gt;</span>100 +</span><br><span class="line">&gt;   <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"number"</span> <span class="attr">id</span>=<span class="string">"b"</span> <span class="attr">value</span>=<span class="string">"50"</span>&gt;</span>=</span><br><span class="line">&gt;   <span class="tag">&lt;<span class="name">output</span> <span class="attr">name</span>=<span class="string">"x"</span> <span class="attr">for</span>=<span class="string">"a b"</span>&gt;</span><span class="tag">&lt;/<span class="name">output</span>&gt;</span></span><br><span class="line">&gt; <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br><span class="line">&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p><strong>表单属性</strong></p>
+<blockquote>
+<p>1、&lt;form&gt;/&lt;input&gt; autocomplete 属性  opera 不支持<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">""</span> <span class="attr">autocomplete</span>=<span class="string">"on"</span>&gt;</span></span><br><span class="line">  Name:<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"fname"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">  E-mail: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"email"</span> <span class="attr">name</span>=<span class="string">"email"</span> <span class="attr">autocomplete</span>=<span class="string">"off"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>填写表单并提交后，刷新页面， 重新填写会给出上次输入的内容<br><img src="/images/html/h5-autocomp.png" alt="autoplay"></p>
+</blockquote>
+<blockquote>
+<p>2、&lt;input&gt; autofocus 属性<br>在页面加载时，input 元素域自动获得焦点<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Name:<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"fname"</span> <span class="attr">autofocus</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>3、&lt;input&gt; min &amp; max &amp; step  属性<br>min, max, step 属性用于为包含数字或日期的input类型设置约束， firfox 不支持<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"number"</span> <span class="attr">min</span>=<span class="string">"1"</span> <span class="attr">max</span>=<span class="string">"8"</span> <span class="attr">step</span>=<span class="string">"2"</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/html/h5-input2.png" alt="minmax"></p>
+</blockquote>
+<blockquote>
+<p>4、&lt;input&gt; multiple 属性<br>multiple 属性可以规定&lt;input&gt; 元素可以选择多个值<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Select Imgs: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">multiple</span>&gt;</span> //一次性可以提交多张图片</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>5、&lt;input&gt; pattern 属性， Safari不支持<br>pattern 属性用于描述一个正则表达试验证&lt;input&gt; 元素的值<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">number: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">pattern</span>=<span class="string">"\d+"</span> <span class="attr">title</span>=<span class="string">"number"</span> &gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>6、&lt;input&gt; required 属性<br>required 属性规定&lt;input&gt;必须在提交之前不能为空<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">name: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"usrname"</span> <span class="attr">required</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>7、其他属性： placeholder(input提示)， formmethod(定义表单提交方式) …</p>
+</blockquote>
+<p><strong>input 类型属性</strong></p>
+<blockquote>
+<p>常见; &lt;input type=”text”&gt; &lt;input type=”file”&gt; &lt;input type=”password”&gt; &lt;input type=”radio”&gt; &lt;input type=”checkbox”&gt;<br>HTML5 新的类型, 存在严重的兼容性问题，不建议使用   </p>
+</blockquote>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>属性名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>color</td>
+<td>用于颜色选取</td>
+</tr>
+<tr>
+<td>date</td>
+<td>日期选取</td>
+</tr>
+<tr>
+<td>datetime</td>
+<td>日期选取</td>
+</tr>
+<tr>
+<td>time</td>
+<td>时间选择</td>
+</tr>
+<tr>
+<td>datetime-local</td>
+<td>日期和时间选择</td>
+</tr>
+<tr>
+<td>week</td>
+<td>星期和年选择</td>
+</tr>
+<tr>
+<td>month</td>
+<td>选择月份</td>
+</tr>
+<tr>
+<td>email</td>
+<td>验证email有效性</td>
+</tr>
+<tr>
+<td>number</td>
+<td>数值输入</td>
+</tr>
+<tr>
+<td>range</td>
+<td>在一定范围选择一个数值</td>
+</tr>
+<tr>
+<td>search</td>
+<td>搜索</td>
+</tr>
+<tr>
+<td>tel</td>
+<td>号码校验</td>
+</tr>
+<tr>
+<td>url</td>
+<td>URL 地址校验</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h2 id="Web存储"><a href="#Web存储" class="headerlink" title="Web存储"></a>Web存储</h2><blockquote>
+<p>HTML5 的Web存储是比 cookie 更好用的本地存储方式，可以存储大量数据，不能跨越<br>浏览器支持： Internet Explorer 8+, Firefox, Opera, Chrome, Safari,<br>Web存储对象： localStorage &amp; sessionStorage<br>检查浏览器是否支持 localStorage 和sessionStorage<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(<span class="keyword">typeof</span> Storage !== <span class="string">'undefined'</span>) &#123;</span><br><span class="line">   <span class="comment">//支持</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">   <span class="comment">//不支持</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p><strong>localStorage 对象</strong></p>
+<blockquote>
+<p>localStorage 的生命周期为长期， 没有存储时间限制<br>使用：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">localStorage.name = <span class="string">'feifeiyu'</span></span><br><span class="line">localStorage.arr = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>]</span><br><span class="line">localStorage.obj = &#123;<span class="attr">name</span>: <span class="string">'feifeiyu'</span>&#125;</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'name:'</span>, localStorage.name)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'arr:'</span>, localStorage.arr)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'obj:'</span>, localStorage.obj)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'obj.name:'</span>, localStorage.obj.name)</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>在浏览器console中演示<br><img src="/images/html/h5-storage.png" alt="localStorage"><br>1、在localStorage中是以字符串形式存储的，<br>2、localStorage不能存储 js 对象<br>3、在 localStorage 存储数组时，会转化成字符串，以逗号隔开   </p>
+</blockquote>
+<blockquote>
+<p><strong>可用API</strong>   </p>
+</blockquote>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>localStorage.setItem(key,value)</td>
+<td>保存数据</td>
+</tr>
+<tr>
+<td>ocalStorage.getItem(key)</td>
+<td>根据key读取对应的值</td>
+</tr>
+<tr>
+<td>localStorage.removeItem(key)</td>
+<td>根据key删除某条数据</td>
+</tr>
+<tr>
+<td>localStorage.clear()</td>
+<td>清空所有数据</td>
+</tr>
+<tr>
+<td>localStorage.key(index)</td>
+<td>根据key获得与其对应的索引</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<p><strong>sessionStorage 对象</strong></p>
+<blockquote>
+<p>sessionStorage 的生命周期同浏览器页面一致，浏览器关闭后，数据删除<br>sessionStorage 的用法与 localStorage 一致  </p>
+</blockquote>
+<h2 id="HTML5-缓存"><a href="#HTML5-缓存" class="headerlink" title="HTML5 缓存"></a>HTML5 缓存</h2><blockquote>
+<p>HTML5 中 可以通过创建 cache manifest 文件来创建离线页面， 缓存已加载资源， 减少服务器负载<br>浏览器支持： Internet Explorer 10, Firefox, Chrome, Safari 和 Opera</p>
+</blockquote>
+<p><strong>启用缓存</strong></p>
+<blockquote>
+<p>&lt;html&gt; 标签中添加 manifest 属性<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE HTML&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">manifest</span>=<span class="string">"test.appcache"</span>&gt;</span></span><br><span class="line">  ...</span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>test.appcache 文件是简单的文本文件， 在文件中按一定格式填写需要/不需要被缓存的内容， .appcache 为建议扩展名</p>
+</blockquote>
+<p><strong>Manifest 文件编写</strong></p>
+<blockquote>
+<p>manifest 文件分为如下三个部分：  </p>
+</blockquote>
+<blockquote>
+<p>1、CACHE MANIFEST， 列出首次加载需要缓存的文件, 写在文件第一行， 必填<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CACHE MANIFEST</span><br><span class="line"># 注释</span><br><span class="line">/index.css</span><br><span class="line">/avator.png</span><br><span class="line">/index.bundle.js</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>上例缓存了三个文件：样式文件，脚本文件， 头像图片， 这些文件在页面第二次加载的时候不会下载这些文件   </p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>2、NETWORK, 列出不需要缓存的数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">NETWORK:</span><br><span class="line"># 用 * 表示刷新页面时所有其他资源都需要重新加载</span><br><span class="line">* </span><br><span class="line"># or</span><br><span class="line">NETWORK:</span><br><span class="line"># 刷新页面时 index.js 文件需要重新加载</span><br><span class="line">/index.js</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>3、FALLBACK 件规定当页面无法访问时的重定向页面<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">FALLBACK:</span><br><span class="line">/myapge/ /404</span><br><span class="line"># 第一个是目标地址， 第二个是地一个访问失败后替换访问的地址</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>4、缓存生命周期(缓存失效)</p>
+<blockquote>
+<ul>
+<li>清空浏览器缓存</li>
+<li>manifest 文件更新</li>
+<li>由脚本处理缓存</li>
+</ul>
+</blockquote>
+</blockquote>
+<h2 id="Canvas"><a href="#Canvas" class="headerlink" title="Canvas"></a>Canvas</h2><blockquote>
+<p>HTML5 &lt;canvas&gt; 元素用于图形绘制，通过脚本来完成，它只是图形容器<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;canvas id=&quot;myCanvas&quot; width=&quot;200&quot; height=&quot;100&quot; style=&quot;border:1px solid #c3c3c3;&quot;&gt;</span><br><span class="line">您的浏览器不支持 HTML5 canvas 标签。</span><br><span class="line">&lt;/canvas&gt;</span><br><span class="line">&lt;script&gt;</span><br><span class="line">    var c=document.getElementById(&quot;myCanvas&quot;);</span><br><span class="line">    var ctx=c.getContext(&quot;2d&quot;);</span><br><span class="line">    ctx.fillStyle=&quot;#FF0000&quot;;</span><br><span class="line">    ctx.fillRect(0,0,150,75);</span><br><span class="line">&lt;/script&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/html/h5-canvas.png" alt="canvas"></p>
+</blockquote>
+<h2 id="SVG"><a href="#SVG" class="headerlink" title="SVG"></a>SVG</h2><blockquote>
+<p>SVG: 可缩放矢量图形 (Scalable Vector Graphics)<br>SVG 使用 XML 格式定义图像。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">svg</span> <span class="attr">xmlns</span>=<span class="string">"http://www.w3.org/2000/svg"</span> <span class="attr">version</span>=<span class="string">"1.1"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">circle</span> <span class="attr">cx</span>=<span class="string">"100"</span> <span class="attr">cy</span>=<span class="string">"50"</span> <span class="attr">r</span>=<span class="string">"40"</span> <span class="attr">stroke</span>=<span class="string">"black"</span></span></span><br><span class="line"><span class="tag">  <span class="attr">stroke-width</span>=<span class="string">"2"</span> <span class="attr">fill</span>=<span class="string">"red"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">svg</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/html/h5-svg.png" alt="svg"><br>SVG 是一种 XML 描述的 2D 图形语言<br>Canvas 是通过javascript 绘制的 2D 图形  </p>
+</blockquote>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><blockquote>
+<p>地理定位<br>拖放  drag 事件<br>MathML, 基于XML标准的数学标记语言   </p>
+</blockquote>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/html/" rel="tag">#html</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/24/front-yupload/" rel="next" title="图片上传组件 Yupload">
+                <i class="fa fa-chevron-left"></i> 图片上传组件 Yupload
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/25/base-css-vision/" rel="prev" title="CSS-视觉">
+                CSS-视觉 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/25/base-html5-intro/" data-title="html5-基础介绍" data-url="https://feifeiyum.github.io/2016/12/25/base-html5-intro/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#H5-新特性"><span class="nav-number">1.</span> <span class="nav-text">H5 新特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML5-新标签"><span class="nav-number">2.</span> <span class="nav-text">HTML5 新标签</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Web存储"><span class="nav-number">3.</span> <span class="nav-text">Web存储</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML5-缓存"><span class="nav-number">4.</span> <span class="nav-text">HTML5 缓存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Canvas"><span class="nav-number">5.</span> <span class="nav-text">Canvas</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SVG"><span class="nav-number">6.</span> <span class="nav-text">SVG</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其他"><span class="nav-number">7.</span> <span class="nav-text">其他</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number">8.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

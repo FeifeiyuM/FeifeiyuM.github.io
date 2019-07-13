@@ -1,0 +1,715 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="js,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="本文主要介绍一款简单的h5 slider –Yslider, 采用原生js书写，使用于任何js框架支持视频播放">
+<meta name="keywords" content="js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="h5轮播组件 Yslider">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/10/30/front-yslider/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="本文主要介绍一款简单的h5 slider –Yslider, 采用原生js书写，使用于任何js框架支持视频播放">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://feifeiyum.github.io/images/components/yslider.png">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.293Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="h5轮播组件 Yslider">
+<meta name="twitter:description" content="本文主要介绍一款简单的h5 slider –Yslider, 采用原生js书写，使用于任何js框架支持视频播放">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/components/yslider.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> h5轮播组件 Yslider | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                h5轮播组件 Yslider
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-10-30T14:13:33+08:00" content="2016-10-30">
+              2016-10-30
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/front/" itemprop="url" rel="index">
+                    <span itemprop="name">front</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/30/front-yslider/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/30/front-yslider/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文主要介绍一款简单的h5 slider –Yslider, 采用原生js书写，使用于任何js框架<br>支持视频播放<br><img src="/images/components/yslider.png" alt="slider"><br><a id="more"></a></p>
+</blockquote>
+<h2 id="Yslider-参数"><a href="#Yslider-参数" class="headerlink" title="Yslider 参数"></a>Yslider 参数</h2><blockquote>
+<p>Yslider 参数以对象形式传入<br>1、target: Slier 容器 DOM 的 id 属性， 必填， 类型 string<br>2、interval: 图片切换间隔时间， 非必填， 类型 number, 单位 s(秒)， defualt 3s<br>3、showCircle: 是否显示圆点导航， 非必填， 类型 boolean, default true<br>4、circleColor： 圆点颜色， 非必填， 类型 颜色(string)， default ‘#00F5FF’<br>5、imgArray: 图片列表， 必填， 类型 array</p>
+<blockquote>
+<ul>
+<li>redirect: 点击图片跳转地址， 非必填， 类型 url(string), 播放视频时为视频地址   </li>
+<li>url: 图片地址， 必填， 类型 url(string)</li>
+<li>type: 类型(string), 选填, 默认按图片处理, 如果是播放视频, type 为 video</li>
+<li>detail: 图片介绍， 放在 alt 属性中， 非必填，类型 string</li>
+</ul>
+</blockquote>
+</blockquote>
+<h2 id="Yslider-使用"><a href="#Yslider-使用" class="headerlink" title="Yslider 使用"></a>Yslider 使用</h2><blockquote>
+<p><strong>注意：</strong> 推荐使用 <a href="https://github.com/FeifeiyuM/JSComponents/blob/master/yslider/yslider-3.0.js" target="_blank" rel="noopener">yslider 3.x</a> 版本， 3.x 版本需要依赖组件 video.js， 更好支持视频播放<br>1、在html 标签中定一个 slider 元素用于容纳图片列表, 并定义好slider容器的尺寸<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">.page-wrap .slider &#123;  //</span><br><span class="line">    height: 25rem; //定义容器高度，</span><br><span class="line">    width: 100%; //容器宽度</span><br><span class="line">    overflow: hidden;  //超出不显示</span><br><span class="line">&#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line">//yslider 3.x 版本需要 video-js.min.css</span><br><span class="line"><span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"&#123;&#123; STATIC_URL &#125;&#125;js/video/video-js.min.css"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"page-wrap"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"slider"</span> <span class="attr">class</span>=<span class="string">"slider"</span>&gt;</span>  //slider 容器标签 一定包含id 属性</span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">//yslider 3.x 版本需要 video.js</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"&#123;&#123; STATIC_URL &#125;&#125;js/video/video.min.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line">//引入 yslider</span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/static/common/slider/slider-1.0.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span> <span class="comment">&lt;!--引入 slider--&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>2、使用slider<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">(<span class="function"><span class="keyword">function</span>(<span class="params">win</span>) </span>&#123;</span></span><br><span class="line">    imgArray = [</span><br><span class="line"><span class="javascript">        &#123;<span class="attr">redirect</span>: <span class="string">''</span>, <span class="attr">url</span>: <span class="string">'/static/images/slider1.jpg'</span>, <span class="attr">detail</span>: <span class="string">'img1'</span>&#125;,</span></span><br><span class="line"><span class="javascript">        &#123;<span class="attr">redirect</span>: <span class="string">''</span>, <span class="attr">url</span>: <span class="string">'/static/images/slider2.jpg'</span>, <span class="attr">detail</span>: <span class="string">'img2'</span>&#125;,</span></span><br><span class="line"><span class="javascript">        &#123;<span class="attr">redirect</span>: <span class="string">''</span>, <span class="attr">url</span>: <span class="string">'/static/images/slider3.jpg'</span>, <span class="attr">detail</span>: <span class="string">'img3'</span>&#125;,</span></span><br><span class="line"><span class="javascript">        &#123;<span class="attr">redirect</span>: <span class="string">'http://www.runoob.com/try/demo_source/movie.mp4'</span>, <span class="attr">url</span>: <span class="string">'/static/images/slider4.jpg'</span>, <span class="attr">type</span>: <span class="string">"video"</span>, <span class="attr">detail</span>: <span class="string">'img4'</span>&#125;</span></span><br><span class="line"><span class="javascript">    ]  <span class="comment">//准备图片列表， redirect 为点击图片跳转链接， url 为图片下载地址， detail: 为图片说明</span></span></span><br><span class="line"></span><br><span class="line"><span class="javascript">     Yslider(&#123;  <span class="comment">//初始化 yslider</span></span></span><br><span class="line"><span class="javascript">        target: <span class="string">'slider'</span>,  <span class="comment">//slider 容器id</span></span></span><br><span class="line"><span class="javascript">        interval: <span class="number">2</span>,  <span class="comment">//图片切换间隔时间, 单位s, default 3s</span></span></span><br><span class="line"><span class="javascript">        imgArray: imgArray, <span class="comment">//图片列表</span></span></span><br><span class="line"><span class="javascript">        showCircle: <span class="literal">true</span>,  <span class="comment">//是否显示圆点导航</span></span></span><br><span class="line"><span class="javascript">        circleColor: <span class="string">'#00C5CD'</span>, <span class="comment">//圆点导航颜色</span></span></span><br><span class="line">     &#125;)</span><br><span class="line"><span class="javascript">  &#125;)(<span class="built_in">window</span>);</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="Yslider-源码"><a href="#Yslider-源码" class="headerlink" title="Yslider 源码"></a>Yslider 源码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * author: feifeiyu</span></span><br><span class="line"><span class="comment"> * version: 3.4</span></span><br><span class="line"><span class="comment"> * Yslider is a simple images slider for h5</span></span><br><span class="line"><span class="comment"> * @param target //slider container id</span></span><br><span class="line"><span class="comment"> * @param interval  // images change interval, s, default 3s</span></span><br><span class="line"><span class="comment"> * @param imgArray // images list, include properties: redirect, type, url, detail</span></span><br><span class="line"><span class="comment"> * @param showCircle //show circle nav, dafault true</span></span><br><span class="line"><span class="comment"> * @param circleColor: //circle background-color</span></span><br><span class="line"><span class="comment"> * yslider blog: https://feifeiyum.github.io/2016/10/30/yslider/</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Yslider = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> imgsNode = <span class="string">''</span>  <span class="comment">//图片wrap</span></span><br><span class="line">    <span class="keyword">var</span> circlesNode = <span class="string">''</span> <span class="comment">//圆点 dom</span></span><br><span class="line">    <span class="keyword">var</span> conWidth = <span class="string">''</span> <span class="comment">// 图片宽度</span></span><br><span class="line">    <span class="keyword">var</span> circleColor = <span class="string">''</span> <span class="comment">//圆点颜色</span></span><br><span class="line">    <span class="keyword">var</span> interval = <span class="string">''</span>  <span class="comment">//间隔时间</span></span><br><span class="line">    <span class="keyword">var</span> autoPlay = <span class="literal">true</span> <span class="comment">//是否自动轮播</span></span><br><span class="line">    <span class="keyword">var</span> intervalFlag = <span class="literal">null</span> <span class="comment">//setInterval 值</span></span><br><span class="line">    <span class="keyword">var</span> currentIndex = <span class="number">0</span> <span class="comment">//当前页面编号</span></span><br><span class="line">    <span class="keyword">var</span> imgLength = <span class="string">''</span></span><br><span class="line">    <span class="keyword">var</span> videoIds = []  <span class="comment">//视频 video 标签 id</span></span><br><span class="line">    <span class="keyword">var</span> conHeight = <span class="string">''</span></span><br><span class="line">    <span class="keyword">var</span> isPlaying = <span class="literal">false</span> <span class="comment">//视频是否正在播放</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> ysGenDom = <span class="function"><span class="keyword">function</span>(<span class="params">opt</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> container = <span class="built_in">document</span>.getElementById(opt.target)</span><br><span class="line">        <span class="keyword">if</span>(!container) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yslider - can not find slider container DOM'</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        conWidth = container.clientWidth <span class="comment">//slider width</span></span><br><span class="line">        conHeight = container.offsetHeight <span class="comment">//slider height</span></span><br><span class="line">        imgLength = opt.imgArray.length </span><br><span class="line"></span><br><span class="line">        <span class="comment">//检查 imgArray 有效性</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; imgLength; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span>(!opt.imgArray[i].url) &#123;</span><br><span class="line">                opt.imgArray.splice(i, <span class="number">1</span>)</span><br><span class="line">                imgLength -= <span class="number">1</span></span><br><span class="line">                i -= <span class="number">1</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//生成slider dom 字符串</span></span><br><span class="line">        <span class="keyword">var</span> sliderNode = <span class="string">'&lt;div id="yslider-wrap" class="yslider-wrap"'</span></span><br><span class="line">            + <span class="string">'style="position: relative; width: 100%; height: 100%; overflow: hidden;"&gt;'</span></span><br><span class="line">            +  <span class="string">'&lt;ul id="yslider-imglist" class="yslider-imglist" style="position: relative;margin: 0; padding: 0; height: 100%; transition: all 0.5s; width: '</span> +( conWidth * imgLength) + <span class="string">'px;clear: both;"&gt;'</span></span><br><span class="line">        <span class="keyword">var</span> sliderItems = <span class="string">''</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; imgLength; i++) &#123;</span><br><span class="line">            <span class="keyword">var</span> index = i</span><br><span class="line">            <span class="keyword">if</span>(opt.imgArray[index].type === <span class="string">'video'</span>) &#123;</span><br><span class="line">                <span class="keyword">if</span>(opt.enable) &#123;</span><br><span class="line">                    <span class="keyword">var</span> tagId = <span class="string">'yvideo-'</span> + i </span><br><span class="line">                    sliderItems += <span class="string">'&lt;li class="yvideo-item" style="float: left; height: 100%; width: '</span> + conWidth + <span class="string">'px;"&gt;'</span></span><br><span class="line">                            + <span class="string">'&lt;video id="'</span> + tagId + <span class="string">'" class="yvideo-play video-js" controls preload="auto" width="'</span> + conWidth + <span class="string">'" height="'</span> + conHeight + <span class="string">'" poster="'</span> + opt.imgArray[index].url + <span class="string">'" data-setup="&#123;&#125;"&gt;'</span></span><br><span class="line">                            + <span class="string">'&lt;source src="'</span> + opt.imgArray[index].redirect + <span class="string">'"&gt;&lt;/source&gt;'</span></span><br><span class="line">                            + <span class="string">'&lt;/video&gt;'</span></span><br><span class="line">                        + <span class="string">'&lt;/li&gt;'</span></span><br><span class="line">                    videoIds.push(tagId)</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    sliderItems += <span class="string">'&lt;li style="float:left; height: 100%; width: '</span> + conWidth + <span class="string">'px;"&gt;'</span></span><br><span class="line">                   + <span class="string">'&lt;a href="javascript:void(0);"&gt;'</span></span><br><span class="line">                   + <span class="string">'&lt;img\ v-url="'</span> + opt.imgArray[index].redirect + <span class="string">'" src="'</span> + opt.imgArray[index].url + <span class="string">'"\ alt="'</span> + opt.imgArray[index].detail + <span class="string">'"\ style="width: 100%;"&gt;'</span></span><br><span class="line">                   + <span class="string">'&lt;button class="video-play" v-url="'</span> + opt.imgArray[index].redirect + <span class="string">'" style="position:absolute; top:35%; left:'</span> + conWidth*(i+<span class="number">0.4</span>)+ <span class="string">'px; border: 2px solid #fff; border-radius: 50%; background: rgba(43, 51, 63, 0.6); height: 60px; width: 60px; "&gt;&lt;div v-url="'</span> + opt.imgArray[index].redirect + <span class="string">'" style="position:relative;left:16px;width:0;height:0;transform: rotate(45deg);border:8px solid;border-color: #fff #fff transparent transparent;"&gt;&lt;/div&gt;&lt;/button&gt;'</span></span><br><span class="line">                   + <span class="string">'&lt;/a&gt;&lt;/li&gt;'</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                sliderItems += <span class="string">'&lt;li style="float: left; height: 100%; width: '</span> + conWidth + <span class="string">'px;display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex;-webkit-box-align:center;-webkit-align-items:center;-ms-flex-align:center;align-items:center;-webkit-box-pack: center;-webkit-justify-content:center;-ms-flex-pack:center;justify-content:center;"&gt;'</span></span><br><span class="line">                    + (opt.imgArray[index].redirect ? <span class="string">'&lt;a href="'</span> + opt.imgArray[index].redirect + <span class="string">'"&gt;'</span> : <span class="string">'&lt;a&gt;'</span>)</span><br><span class="line">                    + <span class="string">'&lt;img src="'</span> + opt.imgArray[index].url + <span class="string">'" alt="'</span> + opt.imgArray[index].detail + <span class="string">'" style="width: 100%;height: auto;"&gt;'</span></span><br><span class="line">                    + <span class="string">'&lt;/a&gt;&lt;/li&gt;'</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        sliderNode += sliderItems</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span>(opt.showCircle &amp;&amp; imgLength &gt; <span class="number">1</span>) &#123;</span><br><span class="line">            sliderNode += <span class="string">'&lt;/ul&gt;&lt;ul class="ysclider-circles" style="position: relative; bottom: 30px; margin: auto; width:'</span>+ (<span class="number">18</span> * imgLength) +<span class="string">'px;"&gt;'</span></span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;imgLength; i++) &#123;</span><br><span class="line">                sliderNode += <span class="string">'&lt;li style="margin-right: 5px; display: inline-block;"&gt;'</span></span><br><span class="line">                    + <span class="string">'&lt;span class="ysclider-circle" style="display: block; width: 10px; height: 10px; border: 1px solid #ddd; border-radius: 50%; background: transparent;"&gt;&lt;/span&gt;&lt;/li&gt;'</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        sliderNode += <span class="string">'&lt;/ul&gt;&lt;/div&gt;'</span></span><br><span class="line">        container.innerHTML = sliderNode</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//初始化函数</span></span><br><span class="line">    <span class="keyword">var</span> ysInit = <span class="function"><span class="keyword">function</span>(<span class="params">cColor, showCircle, autoplay, inval</span>) </span>&#123;</span><br><span class="line">        imgsNode = <span class="built_in">document</span>.getElementById(<span class="string">'yslider-imglist'</span>)</span><br><span class="line">        <span class="keyword">if</span>(showCircle) &#123;</span><br><span class="line">            circlesNode = <span class="built_in">document</span>.getElementsByClassName(<span class="string">'ysclider-circle'</span>)</span><br><span class="line">            circleColor = cColor || <span class="string">'#00F5FF'</span></span><br><span class="line">            <span class="comment">//初始化，第一个园点加上样式</span></span><br><span class="line">            <span class="keyword">if</span>(circlesNode.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">                circlesNode[<span class="number">0</span>].style.backgroundColor = circleColor</span><br><span class="line">                circlesNode[<span class="number">0</span>].style.borderColor = circleColor</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        autoPlay = autoplay</span><br><span class="line">        interval = (inval * <span class="number">1000</span>) || <span class="number">3000</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//图片切换函数</span></span><br><span class="line">    <span class="keyword">var</span> ysChangeImg = <span class="function"><span class="keyword">function</span>(<span class="params">index</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(imgLength === <span class="number">1</span>) &#123;</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(index == <span class="string">'next'</span>) &#123;</span><br><span class="line">            currentIndex++</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(index == <span class="string">'prev'</span>) &#123;</span><br><span class="line">            currentIndex--</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            currentIndex = index</span><br><span class="line">        &#125;</span><br><span class="line">        currentIndex = currentIndex &lt; <span class="number">0</span> ? (imgLength - <span class="number">1</span>) : (currentIndex % imgLength)</span><br><span class="line">        <span class="keyword">var</span> circleIndex = currentIndex % imgLength</span><br><span class="line">        </span><br><span class="line">        <span class="comment">//移动图片</span></span><br><span class="line">        imgsNode.style.marginLeft = <span class="string">'-'</span> + (currentIndex * conWidth) + <span class="string">'px'</span></span><br><span class="line">        <span class="comment">//圆点</span></span><br><span class="line">        <span class="keyword">if</span>(circlesNode) &#123;</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; imgLength; i++) &#123;</span><br><span class="line">                <span class="keyword">if</span>(circleIndex === i) &#123;</span><br><span class="line">                    circlesNode[i].style.backgroundColor = circleColor</span><br><span class="line">                    circlesNode[i].style.borderColor = circleColor</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    circlesNode[i].style.backgroundColor = <span class="string">''</span></span><br><span class="line">                    circlesNode[i].style.borderColor = <span class="string">'#ddd'</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//视频播放</span></span><br><span class="line">    <span class="keyword">var</span> ysPlayVideo = <span class="function"><span class="keyword">function</span>(<span class="params">enable, cb</span>) </span>&#123;</span><br><span class="line">       <span class="comment">//注册 video 事件</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; videoIds.length; i ++) &#123;</span><br><span class="line">            videojs(videoIds[i], &#123;&#125;, <span class="function"><span class="keyword">function</span> <span class="title">onPlayerReady</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                <span class="keyword">var</span> vsrc = <span class="keyword">this</span>.children()[<span class="number">0</span>].currentSrc</span><br><span class="line">                <span class="keyword">this</span>.on(<span class="string">'play'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                    clearInterval(intervalFlag)</span><br><span class="line">                    intervalFlag = <span class="literal">null</span></span><br><span class="line">                    isPlaying = <span class="literal">true</span></span><br><span class="line">                    cb(&#123;<span class="attr">status</span>: <span class="string">'play'</span>, <span class="attr">src</span>: vsrc&#125;)</span><br><span class="line">                &#125;)</span><br><span class="line">                <span class="keyword">this</span>.on(<span class="string">'pause'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">this</span>.exitFullscreen()</span><br><span class="line">                    cb(&#123;<span class="attr">status</span>: <span class="string">'pause'</span>, <span class="attr">src</span>: vsrc&#125;)</span><br><span class="line">                &#125;)</span><br><span class="line">                <span class="keyword">this</span>.on(<span class="string">'ended'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                    <span class="keyword">this</span>.exitFullscreen()</span><br><span class="line">                    isPlaying = <span class="literal">false</span></span><br><span class="line">                    !intervalFlag &amp;&amp; ysAutoPlay()</span><br><span class="line">                    cb(&#123;<span class="attr">status</span>: <span class="string">'ended'</span>, <span class="attr">src</span>: vsrc&#125;)</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//自动播放函数</span></span><br><span class="line">    <span class="keyword">var</span> ysAutoPlay = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        autoPlay &amp;&amp; (intervalFlag = setInterval(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; ysChangeImg(<span class="string">'next'</span>)&#125;, interval))</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//手动播放函数</span></span><br><span class="line">    <span class="keyword">var</span> ysManualPlay = <span class="function"><span class="keyword">function</span>(<span class="params">cb</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> ySlideroffsetX = <span class="number">0</span></span><br><span class="line">        <span class="keyword">var</span> ySliderStartX = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">var</span> touchEvt = <span class="function"><span class="keyword">function</span>(<span class="params">evt</span>) </span>&#123;</span><br><span class="line">            <span class="keyword">var</span> e = evt || <span class="built_in">window</span>.event</span><br><span class="line">            <span class="keyword">var</span> touch = e.touches[<span class="number">0</span>]</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">switch</span>(e.type) &#123;</span><br><span class="line">                <span class="keyword">case</span> <span class="string">'touchstart'</span>:</span><br><span class="line">                    e.preventDefault()</span><br><span class="line">                    ySliderStartX = touch.pageX</span><br><span class="line">                    clearInterval(intervalFlag)</span><br><span class="line">                    intervalFlag = <span class="literal">null</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">case</span> <span class="string">'touchmove'</span>: </span><br><span class="line">                    e.preventDefault()</span><br><span class="line">                    <span class="keyword">if</span>(imgLength &gt; <span class="number">1</span>) &#123;</span><br><span class="line">                        ySlideroffsetX = touch.pageX - ySliderStartX</span><br><span class="line">                        imgsNode.style.marginLeft = <span class="string">'-'</span> + (currentIndex * conWidth - ySlideroffsetX) + <span class="string">'px'</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">case</span> <span class="string">'touchend'</span>:</span><br><span class="line">                    e.preventDefault()</span><br><span class="line">                    <span class="keyword">if</span>(ySlideroffsetX &lt; <span class="number">3</span> &amp;&amp; ySlideroffsetX &gt; <span class="number">-3</span>) &#123; <span class="comment">//点击图片</span></span><br><span class="line">                        <span class="keyword">var</span> vsrc = e.target.getAttribute(<span class="string">'v-url'</span>)</span><br><span class="line">                        <span class="keyword">if</span>(vsrc) &#123;</span><br><span class="line">                            cb(&#123;<span class="attr">status</span>: <span class="string">'play'</span>, <span class="attr">src</span>: vsrc&#125;)</span><br><span class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(e.target.tagName === <span class="string">"IMG"</span>) &#123;</span><br><span class="line">                            imgsNode.childNodes[currentIndex].childNodes[<span class="number">0</span>].click()</span><br><span class="line">                            cb(&#123;<span class="attr">status</span>: <span class="string">'showimg'</span>, <span class="attr">src</span>: e.target.src&#125;)</span><br><span class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(e.target.tagName === <span class="string">'VIDEO'</span> || e.target.tagName === <span class="string">"DIV"</span> || e.target.tagName === <span class="string">'BUTTON'</span>) &#123;</span><br><span class="line">                            <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">                        &#125; </span><br><span class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(ySlideroffsetX &lt; <span class="number">-50</span>) &#123;</span><br><span class="line">                        ysChangeImg(<span class="string">'next'</span>) <span class="comment">//左滑下一页</span></span><br><span class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(ySlideroffsetX &gt; <span class="number">50</span>) &#123;</span><br><span class="line">                        ysChangeImg(<span class="string">'prev'</span>) <span class="comment">//右划上一页</span></span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123; <span class="comment">//滑动距离小，恢复</span></span><br><span class="line">                        imgsNode.style.marginLeft = <span class="string">'-'</span> + (currentIndex * conWidth) + <span class="string">'px'</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    ySlideroffsetX = <span class="number">0</span>  <span class="comment">//清空偏移</span></span><br><span class="line">                    ySliderStartX = <span class="number">0</span> <span class="comment">//清空起始坐标</span></span><br><span class="line">                    !isPlaying &amp;&amp; !intervalFlag &amp;&amp; ysAutoPlay()  <span class="comment">//恢复自动轮播</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">case</span> <span class="string">'touchcancel'</span>:</span><br><span class="line">                    e.preventDefault()</span><br><span class="line">                    <span class="keyword">if</span>(ySlideroffsetX &lt; <span class="number">3</span> &amp;&amp; ySlideroffsetX &gt; <span class="number">-3</span>) &#123; <span class="comment">//点击图片</span></span><br><span class="line">                        <span class="keyword">var</span> vsrc = e.target.getAttribute(<span class="string">'v-url'</span>)</span><br><span class="line">                        <span class="keyword">if</span>(vsrc) &#123;</span><br><span class="line">                            cb(&#123;<span class="attr">status</span>: <span class="string">'play'</span>, <span class="attr">src</span>: vsrc&#125;)</span><br><span class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(e.target.tagName === <span class="string">"IMG"</span>) &#123;</span><br><span class="line">                            imgsNode.childNodes[currentIndex].childNodes[<span class="number">0</span>].click()</span><br><span class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(e.target.tagName === <span class="string">'VIDEO'</span> || e.target.tagName === <span class="string">"DIV"</span> || e.target.tagName === <span class="string">'BUTTON'</span>) &#123;</span><br><span class="line">                            <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(ySlideroffsetX &lt; <span class="number">-50</span>) &#123;</span><br><span class="line">                        ysChangeImg(<span class="string">'next'</span>) <span class="comment">//左滑下一页</span></span><br><span class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(ySlideroffsetX &gt; <span class="number">50</span>) &#123;</span><br><span class="line">                        ysChangeImg(<span class="string">'prev'</span>) <span class="comment">//右划上一页</span></span><br><span class="line">                    &#125; <span class="keyword">else</span> &#123; <span class="comment">//滑动距离小，恢复</span></span><br><span class="line">                        imgsNode.style.marginLeft = <span class="string">'-'</span> + (currentIndex * conWidth) + <span class="string">'px'</span></span><br><span class="line">                    &#125;</span><br><span class="line">                    ySlideroffsetX = <span class="number">0</span>  <span class="comment">//清空偏移</span></span><br><span class="line">                    ySliderStartX = <span class="number">0</span> <span class="comment">//清空起始坐标</span></span><br><span class="line">                   !isPlaying &amp;&amp; !intervalFlag &amp;&amp; ysAutoPlay()  <span class="comment">//恢复自动轮播</span></span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">                <span class="keyword">default</span>:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        imgsNode.addEventListener(<span class="string">'touchstart'</span>, touchEvt, <span class="literal">false</span>)</span><br><span class="line">        imgsNode.addEventListener(<span class="string">'touchmove'</span>, touchEvt, <span class="literal">false</span>)</span><br><span class="line">        imgsNode.addEventListener(<span class="string">'touchend'</span>, touchEvt, <span class="literal">false</span>)</span><br><span class="line">        imgsNode.addEventListener(<span class="string">'touchcancel'</span>, touchEvt, <span class="literal">false</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> YS = <span class="function"><span class="keyword">function</span>(<span class="params">opt, cb</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(!opt.target) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yslider - slider container DOM id target can not be null'</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(opt.autoplay !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.autoplay !== <span class="string">'boolean'</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yslider - type of autoplay is boolean'</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(opt.interval !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.interval !== <span class="string">'number'</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yslider - type of images change interval is number'</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(opt.imgArray === <span class="literal">undefined</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yslider - slider\'s imgArray (image list array) can not be null'</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(opt.imgArray.constructor.toString().indexOf(<span class="string">'Array'</span>) === <span class="number">-1</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yslider - type of imgArray is array'</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(opt.showCircle !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.showCircle !== <span class="string">'boolean'</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yslider - type of showCircle is boolean'</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(opt.enable !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.enable !== <span class="string">'boolean'</span>) &#123;</span><br><span class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yslider - type of enable is boolean'</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//生成 slider DOM</span></span><br><span class="line">        ysGenDom(opt)</span><br><span class="line">        <span class="comment">//初始化参数</span></span><br><span class="line">        ysInit(opt.circleColor, opt.showCircle, opt.autoplay, opt.interval)</span><br><span class="line">        <span class="comment">//自动播放</span></span><br><span class="line">        ysAutoPlay()</span><br><span class="line">        <span class="comment">//手动播放注册</span></span><br><span class="line">        ysManualPlay(cb)</span><br><span class="line">        <span class="comment">//播放器事件注册</span></span><br><span class="line">        <span class="keyword">if</span>(videoIds.length &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            ysPlayVideo(opt.enable !== <span class="literal">undefined</span> ? opt.enable : <span class="literal">true</span>, cb)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> YS</span><br><span class="line">&#125;())</span><br><span class="line"><span class="comment">//如果采用模块化打包的时候加上这句</span></span><br><span class="line"><span class="comment">// module.exports = Yslider</span></span><br></pre></td></tr></table></figure>
+<h1 id="END"><a href="#END" class="headerlink" title="END"></a>END</h1>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag">#js</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/05/front-css-common/" rel="next" title="常用css样式">
+                <i class="fa fa-chevron-left"></i> 常用css样式
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/30/front-yh5confirm/" rel="prev" title="JS 确认组件 Yh5confirm">
+                JS 确认组件 Yh5confirm <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/30/front-yslider/" data-title="h5轮播组件 Yslider" data-url="https://feifeiyum.github.io/2016/10/30/front-yslider/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Yslider-参数"><span class="nav-number">1.</span> <span class="nav-text">Yslider 参数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yslider-使用"><span class="nav-number">2.</span> <span class="nav-text">Yslider 使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yslider-源码"><span class="nav-number">3.</span> <span class="nav-text">Yslider 源码</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#END"><span class="nav-number"></span> <span class="nav-text">END</span></a></li></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

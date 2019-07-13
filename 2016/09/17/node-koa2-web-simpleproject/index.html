@@ -1,0 +1,776 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="koa,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="目标 本文主要目标是构建一个简单的koa2工程，实现基本的路由，模板渲染等">
+<meta name="keywords" content="koa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第一篇：一个简单的koa2-web应用">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/09/17/node-koa2-web-simpleproject/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="目标 本文主要目标是构建一个简单的koa2工程，实现基本的路由，模板渲染等">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://feifeiyum.github.io/images/nunjucks.png">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.295Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第一篇：一个简单的koa2-web应用">
+<meta name="twitter:description" content="目标 本文主要目标是构建一个简单的koa2工程，实现基本的路由，模板渲染等">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/nunjucks.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 第一篇：一个简单的koa2-web应用 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                第一篇：一个简单的koa2-web应用
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-17T22:45:25+08:00" content="2016-09-17">
+              2016-09-17
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/node/" itemprop="url" rel="index">
+                    <span itemprop="name">node</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/17/node-koa2-web-simpleproject/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/17/node-koa2-web-simpleproject/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><blockquote>
+<p>本文主要目标是构建一个简单的koa2工程，实现基本的路由，模板渲染等<br><a id="more"></a></p>
+</blockquote>
+<h2 id="node-安装"><a href="#node-安装" class="headerlink" title="node 安装"></a>node 安装</h2><blockquote>
+<p><a href="https://nodejs.org/en/download/package-manager/" target="_blank" rel="noopener">linux 安装</a>命令：以node 6.x, debian 为例<br>curl -sL <a href="https://deb.nodesource.com/setup_6.x" target="_blank" rel="noopener">https://deb.nodesource.com/setup_6.x</a> | sudo -E bash -<br>（如果未安装 curl 请先安装 curl: sudo apt-get update sudo apt-get install curl )<br>sudo apt-get install -y nodejs  </p>
+</blockquote>
+<h2 id="初始化工程"><a href="#初始化工程" class="headerlink" title="初始化工程"></a>初始化工程</h2><blockquote>
+<p>1、终端（console)进入工程目录，例如： ~/Documents/koa2-start/，输入 命令 npm init<br>2、根据提示填写工程名称（name), 版本(version), 描述（description), 入口文件（entry point), 测试命令（test command）, git仓库（git repository), 关键字（keywords), 作者（author），license。最后 Is this ok?(yes) 输入yes。此时可以发现在当前目录下生成了一个名为 package.json 的文件，这个文件可以管理整个应用的依赖文件，启动命令等。<br>3、新建入口文件 app.js<br>4、进入package.json文件配置启动命令： 在scripts 字段添加启动工程命令：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&quot;scripts&quot;: &#123;</span><br><span class="line">    ”start&quot;: &quot;node --harmony app.js&quot;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>在终端输入命令： npm start 即可node 运行脚本 app.js</p>
+</blockquote>
+<h2 id="工程搭建"><a href="#工程搭建" class="headerlink" title="工程搭建"></a>工程搭建</h2><h3 id="一、最小工程"><a href="#一、最小工程" class="headerlink" title="一、最小工程"></a>一、最小工程</h3><blockquote>
+<p>安装依赖： npm install –save koa@2<br>代码编写：  </p>
+<h4 id="使用-async-await"><a href="#使用-async-await" class="headerlink" title="使用 async/await"></a>使用 async/await</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>)</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa()</span><br><span class="line">app.use(<span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">await</span> next();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    ctx.body = &#123; <span class="attr">message</span>: err.message &#125;</span><br><span class="line">    ctx.status = err.status || <span class="number">500</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;)</span><br><span class="line">app.use(<span class="keyword">async</span> ctx =&gt; &#123;</span><br><span class="line">  ctx.body = <span class="string">'feifeiyu'</span></span><br><span class="line">&#125;)</span><br><span class="line">app.listen(<span class="number">3000</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'server started， port 3000'</span>))</span><br><span class="line"><span class="built_in">module</span>.exports = app</span><br></pre></td></tr></table></figure>
+</blockquote>
+<blockquote>
+<p>async/await是异步流程控制最新的解决方案,还是属于ES7的提案， node 暂未支持，需要使用babel转码后使用<br>babel配置： </p>
+<blockquote>
+<p><strong>a、</strong>安装依赖 npm install –save-dev babel-plugin-syntax-async-functions babel-plugin-transform-async-to-generator babel-preset-es2015 babel-preset-es2015-node6 (根据node版本选择) babel-register<br><strong>b、</strong>新建文件 .babelrc ,加入babel配置<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;presets&quot;: [&quot;es2015-node6&quot;],</span><br><span class="line">  &quot;plugins&quot;: [</span><br><span class="line">    &quot;transform-async-to-generator&quot;,</span><br><span class="line">    &quot;syntax-async-functions&quot;</span><br><span class="line"> ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><strong> c、 </strong>新建文件 index.js, 配置babel入口<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">require</span>(<span class="string">"babel-register"</span>);</span><br><span class="line"><span class="built_in">require</span>(<span class="string">"./app.js"</span>);</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<ul>
+<li>d、 <strong>修改启动入口文件为index.js, 进入package.json，将“start” 启动参数设置为 “node –harmony index.js”   
+</strong> e、 **终端启动服务： npm start, 本机访问： localhost:3000, 在浏览器中可以看见返回结果为 feifeiyu   </li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<h4 id="使用co"><a href="#使用co" class="headerlink" title="使用co"></a>使用co</h4><p><strong> a、 </strong>从上例看出sync/await 虽然好用，但需要配置一大堆babel文件， 接下来使用co来充当 Generator函数的执行器， <a href="https://github.com/tj/co" target="_blank" rel="noopener">co教程</a><br><strong>b、</strong>引入依赖 npm install –save co<br><strong>c、</strong>改写上例代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>)</span><br><span class="line"><span class="keyword">const</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>)</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa()</span><br><span class="line">app.use(co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx, next</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="keyword">yield</span> next();</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    ctx.body = &#123; <span class="attr">message</span>: err.message &#125;</span><br><span class="line">    ctx.status = err.status || <span class="number">500</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;))</span><br><span class="line">app.use(co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx</span>) </span>&#123;</span><br><span class="line">     ctx.body = <span class="string">'feifeiyu'</span></span><br><span class="line">&#125;))</span><br><span class="line">app.listen(<span class="number">3000</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'server started， port 3000'</span>))</span><br><span class="line"><span class="built_in">module</span>.exports = app</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><strong> d、 </strong>修改启动入口文件为index.js, 进入package.json，将“start” 启动参数改回 “node –harmony app.js”<br><strong> e、 </strong>终端启动服务： npm start, 本机访问： localhost:3000, 在浏览器中可以看见返回结果同样为 feifeiyu，<br><strong> f、 </strong>采用co 模块可以避免babel转码而产生大量难以阅读的代码，更有利于代码调试。 本文介绍的koa2将主要基于co模板实现异步流程控制。  </p>
+</blockquote>
+</blockquote>
+<h2 id="二、nunjucks模板渲染"><a href="#二、nunjucks模板渲染" class="headerlink" title="二、nunjucks模板渲染"></a>二、nunjucks模板渲染</h2><blockquote>
+<p>在服务端渲染网页需要使用相应的模板文件，对于node来说，比较流行的有jade， 但是这个对于前端来说不够直观， 没有html文件的那种亲切感，而且学习适应成本高。因此综合考虑可以使用类似Django模板的 nunjucks模板引擎。<br><strong>a、</strong>安装依赖： 在此，我们选择支持koa2的nunjucks中间件： <a href="https://github.com/hanai/koa-nunjucks-promise" target="_blank" rel="noopener">koa-nunjucks-promise</a><br><strong>b、</strong>nunjucks配置：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> nunjucksViews = <span class="built_in">require</span>(<span class="string">'koa-nunjucks-promise'</span>)</span><br><span class="line">app.use(nunjucksViews(<span class="string">`<span class="subst">$&#123;__dirname&#125;</span>/views`</span>, &#123;  <span class="comment">//配置模板文件路径，例如：模板文件统一置于工程根目录的view文件夹中</span></span><br><span class="line">    ext: <span class="string">'html'</span>,  <span class="comment">//渲染文件后缀为 html</span></span><br><span class="line">    noCache: <span class="literal">true</span>, <span class="comment">//开发环境下不设置缓存</span></span><br><span class="line">    watch: <span class="literal">true</span>,  <span class="comment">//开发环境下观察模板文件的变化并更新，方便开发</span></span><br><span class="line">    filters: &#123;  <span class="comment">//过滤器  </span></span><br><span class="line">        json: <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify(str, <span class="literal">null</span>, <span class="number">2</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    globals: &#123;  <span class="comment">//设置对于nunjucks的全局变量</span></span><br><span class="line">        <span class="comment">// staticPath: '//static'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;))</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>c、</strong>根据以上配置，我们先在工程根目标建一个<strong>views</strong>文件夹， 在文件夹下新建一个模板文件<strong>index.html</strong><br><strong>d、</strong>模板文件编写<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">html</span> <span class="attr">lang</span>=<span class="string">"zh-CN"</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">head</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">http-equiv</span>=<span class="string">"X-UA-Compatible"</span> <span class="attr">content</span>=<span class="string">"IE=edge"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">name</span>=<span class="string">"viewport"</span> <span class="attr">content</span>=<span class="string">"width=device-width, initial-scale=1"</span>&gt;</span></span><br><span class="line">    <span class="comment">&lt;!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ --&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>&#123;&#123; title &#125;&#125;<span class="tag">&lt;/<span class="name">title</span>&gt;</span> <span class="comment">&lt;!-- 页面标题，变量值由渲染时传入 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;&#123; content &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span>  <span class="comment">&lt;!-- 页面内容，内容变量值值由渲染时传入 --&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>e、</strong>页面渲染, 加入一下代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">app.use(co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx</span>) </span>&#123;</span><br><span class="line">    <span class="comment">//index表示views/index.html, title 对应模板文件中的title， content 对应 content  </span></span><br><span class="line">    <span class="keyword">yield</span> ctx.render(<span class="string">'index'</span>, &#123;<span class="attr">title</span>: <span class="string">'Nunjucks'</span>, <span class="attr">content</span>: <span class="string">'Feifeiyu yeah!'</span>&#125;)  </span><br><span class="line">&#125;))</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>f、</strong>整体代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>)</span><br><span class="line"><span class="keyword">const</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>)</span><br><span class="line"><span class="keyword">const</span> nunjucksViews = <span class="built_in">require</span>(<span class="string">'koa-nunjucks-promise'</span>)</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa()</span><br><span class="line"><span class="comment">//-----------------------</span></span><br><span class="line">app.use(nunjucksViews(<span class="string">`<span class="subst">$&#123;__dirname&#125;</span>/views`</span>, &#123;  <span class="comment">//配置模板文件路径，例如：模板文件统一置于工程根目录的view文件夹中</span></span><br><span class="line">    ext: <span class="string">'html'</span>,  <span class="comment">//渲染文件后缀为 html</span></span><br><span class="line">    noCache: <span class="literal">true</span>, <span class="comment">//开发环境下不设置缓存</span></span><br><span class="line">    watch: <span class="literal">true</span>,  <span class="comment">//开发环境下观察模板文件的变化并更新，方便开发</span></span><br><span class="line">    filters: &#123;  <span class="comment">//过滤器  </span></span><br><span class="line">        json: <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify(str, <span class="literal">null</span>, <span class="number">2</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    globals: &#123;  <span class="comment">//设置对于nunjucks的全局变量</span></span><br><span class="line">        <span class="comment">// staticPath: '//static'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;))</span><br><span class="line">app.use(co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> ctx.render(<span class="string">'index'</span>, &#123;<span class="attr">title</span>: <span class="string">'Nunjucks'</span>, <span class="attr">content</span>: <span class="string">'Feifeiyu yeah!'</span>&#125;)</span><br><span class="line">&#125;))</span><br><span class="line"><span class="comment">//-----------------------------</span></span><br><span class="line">app.listen(<span class="number">3000</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'server started， port 3000'</span>))</span><br><span class="line"><span class="built_in">module</span>.exports = app</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>g、</strong>在终端输入 npm start 启动服务, 浏览器中访问 localhost:3000, 即可见页面标题变为 Nunjucks, 文本内容为 Feifeiyu yeah!<br><img src="/images/nunjucks.png" alt="nunjucks"> </p>
+</blockquote>
+<h2 id="三、koa2路由"><a href="#三、koa2路由" class="headerlink" title="三、koa2路由"></a>三、koa2路由</h2><blockquote>
+<p>对于一个web应用，需要管理大量的url路径，因此需要一个中间件去管理每个url，将对应的请求交给相对应的程序去处理，对于koa2可以使用<a href="https://github.com/alexmingoia/koa-router/tree/master/" target="_blank" rel="noopener">koa-router</a>去管理/分发每个请求<br>koa-router支持的http请求类型有： get， post， patch, put, delete。<br><strong>a、</strong>安装依赖： npm install –save koa-router@next<br><strong>b、</strong>对上面代码进行编辑。 目标：根据路由访问模板文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>)</span><br><span class="line"><span class="keyword">const</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>)</span><br><span class="line"><span class="keyword">const</span> nunjucksViews = <span class="built_in">require</span>(<span class="string">'koa-nunjucks-promise'</span>)</span><br><span class="line"><span class="keyword">const</span> router = <span class="built_in">require</span>(<span class="string">'koa-router'</span>)</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa()  </span><br><span class="line"><span class="keyword">const</span> route = <span class="keyword">new</span> router()  <span class="comment">//新建路由对象</span></span><br><span class="line">app.use(nunjucksViews(<span class="string">`<span class="subst">$&#123;__dirname&#125;</span>/views`</span>, &#123;  <span class="comment">//配置模板文件路径，例如：模板文件统一置于工程根目录的view文件夹中</span></span><br><span class="line">    ext: <span class="string">'html'</span>,  <span class="comment">//渲染文件后缀为 html</span></span><br><span class="line">    noCache: <span class="literal">true</span>, <span class="comment">//开发环境下不设置缓存</span></span><br><span class="line">    watch: <span class="literal">true</span>,  <span class="comment">//开发环境下观察模板文件的变化并更新，方便开发</span></span><br><span class="line">    filters: &#123;  <span class="comment">//过滤器  </span></span><br><span class="line">        json: <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify(str, <span class="literal">null</span>, <span class="number">2</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;))</span><br><span class="line"><span class="comment">//---------------------------</span></span><br><span class="line">route.get(<span class="string">'/'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx</span>) </span>&#123;  <span class="comment">//根路径</span></span><br><span class="line">    <span class="keyword">yield</span> ctx.render(<span class="string">'index'</span>, &#123;<span class="attr">title</span>: <span class="string">'Nunjucks'</span>, <span class="attr">content</span>: <span class="string">'Feifeiyu yeah!'</span>&#125;)  <span class="comment">//渲染nunjucks模板</span></span><br><span class="line">&#125;))</span><br><span class="line">app.use(route.routes())  <span class="comment">//使用路由</span></span><br><span class="line">   .use(route.allowedMethods()) </span><br><span class="line"><span class="comment">//---------------------------</span></span><br><span class="line">app.listen(<span class="number">3000</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'server started， port 3000'</span>))</span><br><span class="line"><span class="built_in">module</span>.exports = app</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>c、</strong>本例的表现结果与nunjucks模板渲染那一例完全相同， 浏览器访问 localhost:3000 返回 Feifeiyu yeah!<br><strong>b、</strong>假如要新加一个路由 /route/test, http请求类型为 get, 浏览器访问后，返回结果： ‘feifeiyu nuaa’. 在上述例子中加入如下代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">route.get(<span class="string">'/route/test'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx</span>) </span>&#123;  <span class="comment">//路径配置</span></span><br><span class="line">    ctx.body = <span class="string">'feifeiyu nuaa'</span> <span class="comment">//直接在返回的body内打入字符串</span></span><br><span class="line">&#125;))</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>d、</strong>重启系统 =&gt; 浏览器访问： localhost:3000/route/test, =&gt; 浏览器中显示 ’feifeiyu nuaa’;</p>
+</blockquote>
+<h2 id="四、静态文件服务"><a href="#四、静态文件服务" class="headerlink" title="四、静态文件服务"></a>四、静态文件服务</h2><blockquote>
+<p>web工程中静态文件路径用于存放 js脚本， 图片等静态资源， 可以通过浏览器直接访问<br><strong>a、</strong> koa2 静态文件配置需要用到两个依赖， 分别是中间件 koa-static： 开启静态服务的中间件， 将工程中的某一路径设置为静态文件路径； koa-mount: 挂载静态文件的中间件，用于将静态文件夹挂载于某一url路径; npm install –save koa-static@next koa-mount@next<br><strong>b、</strong> 在工程根目录新建路径/public, 用于存放静态文件<br><strong>c、</strong> 在app.js文件中加入代码配置代码, **注意： 静态文件路径配置代码一定要放在 模板配置之后（即放置于nunjucks配置之后）<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>)</span><br><span class="line"><span class="keyword">const</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>)</span><br><span class="line"><span class="keyword">const</span> nunjucksViews = <span class="built_in">require</span>(<span class="string">'koa-nunjucks-promise'</span>)</span><br><span class="line"><span class="keyword">const</span> mount = <span class="built_in">require</span>(<span class="string">'koa-mount'</span>)</span><br><span class="line"><span class="keyword">const</span> server = <span class="built_in">require</span>(<span class="string">'koa-static'</span>)</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa()</span><br><span class="line">app.use(nunjucksViews(<span class="string">`<span class="subst">$&#123;__dirname&#125;</span>/views`</span>, &#123;  <span class="comment">//配置模板文件路径，例如：模板文件统一置于工程根目录的view文件夹中</span></span><br><span class="line">    ext: <span class="string">'html'</span>,  <span class="comment">//渲染文件后缀为 html</span></span><br><span class="line">    noCache: <span class="literal">true</span>, <span class="comment">//开发环境下不设置缓存</span></span><br><span class="line">    watch: <span class="literal">true</span>,  <span class="comment">//开发环境下观察模板文件的变化并更新，方便开发</span></span><br><span class="line">    filters: &#123;  <span class="comment">//过滤器  </span></span><br><span class="line">        json: <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify(str, <span class="literal">null</span>, <span class="number">2</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    globals: &#123;  <span class="comment">//设置对于nunjucks的全局变量</span></span><br><span class="line">        <span class="comment">// staticPath: '//static'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;))</span><br><span class="line"><span class="comment">//----------------------------------</span></span><br><span class="line"><span class="comment">//在模版引擎配置之后  </span></span><br><span class="line"><span class="comment">//将./public路径配置为静态路径，并将 ./public路径挂载到 名为/static的url路径  </span></span><br><span class="line">app.use(mount(<span class="string">'/static'</span>, server(<span class="string">`<span class="subst">$&#123;__dirname&#125;</span>/public`</span>)))  <span class="comment">//设置静态文件路径  </span></span><br><span class="line"><span class="comment">//----------------------------------</span></span><br><span class="line">app.listen(<span class="number">3000</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'server started， port 3000'</span>))</span><br><span class="line"><span class="built_in">module</span>.exports = app</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>d、</strong> 在静态路径 ./public 加入一个镜头文件（js, css, img等），例如图片： koa.png<br><strong>e、</strong> 启动服务， 浏览器访问 <a href="http://localhost:3000/static/koa.png，" target="_blank" rel="noopener">http://localhost:3000/static/koa.png，</a> 浏览器中即可看见我们在public中添加的图片。  </p>
+</blockquote>
+<h2 id="五、总结"><a href="#五、总结" class="headerlink" title="五、总结"></a>五、总结</h2><blockquote>
+<p>至此，一个简单的 koa web 应用已经搭建完成，<br><strong>a、</strong>工程目录结构如下：（不考虑babel配置）<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">├── kao-web        #开发根目录  </span><br><span class="line">|   ├──node_modules  #依赖文件目录，这个目录不用建， 由npm install 安装依赖后自动生成</span><br><span class="line">|   ├──public  #静态文件目录</span><br><span class="line">|   ├──views   #模板文件目录</span><br><span class="line">|   ├──app.js  #服务入口</span><br><span class="line">|   └──pakage.json #</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>a、</strong> app.js 文件整合后：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>)</span><br><span class="line"><span class="keyword">const</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>)</span><br><span class="line"><span class="keyword">const</span> nunjucksViews = <span class="built_in">require</span>(<span class="string">'koa-nunjucks-promise'</span>)</span><br><span class="line"><span class="keyword">const</span> router = <span class="built_in">require</span>(<span class="string">'koa-router'</span>)</span><br><span class="line"><span class="keyword">const</span> mount = <span class="built_in">require</span>(<span class="string">'koa-mount'</span>)</span><br><span class="line"><span class="keyword">const</span> server = <span class="built_in">require</span>(<span class="string">'koa-static'</span>)</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa()</span><br><span class="line"><span class="keyword">const</span> route = <span class="keyword">new</span> router()</span><br><span class="line">app.use(nunjucksViews(<span class="string">`<span class="subst">$&#123;__dirname&#125;</span>/views`</span>, &#123;  <span class="comment">//配置模板文件路径，</span></span><br><span class="line">    ext: <span class="string">'html'</span>,  <span class="comment">//渲染文件后缀为 html</span></span><br><span class="line">    noCache: process.env.NODE_ENV === <span class="string">'development'</span>, <span class="comment">//开发环境下不设置缓存</span></span><br><span class="line">    watch: process.env.NODE_ENV === <span class="string">'development'</span>,  <span class="comment">//开发环境下观察模板文件的变化并更新</span></span><br><span class="line">    filters: &#123;  <span class="comment">//过滤器  </span></span><br><span class="line">        json: <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify(str, <span class="literal">null</span>, <span class="number">2</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    globals: &#123;  <span class="comment">//设置对于nunjucks的全局变量</span></span><br><span class="line">        <span class="comment">// staticPath: '//static'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;))</span><br><span class="line">app.use(mount(<span class="string">'/static'</span>, server(<span class="string">`<span class="subst">$&#123;__dirname&#125;</span>/public`</span>)))  <span class="comment">//设置静态文件路径</span></span><br><span class="line">route.get(<span class="string">'/'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">yield</span> ctx.render(<span class="string">'index'</span>, &#123;<span class="attr">title</span>: <span class="string">'Nunjucks'</span>, <span class="attr">content</span>: <span class="string">'Feifeiyu yeah!'</span>&#125;)</span><br><span class="line">&#125;))</span><br><span class="line">app.use(route.routes())</span><br><span class="line">    .use(route.allowedMethods())</span><br><span class="line">route.get(<span class="string">'/route/test'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx</span>) </span>&#123;</span><br><span class="line">    ctx.body = <span class="string">'feifeiyu nuaa'</span></span><br><span class="line">&#125;))</span><br><span class="line">app.listen(<span class="number">3000</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'server started， port 3000'</span>))</span><br><span class="line"><span class="built_in">module</span>.exports = app</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>在pakage.json中引入的依赖：<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">"dependencies": &#123;</span><br><span class="line">    "co": "^4.6.0",</span><br><span class="line">    "koa": "^2.0.0",</span><br><span class="line">    "koa-mount": "^2.0.0",</span><br><span class="line">    "koa-nunjucks-promise": "^1.0.3",</span><br><span class="line">    "koa-router": "^7.0.1",</span><br><span class="line">    "koa-static": "^3.0.0"</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/koa/" rel="tag">#koa</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/17/node-koa2-start/" rel="next" title="KOA2-开发笔记">
+                <i class="fa fa-chevron-left"></i> KOA2-开发笔记
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/18/node-koa2-web-session/" rel="prev" title="第二篇：koa2-web应用进阶—session">
+                第二篇：koa2-web应用进阶—session <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/17/node-koa2-web-simpleproject/" data-title="第一篇：一个简单的koa2-web应用" data-url="https://feifeiyum.github.io/2016/09/17/node-koa2-web-simpleproject/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#目标"><span class="nav-number">1.</span> <span class="nav-text">目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#node-安装"><span class="nav-number">2.</span> <span class="nav-text">node 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化工程"><span class="nav-number">3.</span> <span class="nav-text">初始化工程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程搭建"><span class="nav-number">4.</span> <span class="nav-text">工程搭建</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、最小工程"><span class="nav-number">4.1.</span> <span class="nav-text">一、最小工程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-async-await"><span class="nav-number">4.1.1.</span> <span class="nav-text">使用 async/await</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#使用co"><span class="nav-number">4.1.2.</span> <span class="nav-text">使用co</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、nunjucks模板渲染"><span class="nav-number">5.</span> <span class="nav-text">二、nunjucks模板渲染</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、koa2路由"><span class="nav-number">6.</span> <span class="nav-text">三、koa2路由</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、静态文件服务"><span class="nav-number">7.</span> <span class="nav-text">四、静态文件服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、总结"><span class="nav-number">8.</span> <span class="nav-text">五、总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

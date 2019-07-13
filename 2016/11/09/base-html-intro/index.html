@@ -1,0 +1,1376 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="html,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="名词解释 HTML 是一门用于描述网页的语言   HTML(Hyper Text Markup Language): 超文本标记语言 HTML 不是编程语言， 是一种标记语言 标记语言是一套标记标签( Markup tag), 用于描述网页内容       HTML 标签 / HTML 元素  HTML 标签是由接括号(&amp;lt;&amp;gt;)包围的关键字, 且通常成对出现  例如： &amp;lt;p&amp;gt;">
+<meta name="keywords" content="html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="html 基础介绍">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/11/09/base-html-intro/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="名词解释 HTML 是一门用于描述网页的语言   HTML(Hyper Text Markup Language): 超文本标记语言 HTML 不是编程语言， 是一种标记语言 标记语言是一套标记标签( Markup tag), 用于描述网页内容       HTML 标签 / HTML 元素  HTML 标签是由接括号(&amp;lt;&amp;gt;)包围的关键字, 且通常成对出现  例如： &amp;lt;p&amp;gt;">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/html1.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/html4.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/html3.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/html5.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/html6.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/html7.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/html/html2.png">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.291Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="html 基础介绍">
+<meta name="twitter:description" content="名词解释 HTML 是一门用于描述网页的语言   HTML(Hyper Text Markup Language): 超文本标记语言 HTML 不是编程语言， 是一种标记语言 标记语言是一套标记标签( Markup tag), 用于描述网页内容       HTML 标签 / HTML 元素  HTML 标签是由接括号(&amp;lt;&amp;gt;)包围的关键字, 且通常成对出现  例如： &amp;lt;p&amp;gt;">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/html/html1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> html 基础介绍 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                html 基础介绍
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-11-09T22:29:46+08:00" content="2016-11-09">
+              2016-11-09
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/base/" itemprop="url" rel="index">
+                    <span itemprop="name">base</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/11/09/base-html-intro/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/11/09/base-html-intro/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h2><blockquote>
+<p><strong>HTML 是一门用于描述网页的语言</strong> </p>
+<ul>
+<li>HTML(Hyper Text Markup Language): 超文本标记语言</li>
+<li>HTML 不是编程语言， 是一种标记语言</li>
+<li>标记语言是一套标记标签( Markup tag), 用于描述网页内容   </li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>HTML 标签 / HTML 元素</strong></p>
+<ul>
+<li>HTML 标签是由接括号(&lt;&gt;)包围的关键字, 且通常成对出现 </li>
+<li>例如： &lt;p&gt;HTML&lt;/p&gt;, &lt;div&gt;&lt;img src=”” alt=””&gt;&lt;/div&gt;， </li>
+<li>标签中的第一个标签是开始标签(开放标签)， 第二个标签是结束标签(闭合标签),在开始结束标签之间插入内容 </li>
+<li>例外： &lt;img src=”/static/test.png” alt=”test”&gt;, &lt;input type=”text” value=”feifeiyu”&gt;, &lt;br/&gt;<a id="more"></a>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><strong>HTML 标签属性</strong></p>
+<ul>
+<li>HTML 属性是附加于 HTML 标签中的信息   </li>
+<li>属性是以 key-value 形式出现的， 例如：&lt;input type=”text”&gt;,  </li>
+<li>value 值是字符串，必须包括在”“， ’‘中， 推荐使用 ”“  </li>
+<li>HTML 文档大小写不敏感，规定 key和value 都使用小写，  </li>
+<li>如果key 或 value 有多个单词构成，推荐使用 - 进行分割， 例如： &lt;input id=”input-name” type=”text” data-id=”123”&gt;</li>
+<li>属性可以根据需要定义，元素名不要与默认属性名冲突</li>
+<li>默认属性： </li>
+</ul>
+</blockquote>
+<blockquote>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>class</td>
+<td>为html元素定义一个或多个类名， 主要用于样式附着， 不同元素可以有相同的类名</td>
+</tr>
+<tr>
+<td>id</td>
+<td>为thml元素定义唯一的id， 同一页面中唯一</td>
+</tr>
+<tr>
+<td>style</td>
+<td>规定元素的内联样式</td>
+</tr>
+<tr>
+<td>title</td>
+<td>描述了元素的额外信息 (鼠标悬浮与元素会显示出来)</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><strong>HTML 文档 / Web 页面</strong></p>
+<ul>
+<li>HTML 文档 是一个由 HTML 标签及文本内容组成的文本文件（.html 文件)， 可以在浏览器中按一定形式展现</li>
+</ul>
+</blockquote>
+<h2 id="HTML-文档组成"><a href="#HTML-文档组成" class="headerlink" title="HTML 文档组成"></a>HTML 文档组成</h2><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;!DOCTYPE html&gt;</span>  // 文档声明, 位于HTML文档第一行， 有助与浏览器中正确显示网页</span><br><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span> //告诉浏览器这是 html 文档， 限定html文档的开始和结束点</span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span> //定义文档头部， 是所有头部元素的容器</span><br><span class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"UTF-8"</span>&gt;</span> //页面元信息</span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>page title<span class="tag">&lt;/<span class="name">title</span>&gt;</span>  //页面标题</span><br><span class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"./index.css"</span>&gt;</span>  //引入外部样式文件</span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span>  //文档主题部分，可视区域</span><br><span class="line">    <span class="tag">&lt;<span class="name">h1</span>&gt;</span>---我是标题---<span class="tag">&lt;/<span class="name">h1</span>&gt;</span> //文档内容</span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>XXX我是一个段落XXX<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="xml">  //脚本， 必须在 <span class="tag">&lt;<span class="name">script</span>&gt;</span> 标签内</span></span><br><span class="line"><span class="javascript">    (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span></span><br><span class="line"><span class="javascript">        <span class="built_in">console</span>.log(<span class="string">'hello world'</span>)</span></span><br><span class="line">    &#125;)()</span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>在浏览器中显示结果<br><img src="/images/html/html1.png" alt="html1"><br>整个文档中可见的区域为 &lt;body&gt;&lt;/body&gt;标签中的内容<br>页面标题则显示在浏览器的tab标签中</p>
+</blockquote>
+<h2 id="HTML-文档渲染"><a href="#HTML-文档渲染" class="headerlink" title="HTML 文档渲染"></a>HTML 文档渲染</h2><blockquote>
+<p>1、浏览器一边下载HTML文档， 一边开始解析文档，构建 HTML DOM树，渲染页面</p>
+<blockquote>
+<p>(DOM: Document Object Model, 文档对象模型， 可以理解为网页各个元素的API, 他将网页的各个元素(节点)看作一个对象，利用浏览器脚本语言就可以操纵现在元素，改变其表现形式和属性)   </p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>2、在解析过程中遇到外部样式引入标签&lt;link&gt; 时， 浏览器渲染引擎会暂停解析， 等待样式文件加载完成， 解析样式文件，将样式规则和DOM树进行结合， 渲染输出  </p>
+</blockquote>
+<blockquote>
+<p>3、如果遇到 &lt;script&gt; 标签，渲染引擎停止渲染，将控制权交给脚本执行引擎。 </p>
+<blockquote>
+<ul>
+<li>如果&lt;script&gt;标签引用了外部脚本， 则下载该脚本，下载完成后执行脚本;  </li>
+<li>直接在&lt;script&gt;标签中书写的脚本则直接执行。  </li>
+<li>执行完毕后，控制权交还给渲染引擎， 恢复往下解析HTML网页</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>4、不同浏览器的渲染引擎工作略有不同。资料 <a href="http://ued.ctrip.com/blog/how-browsers-work-rendering-engine-html-parsing-series-ii.html" target="_blank" rel="noopener">Rendering Engine</a></p>
+</blockquote>
+<h2 id="HTML-常用标签-元素"><a href="#HTML-常用标签-元素" class="headerlink" title="HTML 常用标签(元素)"></a>HTML 常用标签(元素)</h2><h3 id="一、头部和身体"><a href="#一、头部和身体" class="headerlink" title="一、头部和身体"></a>一、头部和身体</h3><blockquote>
+<p><strong>1、头部标签&lt;head&gt;&lt;/head&gt;</strong></p>
+<blockquote>
+<p>头部标签，在浏览器窗口中不显示， 其可以包含的元素有 </p>
+<ul>
+<li>&lt;title&gt;&lt;/title&gt;: 页面标题  </li>
+<li>&lt;meta&gt;: 描述 HTML 文档的一些基本信息， 例如： 网页描述， 关键词设置， 页面配置等  </li>
+<li>&lt;style&gt;&lt;/stye&gt;: 样式标签(其也可以放在&lt;body&gt;中),  放置样式表  </li>
+<li>&lt;link&gt;: 定义当前文档与外部文档之间的关系，主要用于下载外部样式文件</li>
+<li>&lt;script&gt;: 用于编写内置脚本，或下载外部脚本</li>
+<li>&lt;base&gt;: 描述了当前HTML文档中所有的链接标签的默认链接</li>
+</ul>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><strong>2、文档主体&lt;body&gt;&lt;/body&gt;</strong></p>
+<blockquote>
+<p>定义文档主体，包含文档中所有需要展示的内容， 例如： 文本， 图片， 列表， 表格，链接等。</p>
+</blockquote>
+</blockquote>
+<h3 id="二、按显示特征分"><a href="#二、按显示特征分" class="headerlink" title="二、按显示特征分"></a>二、按显示特征分</h3><blockquote>
+<p><strong>1、块级元素</strong><br>在视觉上被格式化的块元素， 明显特征： 在浏览器显示时，会以新一行开始，且横向占满<br>块级元素可以设置 高度 &amp; 宽度 &amp; 上下内边距 &amp; 上下外边距 样式<br>常见块级元素  </p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>元素</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>div</td>
+<td>HTML文档中最常用的标签, 现在网页一般都是基于 div+css 布局的， 无默认样式</td>
+</tr>
+<tr>
+<td>h1,h2,..h6</td>
+<td>1～6级别标题标签，有默认样式</td>
+</tr>
+<tr>
+<td>form</td>
+<td>表单， 定义一个包含表单元素的区域， 请求方法只支持： GET &amp; POST</td>
+</tr>
+<tr>
+<td>p</td>
+<td>段落， 填写文本内容</td>
+</tr>
+<tr>
+<td>ul/li</td>
+<td>无序列表组合， 项目默认用园点标记</td>
+</tr>
+<tr>
+<td>ol/li</td>
+<td>有序列表组合， 项目默认用数字来标记</td>
+</tr>
+<tr>
+<td>dl/dt/dd</td>
+<td>自定义列表组合， 适用于左右结构的布局</td>
+</tr>
+<tr>
+<td>iframe</td>
+<td>在同一个浏览器窗口中显示不止一个页面</td>
+</tr>
+<tr>
+<td>table/tr/</td>
+<td>表格组合, 但默认宽度并非是父级元素的100%</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>2、行内(内联)元素</strong><br>行内元素不形成新内容块，即在其左右可以有其他元素, 明显特征： 在浏览器显示时不会以新行开始<br>行内元素无法设置 高度 &amp; 宽度 &amp; 内边距 &amp; 外边距 样式 (img, input, textarea, select, button 除外)<br>常见行内元素  </p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>元素</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>a</td>
+<td>超链接标签</td>
+</tr>
+<tr>
+<td>i</td>
+<td>斜体文本</td>
+</tr>
+<tr>
+<td>em</td>
+<td>强调文本</td>
+</tr>
+<tr>
+<td>label</td>
+<td>主要为 input 元素定义标注， for 属性与相关元素 id 属性相同</td>
+</tr>
+<tr>
+<td>span</td>
+<td>常用内联文本容器， 无默认样式</td>
+</tr>
+<tr>
+<td>sub/sup</td>
+<td>下标/上标</td>
+</tr>
+<tr>
+<td>strong</td>
+<td>粗体强调</td>
+</tr>
+<tr>
+<td>textarea</td>
+<td>多行文本输入框</td>
+</tr>
+<tr>
+<td>input</td>
+<td>单行输入框，单选框，多选框，按钮</td>
+</tr>
+<tr>
+<td>button</td>
+<td>按钮, 可以插入文本或图片</td>
+</tr>
+<tr>
+<td>img</td>
+<td>图片元素</td>
+</tr>
+<tr>
+<td>select/option</td>
+<td>下拉列表组合</td>
+</tr>
+</tbody>
+</table>
+<h3 id="二、按元素本身特点分"><a href="#二、按元素本身特点分" class="headerlink" title="二、按元素本身特点分"></a>二、按元素本身特点分</h3><blockquote>
+<p><strong>1、替换元素</strong><br>1、替换换素是浏览器根据其标签属性来判断显示其具体内容的，这些元素没有实际的内容</p>
+<blockquote>
+<p>例如：标签&lt;img src=”/static/test.png”&gt;, 在浏览器中显示的是其 src 属性的内容。<br>常见替换元素， &lt;img&gt;, &lt;input&gt;, &lt;textarea&gt;, &lt;select&gt;, &lt;object&gt; (flash文件标签)<br>2、替换元素在显示过程中生成了框（box)， 一般具有内在尺寸， 因此可以这些元素可以设置 高度 &amp; 宽度 &amp; 内边距 &amp; 外边距<br>3、不严谨地说，几乎所有替换元素都是<strong>行内(内联)元素</strong>, 由于他们可以设置宽高，这些元素又可以看成是 <strong>行内(内联)块状元素</strong></p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><strong>2、非替换元素</strong></p>
+<blockquote>
+<p>HTML 的大多数元素是不可替换元素，即其内容直接表现给用户端（例如浏览器）<br>例如： 段落 &lt;p&gt;feifeiyu&lt;/p&gt; 元素内容全在浏览器中显示出来<br>不严谨地说 除了上面介绍的替换元素，剩下的基本就是非替换元素</p>
+</blockquote>
+</blockquote>
+<h3 id="三、按功能特点分"><a href="#三、按功能特点分" class="headerlink" title="三、按功能特点分"></a>三、按功能特点分</h3><blockquote>
+<p><strong>1、文本展示</strong>   </p>
+</blockquote>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>元素名</th>
+<th>描述</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;span&gt;feifeiyu&lt;/span&gt;</td>
+<td>基本文本容器，无默认样式</td>
+<td>-</td>
+</tr>
+<tr>
+<td>&lt;p&gt;feifeiyu&lt;/p&gt;</td>
+<td>显示段落文本</td>
+<td>-</td>
+</tr>
+<tr>
+<td>&lt;a&gt;feifeiyu&lt;/a&gt;</td>
+<td>超链接</td>
+<td><a href="#">feifeiyu</a></td>
+</tr>
+<tr>
+<td>&lt;h1&gt;Title&lt;/h2&gt;～&lt;h6&gt;</td>
+<td>显示标题文本</td>
+<td>-</td>
+</tr>
+<tr>
+<td>&lt;sub&gt;2&lt;/sub&gt;&lt;sup&gt;4&lt;/sup&gt;</td>
+<td>上标，下标</td>
+<td><span>log<sub>2</sub><sup>4</sup></span></td>
+</tr>
+<tr>
+<td>&lt;del&gt;blue&lt;/del&gt; &lt;ins&gt;red&lt;/ins&gt;</td>
+<td>删除, 添加</td>
+<td><span><del>blue</del> <ins>red</ins></span></td>
+</tr>
+<tr>
+<td>&lt;bdo dir=”rtl”&gt;&lt;/bdo&gt;</td>
+<td>定义文字显示方向</td>
+<td>&lt;span&gt;&lt;bdo dir=”rtl”&gt;feifeiyu&lt;/bdo&gt;&lt;/span&gt; <span><bdo dir="rtl">feifeiyu</bdo></span></td>
+</tr>
+<tr>
+<td>&lt;pre&gt;&lt;/pre&gt;</td>
+<td>预格式化文本，通常保留空格和换行符</td>
+<td>&darr;</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<blockquote>
+<blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">pre</span>&gt;</span>  </span><br><span class="line">   此例演示如何使用 pre 标签  </span><br><span class="line">   对空行和 空格  </span><br><span class="line">   进行控制  </span><br><span class="line"><span class="tag">&lt;/<span class="name">pre</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<pre>
+此例演示如何使用 pre 标签
+对空行和 空格
+进行控制
+</pre>
+</blockquote>
+</blockquote>
+<blockquote>
+<ul>
+<li>其他： 不常用   </li>
+</ul>
+</blockquote>
+<blockquote>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>元素名</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;mark&gt;高亮文本&lt;/mark&gt;</td>
+<td><mark>高亮文本</mark></td>
+</tr>
+<tr>
+<td>&lt;q&gt;定义短的引用语&lt;/q&gt;</td>
+<td><q>定义短的引用语</q></td>
+</tr>
+<tr>
+<td>&lt;cite&gt; 定义引用、引证&lt;/cite&gt;</td>
+<td><cite> 定义引用、引证</cite></td>
+</tr>
+<tr>
+<td>&lt;b&gt;这是一个加粗文本&lt;/b&gt;</td>
+<td><b>这是一个加粗文本</b></td>
+</tr>
+<tr>
+<td>&lt;em&gt;强调文本&lt;/em&gt;</td>
+<td><em>强调文本</em></td>
+</tr>
+<tr>
+<td>&lt;strong&gt;加粗文本&lt;/strong&gt;</td>
+<td><strong>加粗文本</strong></td>
+</tr>
+<tr>
+<td>&lt;dfn&gt;定义项目&lt;/dfn&gt;</td>
+<td><dfn>定义项目</dfn></td>
+</tr>
+<tr>
+<td>&lt;code&gt;一段电脑代码&lt;/code&gt;</td>
+<td><code>一段电脑代码</code></td>
+</tr>
+<tr>
+<td>&lt;samp&gt;计算机样本&lt;/samp&gt;</td>
+<td><samp>计算机样本</samp></td>
+</tr>
+<tr>
+<td>&lt;kbd&gt;键盘输入&lt;/kbd&gt;</td>
+<td><kbd>键盘输入</kbd></td>
+</tr>
+<tr>
+<td>&lt;var&gt;变量&lt;/var&gt;</td>
+<td><var>变量</var></td>
+</tr>
+<tr>
+<td>&lt;blockquote&gt;定义长引用&lt;/blockquote&gt;</td>
+<td><blockquote>定义长引用</blockquote></td>
+</tr>
+<tr>
+<td>&lt;address&gt;显示地址&lt;/address&gt;</td>
+<td><address>显示地址</address></td>
+</tr>
+<tr>
+<td>……</td>
+<td>….</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+</blockquote>
+<p><strong>2、表单&amp;表单元素</strong>  </p>
+<blockquote>
+<p>表单是一个包含表单元素的<strong>区域</strong>  </p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span> <span class="attr">action</span>=<span class="string">"/user/info"</span> <span class="attr">method</span>=<span class="string">"POST"</span>&gt;</span>  </span><br><span class="line"> ... input 元素  </span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p><strong>表单元素包括：</strong>  </p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>元素名</th>
+<th>描述</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;textarea&gt;&lt;/textarea&gt;</td>
+<td>多行文本输入</td>
+<td><textarea>1235678</textarea></td>
+</tr>
+<tr>
+<td>&lt;input type=”text”&gt;</td>
+<td>单行文本输入</td>
+<td><input type="text" placeholder="单行文本输入"></td>
+</tr>
+<tr>
+<td>&lt;input type=”password”&gt;</td>
+<td>密码输入</td>
+<td><input type="password" value="1235"></td>
+</tr>
+<tr>
+<td>&lt;input type=”radio”&gt;</td>
+<td>单选框</td>
+<td><input type="radio"></td>
+</tr>
+<tr>
+<td>&lt;input type=”checkbox”&gt;</td>
+<td>复选框</td>
+<td><input type="checkbox"></td>
+</tr>
+<tr>
+<td>&lt;input type=”submit”&gt;</td>
+<td>提交按钮</td>
+<td><input type="submit"></td>
+</tr>
+<tr>
+<td>&lt;input type=”button”&gt;</td>
+<td>普通按钮</td>
+<td><input type="button" value="button"></td>
+</tr>
+<tr>
+<td>&lt;input type=”file”&gt; 文件提交</td>
+<td><input type="file">  </td>
+</tr>
+<tr>
+<td>&lt;select&gt;&lt;option value=1&gt;test&lt;/option&gt;&lt;/select&gt;</td>
+<td>下拉列表</td>
+<td><select><option value="1">test</option></select></td>
+</tr>
+<tr>
+<td>&lt;label for=””&gt;&lt;/label&gt;</td>
+<td>为表单元素定义标注</td>
+<td><input type="radio"> <label for="test">YES</label></td>
+</tr>
+<tr>
+<td>&lt;fieldset&gt;&lt;/fieldset&gt;</td>
+<td>表单内相关元素分组，周围绘制边框</td>
+</tr>
+<tr>
+<td>&lt;legend&gt;&lt;/legend&gt;</td>
+<td>&lt;fieldset&gt; 元素定义标题</td>
+<td>例：</td>
+</tr>
+</tbody>
+</table>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"> <span class="tag">&lt;<span class="name">form</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">fieldset</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">legend</span>&gt;</span>Personalia:<span class="tag">&lt;<span class="name">legend</span>&gt;</span>  </span><br><span class="line">    Name: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    Email: <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span>&gt;</span><span class="tag">&lt;<span class="name">br</span>&gt;</span></span><br><span class="line">    Date of birth:<span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;/<span class="name">fieldset</span>&gt;</span>  </span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><img src="/images/html/html4.png" alt="form"></p>
+</blockquote>
+</blockquote>
+<p><strong>3、表格元素</strong></p>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>元素名</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&lt;table&gt;&lt;/table&gt;</td>
+<td>定义表格</td>
+</tr>
+<tr>
+<td>&lt;thead&gt;&lt;/thead&gt;</td>
+<td>表格页眉</td>
+</tr>
+<tr>
+<td>&lt;tbody&gt;&lt;/tbody&gt;</td>
+<td>表格主体</td>
+</tr>
+<tr>
+<td>&lt;tfoot&gt;&lt;/tfoot&gt;</td>
+<td>表格页脚</td>
+</tr>
+<tr>
+<td>&lt;th&gt;&lt;/th&gt;</td>
+<td>表格的表头</td>
+</tr>
+<tr>
+<td>&lt;tr&gt;&lt;/tr&gt;</td>
+<td>表格的行</td>
+</tr>
+<tr>
+<td>&lt;tr&gt;&lt;/tr&gt;</td>
+<td>表格单元格</td>
+</tr>
+<tr>
+<td>&lt;caption&gt;&lt;/caption&gt;</td>
+<td>表格标题</td>
+</tr>
+<tr>
+<td>&lt;colgroup&gt;&lt;/colgroup&gt;</td>
+<td>表格列的组</td>
+</tr>
+<tr>
+<td>&lt;col&gt;&lt;/col&gt;</td>
+<td>用于表格列的属性</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<blockquote>
+<p>例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">&lt;table border=&quot;1&quot;&gt;</span><br><span class="line">  &lt;colgroup&gt;</span><br><span class="line">    &lt;col style=&quot;background-color:blue&quot;&gt;</span><br><span class="line">    &lt;col style=&quot;background-color:gray&quot;&gt;</span><br><span class="line">  &lt;/colgroup&gt;</span><br><span class="line">  &lt;thead&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">      &lt;th&gt;Month&lt;/th&gt;</span><br><span class="line">      &lt;th&gt;Savings&lt;/th&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">  &lt;/thead&gt;</span><br><span class="line">  &lt;tfoot&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">      &lt;td&gt;Sum&lt;/td&gt;</span><br><span class="line">      &lt;td&gt;$180&lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">  &lt;/tfoot&gt;</span><br><span class="line">  &lt;tbody&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">      &lt;td&gt;January&lt;/td&gt;</span><br><span class="line">      &lt;td&gt;$100&lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">    &lt;tr&gt;</span><br><span class="line">      &lt;td&gt;February&lt;/td&gt;</span><br><span class="line">      &lt;td&gt;$80&lt;/td&gt;</span><br><span class="line">    &lt;/tr&gt;</span><br><span class="line">  &lt;/tbody&gt;</span><br><span class="line">&lt;/table&gt;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/html/html3.png" alt="table"></p>
+</blockquote>
+<p><strong>4、列表</strong></p>
+<blockquote>
+<ul>
+<li>无序列表, 最常见列表<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Lilei<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Hangmeimei<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>效果<br><img src="/images/html/html5.png" alt="li"></p>
+</blockquote>
+</blockquote>
+<blockquote>
+<ul>
+<li>有序列表<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">ol</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">li</span>&gt;</span>Lilei<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">li</span>&gt;</span>Hangmeimei<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ol</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>效果<br><img src="/images/html/html6.png" alt="ol"></p>
+</blockquote>
+</blockquote>
+<blockquote>
+<ul>
+<li>自定义列表, 左右结构布局时常用<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dl</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">dt</span>&gt;</span>Lilei<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dd</span>&gt;</span>- black hot drink<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">dt</span>&gt;</span>Hangmeimei<span class="tag">&lt;/<span class="name">dt</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dd</span>&gt;</span>- white cold drink<span class="tag">&lt;/<span class="name">dd</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dl</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>效果<br><img src="/images/html/html7.png" alt="dl"></p>
+</blockquote>
+</blockquote>
+<p><strong>4、框架</strong></p>
+<blockquote>
+<p>通过使用框架，可以在同一个页面中切入另一个页面的内容<br>使用：<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"//baidu.com"</span> <span class="attr">width</span>=<span class="string">"100"</span> <span class="attr">height</span>=<span class="string">"100"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span></span><br><span class="line">或   </span><br><span class="line"><span class="tag">&lt;<span class="name">iframe</span> <span class="attr">src</span>=<span class="string">"//baidu.com"</span> <span class="attr">name</span>=<span class="string">"iframe_a"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span>  </span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"//google.com"</span> <span class="attr">target</span>=<span class="string">"iframe_a"</span>&gt;</span>google<span class="tag">&lt;/<span class="name">a</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p><strong>5、图像</strong></p>
+<blockquote>
+<p>&lt;img&gt; 是空标签，意思是说，它只包含属性，并且没有闭合标签。在浏览器上使用属性 src 来显示图片</p>
+</blockquote>
+<p><strong>6、字符实体</strong>    </p>
+<blockquote>
+<p>HTML 中使用字符为 HTML 的预留字符必须被替换为字符实体。<br>某些在键盘上找不到的字符也可以使用字符实体来替换</p>
+</blockquote>
+<blockquote>
+<p>常用实体字符，</p>
+</blockquote>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>实体名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>&amp;nbsp;</td>
+<td>空格, 在编写html文件是空格务必用 &amp;nbsp; 代替</td>
+</tr>
+<tr>
+<td>&amp;lt;, &amp;gt;</td>
+<td>&lt; 小于号， &gt; 大于号</td>
+</tr>
+<tr>
+<td>&amp;le;, &amp;ge;</td>
+<td>&le; 小于等于， &ge; 大于等于</td>
+</tr>
+<tr>
+<td>&amp;asymp;</td>
+<td>&asymp; 约等于</td>
+</tr>
+<tr>
+<td>&amp;plusmn;</td>
+<td>&plusmn; 加减</td>
+</tr>
+<tr>
+<td>&amp;yen;</td>
+<td>&yen; 人民币，日圆符号</td>
+</tr>
+<tr>
+<td>&amp;pound;</td>
+<td>&pound; 英镑符号</td>
+</tr>
+<tr>
+<td>&amp;sect;</td>
+<td>&sect; 小节</td>
+</tr>
+<tr>
+<td>&amp;copy;</td>
+<td>&copy; 版权</td>
+</tr>
+<tr>
+<td>&amp;reg;</td>
+<td>&reg; 注册商标</td>
+</tr>
+<tr>
+<td>&amp;times;</td>
+<td>&times; 乘号</td>
+</tr>
+<tr>
+<td>&amp;divide;</td>
+<td>&divide; 除号</td>
+</tr>
+<tr>
+<td>&amp;radic;</td>
+<td>&radic; 勾</td>
+</tr>
+<tr>
+<td><a href="http://tool.xker.com/htmlchar.php" target="_blank" rel="noopener">更多实体字符</a></td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<h2 id="页面样式"><a href="#页面样式" class="headerlink" title="页面样式"></a>页面样式</h2><blockquote>
+<p>CSS (Cascading Style Sheets), 层叠样式表用于渲染HTML元素标签的样式<br>CSS 引入 HTML 方式</p>
+<ul>
+<li>内联样式， 在HTML元素中使用 style 属性</li>
+<li>内部样式表， 在HTML文档中，用 &lt;sytle&gt;&lt;/sytle&gt; 标签包裹CSS,</li>
+<li>外部样式表， 在HTML文档中，使用 &lt;link rel=”stylesheet” href=”/static/test.css”&gt; 标签引入下载的CSS文件  </li>
+</ul>
+</blockquote>
+<blockquote>
+<p>CSS 可以干什么？</p>
+<blockquote>
+<ul>
+<li>修改元素的尺寸， 边框， 背景， 显示方式， 内外边距 …</li>
+<li>修改文本颜色， 尺寸， 字体， 对齐方式 …</li>
+<li>一句话 CSS 是用来美化页面的</li>
+</ul>
+</blockquote>
+</blockquote>
+<h2 id="页面脚本"><a href="#页面脚本" class="headerlink" title="页面脚本"></a>页面脚本</h2><blockquote>
+<p>HTML 脚本用于增强页面的动态性和交互性<br>HTML 文档通过 &lt;script&gt;&lt;/script&gt; 标签容纳内部脚本<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">    <span class="built_in">document</span>.write(<span class="string">"Hello World!"</span>);</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>或者通过 &lt;script src=”/static/test.js”&gt;&lt;/script&gt; src 属性来下载外部脚本文件。  </p>
+</blockquote>
+<blockquote>
+<p>&lt;noscript&gt; 标签提供无法使用脚本时的替代内容，比方在浏览器禁用脚本时，或浏览器不支持客户端脚本时。只有在浏览器不支持脚本或者禁用脚本时，才会显示 &lt;noscript&gt; 元素中的内容<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="javascript">   <span class="built_in">document</span>.write(<span class="string">"Hello World!"</span>);</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">noscript</span>&gt;</span></span><br><span class="line">   抱歉，您浏览器不支持脚本</span><br><span class="line"><span class="tag">&lt;/<span class="name">noscript</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="页面布局"><a href="#页面布局" class="headerlink" title="页面布局"></a>页面布局</h2><blockquote>
+<p>1、基于 &lt;div&gt; 的布局 (常用)<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"container"</span> <span class="attr">style</span>=<span class="string">"width:300px"</span>&gt;</span></span><br><span class="line">       <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"header"</span> <span class="attr">style</span>=<span class="string">"background-color:gray;"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span> <span class="attr">style</span>=<span class="string">"margin-bottom:0;"</span>&gt;</span>header<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"menu"</span> <span class="attr">style</span>=<span class="string">"background-color:#778899;height:100px;width:100px;float:left;"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">ul</span> <span class="attr">style</span>=<span class="string">"list-style: none;"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>name<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>age<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">li</span>&gt;</span>address<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"content"</span> <span class="attr">style</span>=<span class="string">"background-color:#323232;height:100px;width:200px;float:left;"</span>&gt;</span></span><br><span class="line">        main content<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"footer"</span> <span class="attr">style</span>=<span class="string">"background-color:gray;text-align:center;"</span>&gt;</span></span><br><span class="line">        Copy © feifeiyu<span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>2、基于 &lt;table&gt; 的布局<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">table</span> <span class="attr">width</span>=<span class="string">"300"</span> <span class="attr">border</span>=<span class="string">"0"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"background-color:gray;"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">h1</span> <span class="attr">style</span>=<span class="string">"margin: 0"</span>&gt;</span>header<span class="tag">&lt;/<span class="name">h1</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span> <span class="attr">style</span>=<span class="string">"background-color:#778899; width:100px;"</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;<span class="name">ul</span> <span class="attr">style</span>=<span class="string">"list-style: none; padding: 0"</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">li</span>&gt;</span>name<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">li</span>&gt;</span>age<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">li</span>&gt;</span>address<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">            <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span> <span class="attr">style</span>=<span class="string">"background-color:#323232;height:100px;width:200px;"</span>&gt;</span></span><br><span class="line">        内容在这里<span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">tr</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">td</span> <span class="attr">colspan</span>=<span class="string">"2"</span> <span class="attr">style</span>=<span class="string">"background-color:gray;text-align:center;"</span>&gt;</span></span><br><span class="line">    版权 © feifieyu <span class="tag">&lt;/<span class="name">td</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">tr</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">table</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>布局效果图</p>
+<blockquote>
+<p><img src="/images/html/html2.png" alt="layout"></p>
+</blockquote>
+<h1 id="end"><a href="#end" class="headerlink" title="end"></a>end</h1>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/html/" rel="tag">#html</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/10/30/front-yh5confirm/" rel="next" title="JS 确认组件 Yh5confirm">
+                <i class="fa fa-chevron-left"></i> JS 确认组件 Yh5confirm
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/02/base-css-selector/" rel="prev" title="css-选择器">
+                css-选择器 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/11/09/base-html-intro/" data-title="html 基础介绍" data-url="https://feifeiyum.github.io/2016/11/09/base-html-intro/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#名词解释"><span class="nav-number">1.</span> <span class="nav-text">名词解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML-文档组成"><span class="nav-number">2.</span> <span class="nav-text">HTML 文档组成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML-文档渲染"><span class="nav-number">3.</span> <span class="nav-text">HTML 文档渲染</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTML-常用标签-元素"><span class="nav-number">4.</span> <span class="nav-text">HTML 常用标签(元素)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#一、头部和身体"><span class="nav-number">4.1.</span> <span class="nav-text">一、头部和身体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、按显示特征分"><span class="nav-number">4.2.</span> <span class="nav-text">二、按显示特征分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二、按元素本身特点分"><span class="nav-number">4.3.</span> <span class="nav-text">二、按元素本身特点分</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#三、按功能特点分"><span class="nav-number">4.4.</span> <span class="nav-text">三、按功能特点分</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#页面样式"><span class="nav-number">5.</span> <span class="nav-text">页面样式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#页面脚本"><span class="nav-number">6.</span> <span class="nav-text">页面脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#页面布局"><span class="nav-number">7.</span> <span class="nav-text">页面布局</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#end"><span class="nav-number"></span> <span class="nav-text">end</span></a></li></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

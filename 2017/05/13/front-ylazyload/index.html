@@ -1,0 +1,734 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="js,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="本文将介绍一款由原生 JavaScript 编写的懒加载组件 Ylazyload， 其不依赖于 JQuery 或其他 JavaScript 框架 源码&amp;amp;DEMO地址： Ylazyload">
+<meta name="keywords" content="js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图片懒加载组件 Ylazyload">
+<meta property="og:url" content="https://feifeiyum.github.io/2017/05/13/front-ylazyload/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="本文将介绍一款由原生 JavaScript 编写的懒加载组件 Ylazyload， 其不依赖于 JQuery 或其他 JavaScript 框架 源码&amp;amp;DEMO地址： Ylazyload">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.293Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="图片懒加载组件 Ylazyload">
+<meta name="twitter:description" content="本文将介绍一款由原生 JavaScript 编写的懒加载组件 Ylazyload， 其不依赖于 JQuery 或其他 JavaScript 框架 源码&amp;amp;DEMO地址： Ylazyload">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 图片懒加载组件 Ylazyload | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                图片懒加载组件 Ylazyload
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-05-13T10:11:59+08:00" content="2017-05-13">
+              2017-05-13
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/front/" itemprop="url" rel="index">
+                    <span itemprop="name">front</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/05/13/front-ylazyload/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/05/13/front-ylazyload/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文将介绍一款由原生 JavaScript 编写的懒加载组件 Ylazyload， 其不依赖于 JQuery 或其他 JavaScript 框架</p>
+<p>源码&amp;DEMO地址： <a href="https://github.com/FeifeiyuM/JSComponents/tree/master/ylazyload" target="_blank" rel="noopener">Ylazyload</a></p>
+<a id="more"></a>
+<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>1、在图片不在可视区域的时候，所有图采用默认的占位图显示，而不是让浏览器加载所有的真实图片，从而减少服务器和客户机的带宽资源，实现按需提供服务的目的<br>2、在页面滚动时，不断地去检测图片是否进入了可视区域， 如果进入可视区域则将默认的占位图替换成真实图片<br>3、如何实现判断图片进入可视区域：  </p>
+<blockquote>
+<ul>
+<li>先计算出我们确定的可视区域在浏览器视窗中的坐标， visibleArea</li>
+<li>在页面滚动的时候，定期去计算每张图片在浏览器视窗中的坐标， imgCoord</li>
+<li>通过对比 visibleArea 和 imgCoord 上下左右的坐标值，即可判断出图片是否在可视区域内 </li>
+<li>本组建采用方法 <a href="https://developer.mozilla.org/en/docs/Web/API/Element/getBoundingClientRect" target="_blank" rel="noopener">getBoundingClientRect</a> 获取 DOM 元素的在窗口中坐标</li>
+</ul>
+</blockquote>
+<p>更详细的解释可以参见博客 <a href="http://www.jianshu.com/p/e62d367c6148" target="_blank" rel="noopener">细说jQuery如何实现懒加载</a></p>
+<h2 id="使用-Ylazyload"><a href="#使用-Ylazyload" class="headerlink" title="使用 Ylazyload"></a>使用 Ylazyload</h2><p><strong>1、在使用前在页面引入 Ylazyload</strong><br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 引入ylazyload --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/static/common/lazyload/ylazyload-1.0.js"</span>&gt;</span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>2、为需要懒加载的图片添加属性 ylazyload-src</strong><br>为需要懒加载图片添加 ylazyload-src 是必须的， ylazyload-src 是真实的图片地址<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">"ylazyload"</span> <span class="attr">src</span>=<span class="string">"default-img-url"</span> <span class="attr">ylazyload-src</span>=<span class="string">"real-img-url1"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">"ylazyload"</span> <span class="attr">src</span>=<span class="string">"default-img-url"</span> <span class="attr">ylazyload-src</span>=<span class="string">"real-img-url2"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">img</span> <span class="attr">class</span>=<span class="string">"ylazyload"</span> <span class="attr">src</span>=<span class="string">"default-img-url"</span> <span class="attr">ylazyload-src</span>=<span class="string">"real-img-url3"</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>3、初始化 Ylazyload</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// page-main： 为可视容器元素的 id 属性</span></span><br><span class="line"><span class="comment">// function(dom, src): 回调函数</span></span><br><span class="line"><span class="keyword">var</span> yLazyload = <span class="keyword">new</span> Ylazyload(<span class="string">'page-main'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">dom, src</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'src'</span>, src)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p><strong>4、添加需要懒加载的图片列表</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//只有在使用了 appendImgs 之后才会真正实现懒加载效果</span></span><br><span class="line">yLazyload.appendImgs()</span><br><span class="line"><span class="comment">//如果是异步 js 渲染的图片， 在图片渲染结束后，相应执行 appendImgs 方法</span></span><br><span class="line"><span class="comment">//刷新需要懒加载的图片列表</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">renderImgList</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br><span class="line">yLazyload.appendImgs()</span><br></pre></td></tr></table></figure></p>
+<h2 id="Ylazyload-参数介绍"><a href="#Ylazyload-参数介绍" class="headerlink" title="Ylazyload 参数介绍"></a>Ylazyload 参数介绍</h2><p>提前申明： Ylazyload 没有参数是必填的<br><strong>1、初始化： new Ylazyload(container, callback)</strong><br>container： 作用是指定可视区域容器元素, 取值可为：</p>
+<blockquote>
+<ul>
+<li>string: 容器元素的 id 属性</li>
+<li>DOM Object: 容器元素的 DOM 对象 </li>
+<li>default： 为 document 对象</li>
+</ul>
+</blockquote>
+<p>callback: 回调函数，返回当前加载真实地址的 img 元素 DOM 对象， 和 真实图片地址， function(dom, src) </p>
+<blockquote>
+<ul>
+<li>dom: 当前替换地址的 img DOM 对象</li>
+<li>src: 真实图片地址 </li>
+</ul>
+</blockquote>
+<p><strong>2、添加懒加载的图片方法 appendImgs(imgs) 参数</strong></p>
+<blockquote>
+<ul>
+<li>string: img 元素的 class 属性 </li>
+<li>DOM NodeList: img 元素 DOM 对象列表</li>
+<li>default: 所有拥有 ylazyload-src 属性的 img 元素 </li>
+<li>如无特别需求推荐 appendImgs 方法不传参数</li>
+</ul>
+</blockquote>
+<h2 id="Ylazyload-源码"><a href="#Ylazyload-源码" class="headerlink" title="Ylazyload 源码"></a>Ylazyload 源码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * author: feifeiyu</span></span><br><span class="line"><span class="comment"> * version: 1.0</span></span><br><span class="line"><span class="comment"> * ylazyload for img lazyload</span></span><br><span class="line"><span class="comment"> * @param container //for init, visible area dom, type: string or DOM object, default document</span></span><br><span class="line"><span class="comment"> * @param cb //for init, callback, can be null </span></span><br><span class="line"><span class="comment"> * @param imgs  //for appandImgs method, imgs list to lazyload, type: string or img DOM object list, can be nul</span></span><br><span class="line"><span class="comment"> * Ylazyload blog: https://feifeiyum.github.io//2017/05/13/front-ylazyload/</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> Ylazyload = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">    <span class="comment">//初始化组件</span></span><br><span class="line">    <span class="keyword">var</span> YLL = <span class="function"><span class="keyword">function</span>(<span class="params">container, cb</span>) </span>&#123;</span><br><span class="line">        <span class="comment">//获取可视区域 DOM object</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> container === <span class="string">'string'</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.container = <span class="built_in">document</span>.getElementById(container)</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(container &amp;&amp; container.constructor.toString().indexof(<span class="string">'Element()'</span>) &gt; <span class="number">-1</span>) &#123;</span><br><span class="line">            <span class="keyword">this</span>.container = container</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.container =  <span class="built_in">document</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//暂存待加载真实地址的 img 元素对象</span></span><br><span class="line">        <span class="keyword">this</span>.imgList = []</span><br><span class="line">        <span class="keyword">this</span>.tid = <span class="number">0</span></span><br><span class="line">        cb &amp;&amp; (<span class="keyword">this</span>.cb = cb)</span><br><span class="line">        <span class="keyword">this</span>.getVisibleArea()</span><br><span class="line">        <span class="keyword">this</span>._refreshEvt()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//获取可视区域的坐标</span></span><br><span class="line">    YLL.prototype.getVisibleArea = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">this</span>.visibleArea = <span class="keyword">this</span>.container.getBoundingClientRect()</span><br><span class="line">        &#125; <span class="keyword">catch</span>(err) &#123;</span><br><span class="line">            <span class="comment">//如果 container 是 document 对象，直接取屏幕宽高</span></span><br><span class="line">            <span class="keyword">this</span>.visibleArea = &#123;</span><br><span class="line">                top: <span class="number">0</span>,</span><br><span class="line">                left: <span class="number">0</span>,</span><br><span class="line">                bottom: <span class="built_in">window</span>.screen.availHeight,</span><br><span class="line">                right: <span class="built_in">window</span>.screen.availWidth</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//为可视容器对象添加 scroll 事件</span></span><br><span class="line">    YLL.prototype._refreshEvt = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></span><br><span class="line">        <span class="keyword">if</span>(self.container.addEventListener) &#123;</span><br><span class="line">            self.container.addEventListener(<span class="string">'scroll'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                clearTimeout(self.tid)</span><br><span class="line">                <span class="comment">//页面滚动时 不断去检测图片列表中进入可视区域的图片</span></span><br><span class="line">                self.tid = setTimeout(self.isVisible.call(self), <span class="number">300</span>)</span><br><span class="line">            &#125;)</span><br><span class="line">            <span class="built_in">window</span>.addEventListener(<span class="string">'resize'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                clearTimeout(self.tid)</span><br><span class="line">                self.tid = setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                    self.getVisibleArea.call(self)</span><br><span class="line">                    self.isVisible.call(self)</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(self.container.attachEvent) &#123;</span><br><span class="line">            self.container.attachEvent(<span class="string">'onscoll'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                clearTimeout(self.tid)</span><br><span class="line">                self.tid = setTimeout(self.isVisible.call(self), <span class="number">300</span>)</span><br><span class="line">            &#125;)</span><br><span class="line">            <span class="built_in">window</span>.attachEvent(<span class="string">'onresize'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                clearTimeout(self.tid)</span><br><span class="line">                self.tid = setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">                    self.getVisibleArea.call(self)</span><br><span class="line">                    self.isVisible.call(self)</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//添加需要懒加载的图片</span></span><br><span class="line">    YLL.prototype.appendImgs = <span class="function"><span class="keyword">function</span>(<span class="params">imgs</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></span><br><span class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> imgs === <span class="string">'string'</span>) &#123;</span><br><span class="line">            imgs = <span class="built_in">document</span>.querySelectorAll(<span class="string">'.'</span> + imgs)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            imgs = <span class="built_in">document</span>.querySelectorAll(<span class="string">'img[ylazyload-src]'</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        imgs.forEach(<span class="function"><span class="keyword">function</span>(<span class="params">item</span>) </span>&#123;</span><br><span class="line">            self.imgList.push(item)</span><br><span class="line">        &#125;)</span><br><span class="line">        <span class="keyword">this</span>.isVisible()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//检查图片列表中是否进入可视区域</span></span><br><span class="line">    YLL.prototype.isVisible = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></span><br><span class="line">        <span class="keyword">var</span> removeImg = []</span><br><span class="line">        <span class="keyword">var</span> listLen = self.imgList.length</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; listLen; i++) &#123; </span><br><span class="line">            <span class="keyword">var</span> item = self.imgList[i]</span><br><span class="line">            <span class="keyword">var</span> itemCoord = item.getBoundingClientRect()</span><br><span class="line">            <span class="comment">//对比坐标判断是否进入进入可视区域</span></span><br><span class="line">            <span class="keyword">if</span>(itemCoord.top &gt; self.visibleArea.bottom) &#123;</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(itemCoord.bottom &lt; self.visibleArea.top) &#123;</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(itemCoord.left &gt; self.visibleArea.right) &#123;</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(itemCoord.right &lt; self.visibleArea.left) &#123;</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">//如果进入可视区域，则替换去真实图片链接</span></span><br><span class="line">                self._activeImg(item)</span><br><span class="line">                <span class="comment">//如果图片f已经替换了真实链接，踢出遍历列表</span></span><br><span class="line">                removeImg.push(item)</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        listLen = removeImg.length</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; listLen; i++) &#123;</span><br><span class="line">            <span class="keyword">var</span> index = self.imgList.indexOf(removeImg[i])</span><br><span class="line">            self.imgList.splice(index, <span class="number">1</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//从属性 ylazyload-src 取出真实图片地址， 替换默认图片地址</span></span><br><span class="line">    YLL.prototype._activeImg = <span class="function"><span class="keyword">function</span>(<span class="params">imgDom</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></span><br><span class="line">        <span class="keyword">var</span> realSrc = imgDom.getAttribute(<span class="string">'ylazyload-src'</span>)</span><br><span class="line">        <span class="keyword">if</span>(realSrc) &#123;</span><br><span class="line">            imgDom.setAttribute(<span class="string">'src'</span>, realSrc)</span><br><span class="line">            <span class="comment">//删除图片属性 ylazyload-src</span></span><br><span class="line">            imgDom.removeAttribute(<span class="string">'ylazyload-src'</span>)</span><br><span class="line">            <span class="comment">//回调</span></span><br><span class="line">            self.cb &amp;&amp; self.cb(imgDom, realSrc)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> YLL</span><br><span class="line">&#125;())</span><br><span class="line"></span><br><span class="line"><span class="comment">//如果采用模块化打包引入的时候加上这句</span></span><br><span class="line"><span class="comment">// module.exports = Ylazyload</span></span><br></pre></td></tr></table></figure>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag">#js</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/04/15/essay-chengdu/" rel="next" title="成都之行">
+                <i class="fa fa-chevron-left"></i> 成都之行
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/27/python-fp-sequence/" rel="prev" title="Fluent Python Study Notes - Built-in Sequences">
+                Fluent Python Study Notes - Built-in Sequences <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/05/13/front-ylazyload/" data-title="图片懒加载组件 Ylazyload" data-url="https://feifeiyum.github.io/2017/05/13/front-ylazyload/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#实现原理"><span class="nav-number">1.</span> <span class="nav-text">实现原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用-Ylazyload"><span class="nav-number">2.</span> <span class="nav-text">使用 Ylazyload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ylazyload-参数介绍"><span class="nav-number">3.</span> <span class="nav-text">Ylazyload 参数介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ylazyload-源码"><span class="nav-number">4.</span> <span class="nav-text">Ylazyload 源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number">5.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

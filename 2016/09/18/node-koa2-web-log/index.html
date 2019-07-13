@@ -1,0 +1,720 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="koa,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="日志在web应用中日志是必不可少的，在系统调试或运行出现异常时，可以通过日志来进行排查。 甚至利用日志可以进行数据统计。本篇将介绍 koa2 web 应用中日志文件的配置， 采用的日志模块为Apache开发的Node 版 log4 – log4js-node推荐一篇介绍 log4js 的博文： NodeJS写日志_Log4js使用详解+常见艰难的解决">
+<meta name="keywords" content="koa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第三篇：koa2-web应用进阶—日志">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/09/18/node-koa2-web-log/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="日志在web应用中日志是必不可少的，在系统调试或运行出现异常时，可以通过日志来进行排查。 甚至利用日志可以进行数据统计。本篇将介绍 koa2 web 应用中日志文件的配置， 采用的日志模块为Apache开发的Node 版 log4 – log4js-node推荐一篇介绍 log4js 的博文： NodeJS写日志_Log4js使用详解+常见艰难的解决">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://feifeiyum.github.io/images/log1.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/log2.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/log3.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/log4.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/log5.png">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.294Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第三篇：koa2-web应用进阶—日志">
+<meta name="twitter:description" content="日志在web应用中日志是必不可少的，在系统调试或运行出现异常时，可以通过日志来进行排查。 甚至利用日志可以进行数据统计。本篇将介绍 koa2 web 应用中日志文件的配置， 采用的日志模块为Apache开发的Node 版 log4 – log4js-node推荐一篇介绍 log4js 的博文： NodeJS写日志_Log4js使用详解+常见艰难的解决">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/log1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 第三篇：koa2-web应用进阶—日志 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                第三篇：koa2-web应用进阶—日志
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-18T16:48:13+08:00" content="2016-09-18">
+              2016-09-18
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/node/" itemprop="url" rel="index">
+                    <span itemprop="name">node</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/18/node-koa2-web-log/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/18/node-koa2-web-log/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>日志在web应用中日志是必不可少的，在系统调试或运行出现异常时，可以通过日志来进行排查。 甚至利用日志可以进行数据统计。<br>本篇将介绍 koa2 web 应用中日志文件的配置， 采用的日志模块为Apache开发的Node 版 log4 – <a href="https://github.com/nomiddlename/log4js-node" target="_blank" rel="noopener">log4js-node</a><br>推荐一篇介绍 log4js 的博文： <a href="http://www.myexception.cn/javascript/1833210.html" target="_blank" rel="noopener">NodeJS写日志_Log4js使用详解+常见艰难的解决</a></p>
+<a id="more"></a>
+</blockquote>
+<h2 id="一、日志配置"><a href="#一、日志配置" class="headerlink" title="一、日志配置"></a>一、日志配置</h2><blockquote>
+<p><strong> 1、 </strong> 依赖选择： 根据koa wiki中的介绍，中间件 koa-log4 是 log4js-node koa版本， 且支持 koa2。 npm i –save koa-log4<br><strong> 2、 </strong> 新建日志路径： ./logs， 用于存放生成的日志文件<br><strong> 3、 </strong> 新建日志配置文件： ./log.js, 加入代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> log4js = <span class="built_in">require</span>(<span class="string">'koa-log4'</span>)</span><br><span class="line"><span class="keyword">const</span> logDir = path.join(__dirname, <span class="string">'logs'</span>)  <span class="comment">//配置目标路径 logs</span></span><br><span class="line"><span class="comment">/*生成logs目录*/</span></span><br><span class="line"> <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'fs'</span>).mkdirSync(logDir)  <span class="comment">//新建目录， ./logs</span></span><br><span class="line"> &#125; <span class="keyword">catch</span>(err) &#123;</span><br><span class="line">    <span class="keyword">if</span>(err.code !== <span class="string">'EEXIST'</span>) &#123;</span><br><span class="line">        <span class="built_in">console</span>.error(<span class="string">'Could not set up log directory, error was: '</span>, err)</span><br><span class="line">        process.exit(<span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="comment">//根据log 配置文件(log4js.json)配置日志文件</span></span><br><span class="line">log4js.configure(path.join(__dirname, <span class="string">'log4js.json'</span>), &#123; <span class="attr">cwd</span>: logDir &#125;)</span><br><span class="line"><span class="comment">//注册日志： 日志名（前缀）startup</span></span><br><span class="line"><span class="keyword">const</span> logger = log4js.getLogger(<span class="string">'startup'</span>)</span><br><span class="line"><span class="comment">//输入日志</span></span><br><span class="line">logger.info(<span class="string">'logs config finished!'</span>)</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong> 5、 </strong> 日志配置文件 (log4js.json) 编写 <strong>实际使用中以下注释全部删除</strong><br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"> &#123;</span><br><span class="line">  <span class="attr">"appenders"</span>: [</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="attr">"type"</span>: <span class="string">"console"</span>  //控制台输出日志</span><br><span class="line">    &#125;,</span><br><span class="line">    &#123;</span><br><span class="line">      "type": "clustered",  //支持多 appender 时添加， </span><br><span class="line">      "appenders": [</span><br><span class="line">         &#123;  //在./logs目录生成 http.log文件</span><br><span class="line">          "type": "dateFile", //datefile表示是输出按时间分文件的日志</span><br><span class="line">          "filename": "http.log",  //文件件名</span><br><span class="line">          "pattern": "-yyyy-MM-dd",  //非当天日志命名格式，例如：http.log-2016-08-02</span><br><span class="line">          "category": "http"  //过滤所有日志名为 http 的日志</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;  //记录所有日志</span><br><span class="line">          "type": "file",  //file表示日志输出为普通文件,在此种配置下,所有日志会输出到该日志文件</span><br><span class="line">          "filename": "app.log", //日志文件名</span><br><span class="line">          "maxLogSize": 10485760,  //设置日志文件的最大大小，文件体积超过时，自动分文件</span><br><span class="line">          "pattern": "-yyyy-MM-dd", //</span><br><span class="line">          "numBackups": 5  //备份的文件数量,如果文件过多则会将最旧的删除</span><br><span class="line">        &#125;,</span><br><span class="line">        &#123;</span><br><span class="line">          "type": "logLevelFilter", //日志级别过滤</span><br><span class="line">          "level": "ERROR",  //该日志文件只记录级别在error及以上的日志</span><br><span class="line">          "appender": &#123;</span><br><span class="line">            "type": "file",  </span><br><span class="line">            "filename": "errors.log"</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>关于日志配置更详细的说明可以参看博客 <a href="http://www.myexception.cn/javascript/1833210.html" target="_blank" rel="noopener">NodeJS写日志_Log4js使用详解+常见艰难的解决</a></p>
+<p><strong> 6、 </strong> 在koa web工程中应如 log4<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>)</span><br><span class="line"><span class="keyword">const</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>)</span><br><span class="line"><span class="keyword">const</span> nunjucksViews = <span class="built_in">require</span>(<span class="string">'koa-nunjucks-promise'</span>)</span><br><span class="line"><span class="keyword">const</span> router = <span class="built_in">require</span>(<span class="string">'koa-router'</span>)</span><br><span class="line"><span class="keyword">const</span> mount = <span class="built_in">require</span>(<span class="string">'koa-mount'</span>)</span><br><span class="line"><span class="keyword">const</span> server = <span class="built_in">require</span>(<span class="string">'koa-static'</span>)</span><br><span class="line"><span class="keyword">const</span> session = <span class="built_in">require</span>(<span class="string">"koa-session2"</span>)</span><br><span class="line"><span class="keyword">const</span> log4js = <span class="built_in">require</span>(<span class="string">'koa-log4'</span>)</span><br><span class="line"><span class="comment">//----------------------------</span></span><br><span class="line"><span class="built_in">require</span>(<span class="string">'./log'</span>)  <span class="comment">//引入（运行）日志配置文件， 生产日志目录及相应文件</span></span><br><span class="line"><span class="keyword">const</span> logger = log4js.getLogger(<span class="string">'app'</span>) <span class="comment">//将当前文件日志命名为 app </span></span><br><span class="line">logger.info(<span class="string">'--------step into koa-------------'</span>)</span><br><span class="line"><span class="comment">//----------------------------</span></span><br><span class="line"><span class="keyword">const</span> store = <span class="built_in">require</span>(<span class="string">'./store'</span>)</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa()</span><br><span class="line"><span class="keyword">const</span> route = <span class="keyword">new</span> router()</span><br><span class="line">app.use(nunjucksViews(<span class="string">`<span class="subst">$&#123;__dirname&#125;</span>/views`</span>, &#123;  <span class="comment">//配置模板文件路径，</span></span><br><span class="line">    ext: <span class="string">'html'</span>,   <span class="comment">//渲染文件后缀为 html</span></span><br><span class="line">    noCache: <span class="literal">true</span>,  <span class="comment">//开发环境下不设置缓存</span></span><br><span class="line">    watch: <span class="literal">true</span>,  <span class="comment">//开发环境下观察模板文件的变化并更新</span></span><br><span class="line">    filters: &#123;  <span class="comment">//过滤器  </span></span><br><span class="line">        json: <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify(str, <span class="literal">null</span>, <span class="number">2</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    globals: &#123;  <span class="comment">//设置对于nunjucks的全局变量</span></span><br><span class="line">        <span class="comment">// staticPath: '//static'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;))</span><br><span class="line">app.use(mount(<span class="string">'/static'</span>, server(<span class="string">`<span class="subst">$&#123;__dirname&#125;</span>/public`</span>)))  <span class="comment">//设置静态文件路径</span></span><br><span class="line"><span class="comment">//------------- 记录所有http请求---------------</span></span><br><span class="line">app.use(log4js.koaLogger(log4js.getLogger(<span class="string">'http'</span>), &#123; <span class="attr">level</span>: <span class="string">'auto'</span> &#125;))</span><br><span class="line"><span class="comment">//-------------------------------------------</span></span><br><span class="line">app.use(session(&#123;</span><br><span class="line">    key: <span class="string">"sessionId"</span>,   <span class="comment">//default "koa:sess",</span></span><br><span class="line">    store: <span class="keyword">new</span> store(),</span><br><span class="line">    maxAge: <span class="number">5000</span>  <span class="comment">//设置session超时时间</span></span><br><span class="line">&#125;))</span><br><span class="line">route.get(<span class="string">'/'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx</span>) </span>&#123;</span><br><span class="line"> <span class="comment">//-------------------------------------------</span></span><br><span class="line">    logger.debug(<span class="string">' this is test log'</span>)  <span class="comment">//打印日志，日志级别 debug</span></span><br><span class="line"><span class="comment">//-------------------------------------------</span></span><br><span class="line">    <span class="keyword">if</span>(ctx.session.view === <span class="literal">undefined</span>) &#123;</span><br><span class="line">        ctx.session.view = <span class="number">0</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        ctx.session.view += <span class="number">1</span>   </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'viewNum'</span>, ctx.session.view)</span><br><span class="line">    <span class="keyword">yield</span> ctx.render(<span class="string">'index'</span>, &#123;<span class="attr">title</span>: <span class="string">'Nunjucks'</span>, <span class="attr">content</span>: <span class="string">'Feifeiyu yeah!'</span>&#125;)</span><br><span class="line">&#125;))</span><br><span class="line">route.get(<span class="string">'/route/test'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx</span>) </span>&#123;</span><br><span class="line">    logger.info(<span class="string">' this is test log2'</span>)  <span class="comment">//打印日志，日志级别 info</span></span><br><span class="line">    ctx.body = <span class="string">'feifeiyu nuaa'</span></span><br><span class="line">&#125;))</span><br><span class="line">app.use(route.routes())</span><br><span class="line">    .use(route.allowedMethods())</span><br><span class="line">app.listen(<span class="number">3000</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'server started， port 3000'</span>))</span><br><span class="line"><span class="built_in">module</span>.exports = app</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong> 7、 </strong> 启动工程，开启测试， 在控制台输出日志：如下图所示：<br><img src="/images/log1.png" alt="logs"><br>如上图所示： 1、级别 INFO 日志名 startup, log config finished! 日志配置完毕<br>2、级别 INFO 日志名 app - 刚进入系统时打印的日志<br>3、级别 ERROR 日志名 http - 访问 /mysql-test 目录， 当该目录在系统中不存在， 输出错误<br>4、级别 INFO  日志名 app  - 在路由 / 下 -&gt; 打印的日志<br>5、级别 INFO 日志名 http - 访问 / 目录 , 路由成功<br>6、级别 INFO  日志名 app  - 在路由 /route/test 下 -&gt; 打印的日志<br>7、级别 INFO 日志名 http - 访问 /route/test 目录 ， 路由成功</p>
+<p><strong>8、</strong> 根据 log4js.json中配置，生成的日志文件有如下三个(http.log-2016-08-09为非当天日志)<br><img src="/images/log2.png" alt="log"><br>在文件 app.log中， 内容同 终端输出的一致<br><img src="/images/log3.png" alt="log"><br>在文件中 http.log 中记录的全是 http 请求的日志<br><img src="/images/log4.png" alt="log"><br>在文件 errors.log 中记录的都是级别为error及以上的日志<br><img src="/images/log5.png" alt="log"></p>
+<h2 id="二、严重错误邮件提醒"><a href="#二、严重错误邮件提醒" class="headerlink" title="二、严重错误邮件提醒"></a>二、严重错误邮件提醒</h2><p>假如发生严重错误时，最好的做法是能够邮件通知到相关责任人， log4js 可以做到这一点<br><strong>1、</strong> 在配置文件 appenders中添加邮件配置<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   <span class="attr">"type"</span>: <span class="string">"logLevelFilter"</span>,  </span><br><span class="line">   "level": "FATAL",  //在输出FATAL级别的日志发送邮件</span><br><span class="line">   "appender": &#123;</span><br><span class="line">        "type": "smtp",  </span><br><span class="line">        "recipients": "recipients@foxmail.com", //邮件人邮箱， 如果有多个写成数组</span><br><span class="line">        "sender": "sender@163.com",  //发件人邮箱</span><br><span class="line">        "sendInterval": 60,  //邮件时间间隔</span><br><span class="line">        "SMTP": &#123;  //邮件首发服务配置，这要参考相关邮箱配置， 以163邮箱为例</span><br><span class="line">            "host": "smtp.163.com",  //邮件服务地址</span><br><span class="line">            "port": 25,</span><br><span class="line">            "auth": &#123;</span><br><span class="line">                "user": "sender@163.com",  //邮箱地址</span><br><span class="line">                "pass": "password" //登入密码</span><br><span class="line">            &#125;</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>2、</strong> 添加邮件处理中间件： nodemailer； npm i –save nodemailer;<br><strong>注意:</strong> 国内很多邮箱仅仅通过配置邮箱地址和密码是无法配置成功的，例如： qq mail。最好找一种只需要地址和密码就可以验证通过的邮箱。 163 邮箱配置时，密码必须使用手机客户端授权密码。</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/koa/" rel="tag">#koa</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/18/node-koa2-web-session/" rel="next" title="第二篇：koa2-web应用进阶—session">
+                <i class="fa fa-chevron-left"></i> 第二篇：koa2-web应用进阶—session
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/18/node-koa2-web-rest/" rel="prev" title="第四篇：koa2-web应用进阶—REST接口">
+                第四篇：koa2-web应用进阶—REST接口 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/18/node-koa2-web-log/" data-title="第三篇：koa2-web应用进阶—日志" data-url="https://feifeiyum.github.io/2016/09/18/node-koa2-web-log/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、日志配置"><span class="nav-number">1.</span> <span class="nav-text">一、日志配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、严重错误邮件提醒"><span class="nav-number">2.</span> <span class="nav-text">二、严重错误邮件提醒</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

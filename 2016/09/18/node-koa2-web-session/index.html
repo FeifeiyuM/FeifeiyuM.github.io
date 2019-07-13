@@ -1,0 +1,719 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="koa,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="本文将介绍koa web应用中的session使用, Session 对象可以用于存储特定用户会话所需的属性及配置信息， 例如用户的登入信息。">
+<meta name="keywords" content="koa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第二篇：koa2-web应用进阶—session">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/09/18/node-koa2-web-session/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="本文将介绍koa web应用中的session使用, Session 对象可以用于存储特定用户会话所需的属性及配置信息， 例如用户的登入信息。">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://feifeiyum.github.io/images/session.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/session2.png">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.294Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第二篇：koa2-web应用进阶—session">
+<meta name="twitter:description" content="本文将介绍koa web应用中的session使用, Session 对象可以用于存储特定用户会话所需的属性及配置信息， 例如用户的登入信息。">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/session.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 第二篇：koa2-web应用进阶—session | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                第二篇：koa2-web应用进阶—session
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-18T08:55:35+08:00" content="2016-09-18">
+              2016-09-18
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/node/" itemprop="url" rel="index">
+                    <span itemprop="name">node</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/18/node-koa2-web-session/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/18/node-koa2-web-session/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文将介绍koa web应用中的session使用, Session 对象可以用于存储特定用户会话所需的属性及配置信息， 例如用户的登入信息。</p>
+</blockquote>
+<a id="more"></a>
+<blockquote>
+<h2 id="一、中间件选择"><a href="#一、中间件选择" class="headerlink" title="一、中间件选择"></a>一、中间件选择</h2><p>1、从<a href="https://github.com/koajs/koa/wiki" target="_blank" rel="noopener">koa wiki</a>中可以发现koa的session中间件多大12种，但是目前大都未支持koa2。对于未支持koa2的中间件，可以应如中间件 koa-convert 包裹后在koa2中使用。<br>2、为了获得koa2更好的支持，本文选择中间件 <a href="https://github.com/Secbone/koa-session2" target="_blank" rel="noopener">koa-session2</a> </p>
+</blockquote>
+<blockquote>
+<h2 id="二、简单实现"><a href="#二、简单实现" class="headerlink" title="二、简单实现"></a>二、简单实现</h2><p>在第一篇的koa web应用基础上进行配置,为了延续之前不使用 async/await的原则，我们选用不需要babel转码的版本， 但 node 版本必须为 6.x<br><strong> 1、 </strong>加入依赖: npm install –save koa-session2@node6</p>
+<ul>
+<li>2、 **加入session配置代码</li>
+</ul>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>)</span><br><span class="line"><span class="keyword">const</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>)</span><br><span class="line"><span class="keyword">const</span> nunjucksViews = <span class="built_in">require</span>(<span class="string">'koa-nunjucks-promise'</span>)</span><br><span class="line"><span class="keyword">const</span> router = <span class="built_in">require</span>(<span class="string">'koa-router'</span>)</span><br><span class="line"><span class="keyword">const</span> mount = <span class="built_in">require</span>(<span class="string">'koa-mount'</span>)</span><br><span class="line"><span class="keyword">const</span> server = <span class="built_in">require</span>(<span class="string">'koa-static'</span>)</span><br><span class="line"><span class="keyword">const</span> session = <span class="built_in">require</span>(<span class="string">"koa-session2"</span>)</span><br><span class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa()</span><br><span class="line"><span class="keyword">const</span> route = <span class="keyword">new</span> router()</span><br><span class="line">app.use(nunjucksViews(<span class="string">`<span class="subst">$&#123;__dirname&#125;</span>/views`</span>, &#123;  <span class="comment">//配置模板文件路径，</span></span><br><span class="line">    ext: <span class="string">'html'</span>,  <span class="comment">//渲染文件后缀为 html</span></span><br><span class="line">    noCache: <span class="literal">true</span>, <span class="comment">//开发环境下不设置缓存</span></span><br><span class="line">    watch: <span class="literal">true</span>,  <span class="comment">//开发环境下观察模板文件的变化并更新</span></span><br><span class="line">    filters: &#123;  <span class="comment">//过滤器  </span></span><br><span class="line">        json: <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify(str, <span class="literal">null</span>, <span class="number">2</span>)</span><br><span class="line">       &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    globals: &#123;  <span class="comment">//设置对于nunjucks的全局变量</span></span><br><span class="line">        <span class="comment">// staticPath: '//static'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;))</span><br><span class="line">app.use(mount(<span class="string">'/static'</span>, server(<span class="string">`<span class="subst">$&#123;__dirname&#125;</span>/public`</span>)))  <span class="comment">//设置静态文件路径</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//--------------------------------------</span></span><br><span class="line">app.use(session(&#123;</span><br><span class="line">    key: <span class="string">"SESSIONID"</span>,   <span class="comment">//default "koa:sess"</span></span><br><span class="line">    maxAge: <span class="number">5000</span>  <span class="comment">//设置session超时时间</span></span><br><span class="line">&#125;))</span><br><span class="line">route.get(<span class="string">'/'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx</span>) </span>&#123;</span><br><span class="line">   <span class="keyword">if</span>(ctx.session.view === <span class="literal">undefined</span>) &#123; <span class="comment">//统计访问次数</span></span><br><span class="line">        ctx.session.view = <span class="number">0</span> </span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        ctx.session.view += <span class="number">1</span>   </span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">'viewNum'</span>, ctx.session.view) <span class="comment">//log 输出</span></span><br><span class="line">    <span class="keyword">yield</span> ctx.render(<span class="string">'index'</span>, &#123;<span class="attr">title</span>: <span class="string">'Nunjucks'</span>, <span class="attr">content</span>: <span class="string">'Feifeiyu yeah!'</span>&#125;)</span><br><span class="line">&#125;))</span><br><span class="line"><span class="comment">//-------------------------------------------- </span></span><br><span class="line">route.get(<span class="string">'/route/test'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx</span>) </span>&#123;</span><br><span class="line">    ctx.body = <span class="string">'feifeiyu nuaa'</span></span><br><span class="line">&#125;))</span><br><span class="line">app.use(route.routes())</span><br><span class="line">    .use(route.allowedMethods())</span><br><span class="line">app.listen(<span class="number">3000</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'server started， port 3000'</span>))</span><br><span class="line"> <span class="built_in">module</span>.exports = app</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p> <strong>3、</strong> 启动服务， 访问 <a href="http://localhost:3000/" target="_blank" rel="noopener">http://localhost:3000/</a>, 以chrome为例：打开浏览器调试工具， 打开： Resources =&gt; Cookies =&gt; localhost,可以看见 session 相关信息： 例如，SESSIONID就是代码中配置的key字段<br><img src="/images/session.png" alt="session"><br><strong>4、</strong> console中打印的信息： 页面每刷新一次， viewNum 加 1, 即代表访问页面一次; 间隔五秒钟后刷新， viewNum 清空，说明上一个session已失效，重新生成新的session<br><img src="/images/session2.png" alt="session"></p>
+<p>##session redis##<br>在上例中，生产的sessio都是存储在node进程开辟的内存中，除此之外，session还可以存储在缓存（redis），数据库(mongodb, mysql)等数据管理工具中。本篇介绍将session如何存储在redis中<br><strong>1、</strong>引入依赖： 1、推荐redis client中间件 <a href="https://github.com/luin/ioredis" target="_blank" rel="noopener">ioredis</a> ， ioredis优势在于支持es6的promise对象。 npm i –save ioredis。 2、npm i –save uid-safe, 用于redis 存储key (sessionid) 的生成<br><strong>2、</strong>根据 koa-session2 git README.md Options中描述 {a class for custom store (extend {Store}, func: #get(sid), #set(session, opts), #destory(sid))}， 需要重写下 store 这个类. 在 README 中提供了相关的例子（Custom Stores），好像这个例子在写redis时数据格式不对，无法正确存储。因此我们参考例子 “Custom Stores” 和 “koa-session2/libs/store.js” 这两个类，重写下 store类，完成 redis 中 session 的 存(set), 取(get), 销毁(destroy)<br><strong>3、</strong> 在工程目录下新建文件 store.js, 在store.js中加入如下代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">'use strict'</span></span><br><span class="line"><span class="keyword">const</span> redis = <span class="built_in">require</span>(<span class="string">'ioredis'</span>)</span><br><span class="line"><span class="keyword">const</span> uid = <span class="built_in">require</span>(<span class="string">'uid-safe'</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Store</span> </span>&#123;</span><br><span class="line">   <span class="keyword">constructor</span>() &#123; </span><br><span class="line">      <span class="keyword">this</span>.redis = <span class="keyword">new</span> redis()   <span class="comment">//默认 127.0.0.1 6379端口</span></span><br><span class="line">    &#125;</span><br><span class="line">    getId(length) &#123;</span><br><span class="line">        <span class="keyword">return</span> uid.sync(length)  <span class="comment">//生成id</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">get</span>(sid) &#123;  <span class="comment">//实现get方法</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.redis.get(<span class="string">`session-<span class="subst">$&#123;sid&#125;</span>`</span>).then(<span class="function">(<span class="params">resp</span>) =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">try</span> &#123; <span class="comment">//如果返回结果不是json字符串，返回空</span></span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(<span class="built_in">JSON</span>.parse(resp)) </span><br><span class="line">            &#125; <span class="keyword">catch</span>(e) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(&#123;&#125;)</span><br><span class="line">            &#125;</span><br><span class="line">       &#125;)</span><br><span class="line">    &#125;  </span><br><span class="line">    <span class="keyword">set</span>(session, opts) &#123;  <span class="comment">//实现set方法</span></span><br><span class="line">        <span class="keyword">if</span>(!opts.sid) &#123;</span><br><span class="line">            opts.sid = <span class="keyword">this</span>.getId(<span class="number">24</span>)</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//存入redis要将对象转成JSON字符串</span></span><br><span class="line">        <span class="comment">//存入redis的key为： session-uid</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.redis.set(<span class="string">`session-<span class="subst">$&#123;opts.sid&#125;</span>`</span>, <span class="built_in">JSON</span>.stringify(session)).then(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(opts.sid)</span><br><span class="line">        &#125;)</span><br><span class="line">    &#125;</span><br><span class="line">    destroy(sid) &#123;  <span class="comment">//实现distroy方法</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.redis.del(<span class="string">`session-<span class="subst">$&#123;sid&#125;</span>`</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = Store</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong> 4、 </strong> app.js 中为 session 添加配置项 store：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> store = <span class="built_in">require</span>(<span class="string">'./store'</span>) <span class="comment">//引入上面写的 store类</span></span><br><span class="line"><span class="comment">//----------</span></span><br><span class="line">   code...</span><br><span class="line"><span class="comment">//----------</span></span><br><span class="line">app.use(session(&#123;</span><br><span class="line">   key: <span class="string">"sessionId"</span>,   <span class="comment">//default "koa:sess",</span></span><br><span class="line">   store: <span class="keyword">new</span> store(),  <span class="comment">//添加 store 配置项</span></span><br><span class="line">   maxAge: <span class="number">5000</span>  <span class="comment">//设置session超时时间</span></span><br><span class="line">&#125;))</span><br><span class="line"><span class="comment">//----------</span></span><br><span class="line">   code...</span><br><span class="line"><span class="comment">//----------</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><strong>5、</strong> 首先要在本机启动redis 服务 <a href="http://blog.programster.org/debian-8-install-redis-server/" target="_blank" rel="noopener">redis安装 debian</a>, redis 启动： redis-server &amp; (加 &amp; 表示在后台运行)<br><strong>6、</strong> 启动koa web 服务，按照上例的步骤执行，可以观察到相同的结果, 在store 所在目录会生产一个dump.rdb文件<br><strong>7、</strong> 如果想换成其他的数据存储工具， 只需要将 store 这个类修改成对相应数据存储工具的访问即可</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/koa/" rel="tag">#koa</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/17/node-koa2-web-simpleproject/" rel="next" title="第一篇：一个简单的koa2-web应用">
+                <i class="fa fa-chevron-left"></i> 第一篇：一个简单的koa2-web应用
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/18/node-koa2-web-log/" rel="prev" title="第三篇：koa2-web应用进阶—日志">
+                第三篇：koa2-web应用进阶—日志 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/18/node-koa2-web-session/" data-title="第二篇：koa2-web应用进阶—session" data-url="https://feifeiyum.github.io/2016/09/18/node-koa2-web-session/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、中间件选择"><span class="nav-number">1.</span> <span class="nav-text">一、中间件选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、简单实现"><span class="nav-number">2.</span> <span class="nav-text">二、简单实现</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

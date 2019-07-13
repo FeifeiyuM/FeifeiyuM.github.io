@@ -1,0 +1,828 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="css,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="本文介绍 CSS 文本的样式控制   字体样式 字体选择是一个常见重要的特性，设置字体属性也是 CSS 最常见的用途之一。但是，目前还没有一种办法能够确保所有的 Web 页面上使用同一种字体在编写样式表的时候，开发人员能够为 html 文档指定一种字体 例如： Times New Roman, 但用户机器上并没有安装这种字体， 浏览器就无法显示该种字体如果说有设计师想在浏览器上选定一种特定的字体">
+<meta name="keywords" content="css">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CSS-文本视觉">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/12/25/base-css-test/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="本文介绍 CSS 文本的样式控制   字体样式 字体选择是一个常见重要的特性，设置字体属性也是 CSS 最常见的用途之一。但是，目前还没有一种办法能够确保所有的 Web 页面上使用同一种字体在编写样式表的时候，开发人员能够为 html 文档指定一种字体 例如： Times New Roman, 但用户机器上并没有安装这种字体， 浏览器就无法显示该种字体如果说有设计师想在浏览器上选定一种特定的字体">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://feifeiyum.github.io/images/cssvision/font-bolder.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/cssvision/indent.png">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.290Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CSS-文本视觉">
+<meta name="twitter:description" content="本文介绍 CSS 文本的样式控制   字体样式 字体选择是一个常见重要的特性，设置字体属性也是 CSS 最常见的用途之一。但是，目前还没有一种办法能够确保所有的 Web 页面上使用同一种字体在编写样式表的时候，开发人员能够为 html 文档指定一种字体 例如： Times New Roman, 但用户机器上并没有安装这种字体， 浏览器就无法显示该种字体如果说有设计师想在浏览器上选定一种特定的字体">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/cssvision/font-bolder.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> CSS-文本视觉 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                CSS-文本视觉
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-12-25T16:43:29+08:00" content="2016-12-25">
+              2016-12-25
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/base/" itemprop="url" rel="index">
+                    <span itemprop="name">base</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/25/base-css-test/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/25/base-css-test/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文介绍 CSS 文本的样式控制 </p>
+</blockquote>
+<h2 id="字体样式"><a href="#字体样式" class="headerlink" title="字体样式"></a>字体样式</h2><blockquote>
+<p>字体选择是一个常见重要的特性，设置字体属性也是 CSS 最常见的用途之一。但是，目前还没有一种办法能够确保所有的 Web 页面上使用同一种字体<br>在编写样式表的时候，开发人员能够为 html 文档指定一种字体 例如： Times New Roman, 但用户机器上并没有安装这种字体， 浏览器就无法显示该种字体<br>如果说有设计师想在浏览器上选定一种特定的字体，请拒绝<br><a id="more"></a></p>
+</blockquote>
+<h3 id="字体选择"><a href="#字体选择" class="headerlink" title="字体选择"></a>字体选择</h3><blockquote>
+<p>字体选择可以使用 属性 font-family 来实现<br>例如 body { font-family: “Microsoft Yahei”; }, 此时浏览器会选择 微软雅黑(加入用户机器安装了该字体)， 作为 body 元素字体， 并且body元素的后代元素会继承该属性<br>如果 body 后代中的某个元素想要换个字体，可以重新制定字体元素<br>例如： h1,h2,h5 { font-family: arial; }, 此时浏览器会给 h1, h2, h5 使用 arial 标签<br>假如用户机器上没有安装 arial 字体，浏览器将会使用默认字体显示 h1,h2,h5 元素, 但是这个可以通过一些方式来做一些弥补<br>h1,h2,h5 { font-family: arial, Sans-serif, “Hiragino Sans GB”; }, 这中方式告诉浏览器 如果 arial 字体不可用，就选择 Sans-serif, 如果还不可用，就选择”Hiragino Sans GB”, 如此依次往下选择。根据这一原理，一般 font-family 规则中都提供一个通用字体系列：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span>&#123;  </span><br><span class="line">    <span class="attribute">font-family</span>: <span class="string">"Microsoft Yahei"</span>,tahoma,arial,<span class="string">"Hiragino Sans GB"</span>,<span class="string">"helvetica neue"</span>,helvetica,arial,Sans-serif,<span class="string">"Hiragino Sans GB"</span>,<span class="string">"Hiragino Sans GB W3"</span>,<span class="string">"SimHei"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>从上例可以看出，有些字体名称加了引号，有些没加， 有个共同的特点是，加了引号的字体名中都有空格。 更严格的说： 当一个字体名中有一个或多个空格，或这字体名中包括 #, $, %之类的特殊字符，都要使用引号将字体名括起来<br>加引号只是一种推荐做法，并不强制   </p>
+</blockquote>
+<h3 id="字体加粗"><a href="#字体加粗" class="headerlink" title="字体加粗"></a>字体加粗</h3><blockquote>
+<p>字体加粗使用属性： font-weight, 其属性值可以为： normal, bold, bolder, lighter, 100, 200, 300, 400, 500, 600, 700, 800, 900, inherit。 default： normal.<br>100 ~ 900 这9个数字关键子是为了映射字体设计的一个常见的特性，即为字体指定了9级加粗级别。如果一种字体内置了这些加粗级别， 那么这些数字就直接映射到与定义的级别，100 最细， 900最粗。<br>100 ~ 900 数字本身没有固定的加粗级别，根据 CSS 规范： 每个数字对应一个加粗级别， 至少与前一个数指定的加粗读相同。一般而言： 100, 200, 300, 400 对应较细字体， 500,600对应较粗字体，700,800,900对应很粗字体。<br>假设 A 字体及其各个级别的粗细   </p>
+</blockquote>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>字体</th>
+<th>关键字</th>
+<th>数字级别</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A Light</td>
+<td>–</td>
+<td>100，200,300</td>
+</tr>
+<tr>
+<td>A Regular</td>
+<td>normal</td>
+<td>400</td>
+</tr>
+<tr>
+<td>A Medium</td>
+<td>–</td>
+<td>500</td>
+</tr>
+<tr>
+<td>A bold</td>
+<td>bold</td>
+<td>600,700</td>
+</tr>
+<tr>
+<td>A Black</td>
+<td>–</td>
+<td>800</td>
+</tr>
+<tr>
+<td>A UltraBlack</td>
+<td>–</td>
+<td>900</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<blockquote>
+<p>如果一个标为Medium的变形是唯一可用的变形， 他不会指定为500, 而是 400 。</p>
+</blockquote>
+<blockquote>
+<p><strong>字体加粗级别小于9种时，浏览器会以一种特定方式替补空白：</strong>  </p>
+<ul>
+<li>如果没有 500 的加粗级别，此时 400 与 500 的加粗程度相同  </li>
+<li>如果没有 300 的加粗级别， 则为 300 指定一个比 400 更细的粗度级别， 如果没有更细的，那就 300 与 400 相同。  200, 100 也是如此类推  </li>
+<li>如果没有 600 的加粗级别， 则为 600 指定一个比 400 更粗的粗度级别， 如果没有， 那就 600 与 500(400) 相同. 700, 800, 900 如此类推  </li>
+</ul>
+</blockquote>
+<blockquote>
+<p>例如： 如果字体 B 只有两种加粗级别   </p>
+</blockquote>
+<blockquote>
+<table>
+<thead>
+<tr>
+<th>字体</th>
+<th>关键字</th>
+<th>数字级别</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>B Regular</td>
+<td>normal</td>
+<td>100，200,300,400,500</td>
+</tr>
+<tr>
+<td>B Bold</td>
+<td>bold</td>
+<td>600,700,800,900</td>
+</tr>
+</tbody>
+</table>
+</blockquote>
+<blockquote>
+<p>之前提到的属性值 normal 等价于 400, bold 等价于 700。其他数字不对应其他任何属性值  </p>
+</blockquote>
+<h3 id="让字体更粗-更细"><a href="#让字体更粗-更细" class="headerlink" title="让字体更粗/更细"></a>让字体更粗/更细</h3><blockquote>
+<p>使用 font-weight: bolder 规则， 来为元素设置一个比其所继承的父元素粗度级别更粗的级别<br>例如： </p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span> &#123; <span class="attribute">font-weight</span>: normal; &#125;</span><br><span class="line"><span class="selector-tag">p</span> <span class="selector-tag">em</span> &#123; <span class="attribute">font-weight</span>: bolder; &#125;  </span><br><span class="line"></span><br><span class="line"><span class="selector-tag">h1</span> &#123; <span class="attribute">font-weight</span>: bold;&#125;</span><br><span class="line"><span class="selector-tag">h1</span> <span class="selector-tag">b</span> &#123; <span class="attribute">font-weight</span>: bolder;&#125;</span><br><span class="line"></span><br><span class="line"><span class="selector-tag">p</span> &#123; <span class="attribute">font-weight</span>: blod;&#125;</span><br><span class="line"><span class="selector-tag">p</span> <span class="selector-tag">span</span> &#123; <span class="attribute">font-weight</span>: lighter; &#125; </span><br><span class="line"></span><br><span class="line"><span class="selector-tag">p</span> &#123; <span class="attribute">font-weight</span>: <span class="number">300</span>;&#125;</span><br><span class="line"><span class="selector-tag">p</span> <span class="selector-tag">i</span> &#123; <span class="attribute">font-weight</span>: lighter; &#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>1、 em 从祖先元素继承的加粗级别为 normal(400) ，因此其加粗级别跃迁为 bold(700)<br>2、b 从祖先元素继承的加粗级别为 bold(700), 已经没有更粗的字体了， 就把 b 的加粗级别设置为下一个更大的数值： 800<br>3、span 从祖先元素继承的加粗级别为 bold(700), 则其加粗级别跃迁为 normal(400)<br>4、i 从祖先元素继承的加粗级别为 300, 已经没有更细的字体了， i的加粗级别设置为 200<br><img src="/images/cssvision/font-bolder.png" alt="font-bolder"></p>
+</blockquote>
+<h3 id="字体大小"><a href="#字体大小" class="headerlink" title="字体大小"></a>字体大小</h3><blockquote>
+<p>字体大小由属性: font-size 设置<br>font-size 属性值为 xx-small, x-small, small, medium, large, x-large, xx-large, smaller, larger, <length>, <percentage> 。default: medium  </percentage></length></p>
+</blockquote>
+<h3 id="绝对大小"><a href="#绝对大小" class="headerlink" title="绝对大小"></a>绝对大小</h3><blockquote>
+<p>使用  xx-small, x-small, small, medium, large, x-large, xx-large，<br>根据CSS规范： 一个绝对大小与下一个绝对大小的差别应当是向上1.5, 向下 0.66。例如： medium = 10px 则， large=15px; 不过缩放比例不同浏览可能不同<br>具体以那个值为基准进行缩放，也有浏览器确定。绝对大小的属性值不常用  </p>
+</blockquote>
+<h3 id="相对大小"><a href="#相对大小" class="headerlink" title="相对大小"></a>相对大小</h3><blockquote>
+<p>larger, smaller, 这个两个属性值使元素的大小相对与其父元素的大小在绝对大小的梯度上上下移动。同 bolder, lighter 类似  </p>
+</blockquote>
+<h3 id="百分数设置大小"><a href="#百分数设置大小" class="headerlink" title="百分数设置大小"></a>百分数设置大小</h3><blockquote>
+<p>百分数值是根据从父元素继承的大小来来计算，实现地字体大小更精确的控制<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span> &#123; <span class="attribute">font-size</span>: <span class="number">10px</span>; &#125;</span><br><span class="line"><span class="selector-tag">p</span> <span class="selector-tag">i</span> &#123; <span class="attribute">font-size</span>: <span class="number">120%</span>; &#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>i 元素中字体大小为 10px * 120% = 12px<br>如果计算值为小数，则对其进行取整 [14.4px &asymp; 14px], [18.8px &asymp; 19px]  </p>
+</blockquote>
+<h3 id="使用长度单位"><a href="#使用长度单位" class="headerlink" title="使用长度单位"></a>使用长度单位</h3><blockquote>
+<p>字体小可以使用绝对的长度单位来设置字体大小  </p>
+</blockquote>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span><span class="selector-class">.one</span> &#123;<span class="attribute">font-size</span>: <span class="number">36pt</span>;&#125;</span><br><span class="line"><span class="selector-tag">p</span><span class="selector-class">.two</span> &#123;<span class="attribute">font-size</span>: <span class="number">12pc</span>;&#125;</span><br><span class="line"><span class="selector-tag">p</span><span class="selector-class">.three</span> &#123;<span class="attribute">font-size</span>: .<span class="number">5in</span>;&#125;</span><br><span class="line"><span class="selector-tag">p</span><span class="selector-class">.four</span> &#123;<span class="attribute">font-size</span>: <span class="number">1.2cm</span>;&#125;</span><br><span class="line"><span class="selector-tag">p</span><span class="selector-class">.five</span> &#123; <span class="attribute">font-size</span>: <span class="number">12mm</span>;&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="字体风格"><a href="#字体风格" class="headerlink" title="字体风格"></a>字体风格</h2><blockquote>
+<p>字体风格使用属性 font-style 来设置： 用户 normal(竖直)， italic(斜体), oblique(倾斜)。default: normal<br>italic 是一种单独的字体风格， 属于字体层面的<br>oblique 是正常竖直文本的一个倾斜版本  </p>
+</blockquote>
+<h2 id="文本属性"><a href="#文本属性" class="headerlink" title="文本属性"></a>文本属性</h2><h3 id="文本缩进"><a href="#文本缩进" class="headerlink" title="文本缩进"></a>文本缩进</h3><blockquote>
+<p>文本缩进就是段落的首行缩进， 使用属性 text-indent 来实现。<br>text-indent 属性值为 <length>, <percentage>, inherit<br>text-indent 值可为正为负， 正值向后缩进，负值向前伸展<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line">    p &#123;</span><br><span class="line">        width: 300px;</span><br><span class="line">        text-indent: 20px;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span></span><br><span class="line">    when i was young i'd listen to the radio</span><br><span class="line">    waiting for my favorite songs</span><br><span class="line">    when they played i'd sing along,</span><br><span class="line">    it make me smile.</span><br><span class="line"><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></percentage></length></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/cssvision/indent.png" alt="text-indent"></p>
+</blockquote>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/css/" rel="tag">#css</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/25/base-css-vision/" rel="next" title="CSS-视觉">
+                <i class="fa fa-chevron-left"></i> CSS-视觉
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/04/front-verify-code/" rel="prev" title="验证码组件 Yverifycode">
+                验证码组件 Yverifycode <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/25/base-css-test/" data-title="CSS-文本视觉" data-url="https://feifeiyum.github.io/2016/12/25/base-css-test/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#字体样式"><span class="nav-number">1.</span> <span class="nav-text">字体样式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#字体选择"><span class="nav-number">1.1.</span> <span class="nav-text">字体选择</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字体加粗"><span class="nav-number">1.2.</span> <span class="nav-text">字体加粗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#让字体更粗-更细"><span class="nav-number">1.3.</span> <span class="nav-text">让字体更粗/更细</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字体大小"><span class="nav-number">1.4.</span> <span class="nav-text">字体大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#绝对大小"><span class="nav-number">1.5.</span> <span class="nav-text">绝对大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相对大小"><span class="nav-number">1.6.</span> <span class="nav-text">相对大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#百分数设置大小"><span class="nav-number">1.7.</span> <span class="nav-text">百分数设置大小</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用长度单位"><span class="nav-number">1.8.</span> <span class="nav-text">使用长度单位</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#字体风格"><span class="nav-number">2.</span> <span class="nav-text">字体风格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文本属性"><span class="nav-number">3.</span> <span class="nav-text">文本属性</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文本缩进"><span class="nav-number">3.1.</span> <span class="nav-text">文本缩进</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number">4.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

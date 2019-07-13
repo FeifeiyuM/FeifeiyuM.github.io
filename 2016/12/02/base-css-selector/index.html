@@ -1,0 +1,934 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="css,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="CSS 基础 CSS: 层叠样式表（Cascading Style Sheets),   层叠表示先前添加的样式会被后面添加的样式覆盖(具体原则后面详述)，样式用于定义HTML元素在浏览器中的表现形式， 其通常存放在样式表中">
+<meta name="keywords" content="css">
+<meta property="og:type" content="article">
+<meta property="og:title" content="css-选择器">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/12/02/base-css-selector/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="CSS 基础 CSS: 层叠样式表（Cascading Style Sheets),   层叠表示先前添加的样式会被后面添加的样式覆盖(具体原则后面详述)，样式用于定义HTML元素在浏览器中的表现形式， 其通常存放在样式表中">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/css-syntax.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/class-selector.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/attr-selector1.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/attr-selector2.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/dom-tree.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/child-selector.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/child-selector2.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/brother-selector.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/pse-selector.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/pse-element.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/inherit.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/css-rule2.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/css-rule1.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/css-rule3.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/css/css-rule4.png">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.290Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="css-选择器">
+<meta name="twitter:description" content="CSS 基础 CSS: 层叠样式表（Cascading Style Sheets),   层叠表示先前添加的样式会被后面添加的样式覆盖(具体原则后面详述)，样式用于定义HTML元素在浏览器中的表现形式， 其通常存放在样式表中">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/css/css-syntax.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> css-选择器 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                css-选择器
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-12-02T19:58:50+08:00" content="2016-12-02">
+              2016-12-02
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/base/" itemprop="url" rel="index">
+                    <span itemprop="name">base</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/02/base-css-selector/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/02/base-css-selector/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="CSS-基础"><a href="#CSS-基础" class="headerlink" title="CSS 基础"></a>CSS 基础</h1><blockquote>
+<p>CSS: 层叠样式表（Cascading Style Sheets), </p>
+<blockquote>
+<p>层叠表示先前添加的样式会被后面添加的样式覆盖(具体原则后面详述)，<br>样式用于定义HTML元素在浏览器中的表现形式， 其通常存放在样式表中<br><a id="more"></a></p>
+</blockquote>
+</blockquote>
+<h2 id="CSS-语法"><a href="#CSS-语法" class="headerlink" title="CSS 语法"></a>CSS 语法</h2><p><img src="/images/css/css-syntax.png" alt="syntax"></p>
+<blockquote>
+<p><strong>CSS 规则</strong> 由 <strong>选择器(selector)</strong> 和 <strong>声明块(declaration block)</strong> 两个部分组成  </p>
+<blockquote>
+<p>选择器： 用于从HTML文档中选择需要添加样式的DOM元素<br>声明块： 由一个或多个声明组成，各个声明之间用 ; 分隔。每个声明是一个key-value对， key为CSS属性，value为该属性的值， key和value之间用 ： 分隔。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><strong>样式表</strong> 由一系列上述规则组成</p>
+</blockquote>
+<h2 id="CSS选择器"><a href="#CSS选择器" class="headerlink" title="CSS选择器"></a>CSS选择器</h2><h3 id="元素选择器"><a href="#元素选择器" class="headerlink" title="元素选择器"></a>元素选择器</h3><blockquote>
+<p>使用 html 元素名作为选择器，(所有html元素的的元素名都可以作为选择器) 例如：<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">body</span> &#123; <span class="attribute">background</span>: gray; &#125;</span><br><span class="line"><span class="selector-tag">p</span> &#123; <span class="attribute">color</span>: red; &#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>使用了 &lt;body&gt; 或 &lt;p&gt; 元素名作为选择器。他们会影响整个html文档中 &lt;body&gt;的背景色， 和所有&lt;p&gt;元素中的字体颜色</p>
+</blockquote>
+<h3 id="选择器分组"><a href="#选择器分组" class="headerlink" title="选择器分组"></a>选择器分组</h3><blockquote>
+<p>用于将一个 CSS 声明块影响多个不同的元素<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span>, <span class="selector-tag">h1</span> &#123; <span class="attribute">color</span>: red; &#125; <span class="comment">/*所有 &lt;p&gt; 和 h1 标签中的字体颜色为红色 */</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>在 CSS规则左侧将多个选择器用逗号( , )隔开，告诉浏览器这个两个不同的选择器。逗号不能省略， 如果省略意义就完全不同了。</p>
+</blockquote>
+<h3 id="声明分组"><a href="#声明分组" class="headerlink" title="声明分组"></a>声明分组</h3><blockquote>
+<p>与选择器分组类似，CSS规则的声明也可以分组<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span> &#123; <span class="attribute">font-size</span>: <span class="number">14px</span>; &#125;</span><br><span class="line"><span class="selector-tag">p</span> &#123; <span class="attribute">color</span>: blue; &#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>将所有p元素中的字体大小设置为 14px， 颜色为蓝色<br>这种声明效率底，在实际开发中不使用，会将分组声明合成一个声明<br><figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">p</span> &#123; <span class="attribute">font-size</span>: <span class="number">14px</span>; <span class="attribute">color</span>: blue;&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="类选择器和ID选择器"><a href="#类选择器和ID选择器" class="headerlink" title="类选择器和ID选择器"></a>类选择器和ID选择器</h3><blockquote>
+<p>除了用标签名作为元素选择器外，类选择器(class selector)和ID选择器(ID selector) 也是开发过程中常用的选择器   </p>
+</blockquote>
+<blockquote>
+<p>1、类选择器： 用元素的 class 属性作为选择器， 在CSS中，用点号 + 类名 (.class-name) 表示类选择器  </p>
+<ul>
+<li>类选择器默认作用于拥有对应 class 属性的所有元素， 如下例所示 .warn 中的规则作用于 p 和 span 两个元素， 字体颜色都为蓝色  </li>
+<li>如果想要将类选择器的样式与元素关联， 可以采用元素名+.+类名的方式构成选择器， 如下例： span.warn, 其对应的规则只影响到了 span 元素， 而p 元素未受影响  </li>
+<li>HTML中， 元素的class 属性可以包含多个值，各个值直接用空格隔开， 假如两个或几个类选择器链接在一起，可以选择仅同时包含这些类名的元素(类名顺序不限), 如下例： .urgent.warn 对应的规则只影响了同时拥有类： urgent 和 warn 的 p 元素   <figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.warn</span> &#123; <span class="attribute">color</span>: blue; &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">span</span><span class="selector-class">.warn</span> &#123; <span class="attribute">font-size</span>: <span class="number">20px</span>; &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.urgent</span> &#123; <span class="attribute">font-style</span>: italic; &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.urgent</span><span class="selector-class">.warn</span> &#123; <span class="attribute">background</span>: yellow; &#125;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"warn"</span>&gt;</span>feifeiyu p<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"warn"</span>&gt;</span>feifeiyu span<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"warn urgent"</span>&gt;</span>feifeiyu multi-class<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"urgent"</span>&gt;</span>feifeiyu single-class<span class="tag">&lt;/<span class="name">span</span>&gt;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><img src="/images/css/class-selector.png" alt="class-selector">  </p>
+</blockquote>
+<blockquote>
+<p>2、ID选择器： 用元素的 id 属性作为选择器， 在CSS中， 用 #+id值(#id-value) 表示ID选择器，<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-id">#my-num</span> &#123; <span class="attribute">color</span>: blue;&#125;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"my-num"</span>&gt;</span>13288888888<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>与类选择器不同， 标签中的id属性是唯一的，且不可以有多个值， 因此ID选择器不能像类选择器一样结合使用，ID选择器理论上可以更精准的选择对应的元素   </p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><strong>注意</strong> 浏览器通常不检查HTML标签中 id 属性的唯一性， 意味着如果一个HTML文档中假如存在多个相同的id属性值， 对应的CSS规则可能为这些id值相同的元素添加相同的样式</p>
+</blockquote>
+</blockquote>
+<h3 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h3><blockquote>
+<p>属性选择器（atrribute selector): 根据元素的属性及属性值来选择对应的元素， 类选择器和ID选择器本质上就是属性值的选择  </p>
+</blockquote>
+<blockquote>
+<p>1、简单属性选择</p>
+<blockquote>
+<p>简单属性选择用于选择有某个属性的元素， 不论该属性是什么值。<br>简单属性选择器定义：标签名[属性名]，如下所示：有class 属性的 h3 标签， h3[class], 或有 my-name属性的 h3 标签， h3[my-name]<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">h3</span><span class="selector-attr">[class]</span> &#123; <span class="attribute">color</span>: green; &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">h3</span><span class="selector-attr">[my-name]</span> &#123; <span class="attribute">font-style</span>: italic; &#125;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h3</span> <span class="attr">class</span>=<span class="string">"hoop"</span>&gt;</span>Hello<span class="tag">&lt;/<span class="name">h3</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">h3</span> <span class="attr">class</span>=<span class="string">"hoop"</span> <span class="attr">my-name</span>=<span class="string">"fei"</span>&gt;</span>Feifeiyu<span class="tag">&lt;/<span class="name">h4</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><img src="/images/css/attr-selector1.png" alt="attr-selector">  </p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>2、具体属性值选择</p>
+<blockquote>
+<p>根据特定属性值选择元素, 定义： 标签名[属性名=”属性值”]<br>例如：选择链接为google.com的 a 标签 a[href=”google.com”]<br><strong>注意</strong> 采用具体属性值选择时， 必须要求属性值与相应标签的属性值完全相同，否则无法生效， 例如： a[href=”baidu”]的样式就无法生效<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">a</span><span class="selector-attr">[href="google.com"]</span> &#123;</span></span><br><span class="line"><span class="css">        <span class="selector-tag">text-decoration</span>: <span class="selector-tag">none</span>; <span class="comment">/*无下划线*/</span></span></span><br><span class="line">    &#125;</span><br><span class="line"><span class="css">    <span class="selector-tag">a</span><span class="selector-attr">[href="baidu"]</span> &#123;</span></span><br><span class="line">        text-decoration: none; </span><br><span class="line">    &#125;</span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"//google.com"</span>&gt;</span>Google<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"//baidu.com"</span>&gt;</span>Baidu<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p><img src="/images/css/attr-selector2.png" alt="attr-selector"></p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>3、根据部分属性选择<br>| 选择器 | 描述 | 例 |<br>| —- | —- | – |<br>| [foo~=”bar”] | 选择属性值列表里包含词 “bar” 的所有元素 | p[class~=”warn”] |<br>| [foo^=”bar”] | 选择属性值以 “bar” 开头的所有元素 | p[href^=”baidu”] |<br>| [foo$=”bar”] | 选择属性值以 “bar” 结尾的所有元素 | p[href$=”com”] |<br>| [foo*=”bar”] | 选择属性值中包含子串 “bar” 的所有元素 | p[href*=”du”] |</p>
+</blockquote>
+<h3 id="HTML文档树结构"><a href="#HTML文档树结构" class="headerlink" title="HTML文档树结构"></a>HTML文档树结构</h3><blockquote>
+<p>HTML文档是一种具有层次结构的文档， 可以从 “树” 这种数据结构来形象的理解这种文档结构， 如下图所示<br><img src="/images/css/dom-tree.png" alt="dom-tree"><br>在HTML文档中， 每个元素都有自己的位置， 他要么是别的元素的子元素， 要么是别的元素的父元素， 通常两者兼有之。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">html</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>page title<span class="tag">&lt;/<span class="name">title</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span>  </span><br><span class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>XXX我是一个段落XXX<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">ul</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>google<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">li</span>&gt;</span>baidu<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">html</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>根据上例分析:<br>1、如果一个元素出现在另一个元素的上一层， 则 前者称为后者的父元素， 后者为前者的子元素， 他们之间为 <strong>父-子关系</strong>   </p>
+<blockquote>
+<p>head, body 为 html 元素的 子元素， html 为 head, body 的父元素; body 为 p， ul 元素的父元素， p, ul 为 body 的子元素， 以此类推   </p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>2、如果从一个元素到另一个元素需要跨越两级或多级， 他们之间为 <strong>祖先-后代</strong> 关系  </p>
+<blockquote>
+<p>例如： ul, p 为 html 元素的后代， html 为 ul，p 元素的祖先。 li 为 body 和 html 的后代元素， body, html 都为 li 的祖先元素<br>父子关系为 祖先-后代关系的特例  </p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>3、拥有相同父元素的元素， 他们之间为： <strong>兄-弟</strong>关系   </p>
+<blockquote>
+<p>例如 p, ul 元素相互为兄弟关系， 两个 li 元素之间为兄弟关系， body, head 之间为兄弟关系  </p>
+</blockquote>
+</blockquote>
+<h3 id="后代选择器"><a href="#后代选择器" class="headerlink" title="后代选择器"></a>后代选择器</h3><blockquote>
+<p>后代选择器： 在CSS 规则左边的选择器一端包含两个或多个用空额分隔的选择器， 选择器之间, 左侧的对应的元素必须是右侧的祖先元素，<br>选择器可以是上面介绍的每一种， 后代选择器可以影响所有后代元素， 包括子元素。<br>例如： p i 表示 p 元素后代中的任何 i 元素： 从结果上看这条规则可以影响到 p 元素的子元素及后代元素<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">p</span> <span class="selector-tag">span</span> &#123;<span class="attribute">color</span>: gray;&#125;  <span class="comment">/*p 的子元素 span 颜色为 灰色*/</span></span></span><br><span class="line"><span class="css">    <span class="selector-tag">p</span> <span class="selector-tag">i</span> &#123;<span class="attribute">color</span>: yellowgreen;&#125; <span class="comment">/*p 的后代元素 i 颜色为黄绿*/</span></span></span><br><span class="line"><span class="css">    <span class="selector-tag">p</span> <span class="selector-class">.school</span> &#123; <span class="attribute">font-size</span>: <span class="number">26px</span>; &#125; <span class="comment">/* 使用 元素选择器加类选择器混用模式 */</span></span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>feifeiyu <span class="tag">&lt;<span class="name">span</span>&gt;</span>is my<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">i</span>&gt;</span>nick<span class="tag">&lt;/<span class="name">i</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>graduated from <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"school"</span>&gt;</span>NUAA <span class="tag">&lt;<span class="name">i</span>&gt;</span> with master degree<span class="tag">&lt;/<span class="name">i</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/css/child-selector.png" alt="child-selector"></p>
+</blockquote>
+<h3 id="子选择器"><a href="#子选择器" class="headerlink" title="子选择器"></a>子选择器</h3><blockquote>
+<p>子选择器： 用于选择一个元素的子元素， 定义：父元素选择器 &gt; 子元素选择器 ( &gt; 称为子结合符)， &gt; 的左右两侧可以有空格，也可以没有，随意。<br>例如： p &gt; i 规则只会影响到 p 中子元素 i 的样式， 而后代元素为 i 的则无影响。<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">p</span> &gt; <span class="selector-tag">i</span> &#123;<span class="attribute">color</span>: yellowgreen;&#125; </span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>feifeiyu <span class="tag">&lt;<span class="name">span</span>&gt;</span>is my<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;<span class="name">i</span>&gt;</span>nick<span class="tag">&lt;/<span class="name">i</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>graduated from <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"school"</span>&gt;</span>NUAA <span class="tag">&lt;<span class="name">i</span>&gt;</span> with master degree<span class="tag">&lt;/<span class="name">i</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/css/child-selector2.png" alt="child-selector"></p>
+</blockquote>
+<h3 id="相邻兄弟元素选择器"><a href="#相邻兄弟元素选择器" class="headerlink" title="相邻兄弟元素选择器"></a>相邻兄弟元素选择器</h3><blockquote>
+<p>兄弟元素选择器： 在同一父元素下， 要选择紧接在一个元素后的兄弟元素，可以使用兄弟选择器, 定义 选择器 + 选择器( + 称为相邻兄弟结合符 )， + 左右两侧可以有无空格随意<br>例： .list #google + li 选择 id 属性值为 google 元素后面相邻的兄弟元素<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.list</span> <span class="selector-id">#google</span> + <span class="selector-tag">li</span> &#123;<span class="attribute">color</span>: brown;&#125;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">ul</span> <span class="attr">class</span>=<span class="string">"list"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span> <span class="attr">id</span>=<span class="string">"google"</span>&gt;</span>Google<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Baidu<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">li</span>&gt;</span>Bing<span class="tag">&lt;/<span class="name">li</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">ul</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/css/brother-selector.png" alt="brother-selector"></p>
+</blockquote>
+<h3 id="伪类选择器"><a href="#伪类选择器" class="headerlink" title="伪类选择器"></a>伪类选择器</h3><blockquote>
+<p>伪类(pseudo-class)： 一般用于标识已访问和未访问的锚类型， 例如： visited, hover<br>伪类选择器： 为普通选择器 + 伪类结合的选择器，定义： 选择器：伪类名<br>例如： 1、常见用法 a:link, 2、结合伪类 a:visited:hover<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">a</span><span class="selector-pseudo">:link</span> &#123; <span class="attribute">color</span>: gray; &#125; <span class="comment">/*未访问时状态*/</span></span></span><br><span class="line"><span class="css">    <span class="selector-tag">a</span><span class="selector-pseudo">:hover</span> &#123; <span class="attribute">color</span>: pink;&#125;  <span class="comment">/*鼠标指针停留时状态*/</span></span></span><br><span class="line"><span class="css">    <span class="selector-tag">a</span><span class="selector-pseudo">:visited</span> &#123; <span class="attribute">color</span>: blue;&#125; <span class="comment">/*访问过后的状态*/</span></span></span><br><span class="line"><span class="css">    <span class="selector-tag">a</span><span class="selector-pseudo">:visited</span><span class="selector-pseudo">:hover</span> &#123;<span class="attribute">color</span>: red;&#125; <span class="comment">/*访问过后的链接，鼠标指针停留 */</span></span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"//google.com"</span>&gt;</span>Google<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"//Baidu.com"</span>&gt;</span>Baidu<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/css/pse-selector.png" alt="pseudo-selector"></p>
+</blockquote>
+<h3 id="伪元素选择器"><a href="#伪元素选择器" class="headerlink" title="伪元素选择器"></a>伪元素选择器</h3><blockquote>
+<p>伪元素(pseudo-element): 是插入文档的假想元素, 从而得到某种效果<br>伪元素选择器： 为普通选择器 + 伪元素结合的选择器， 定义: 与伪类选择器类似， 选择器:伪元素名 or 选择器::伪元素名<br>例如, :first-letter 段落的首字母， :before, :after 对应元素添加之前之后元素<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.pse-elem</span><span class="selector-pseudo">:first-letter</span> &#123; <span class="attribute">font-size</span>: <span class="number">200%</span>;&#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.bre-aft</span><span class="selector-pseudo">:before</span> &#123; <span class="attribute">content</span>: <span class="string">"("</span> &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.bre-aft</span><span class="selector-pseudo">:after</span> &#123; <span class="attribute">content</span>: <span class="string">")"</span>&#125;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"pse-elem"</span>&gt;</span>This is a rainy day<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"bre-aft"</span>&gt;</span> pseudo element after &amp; berfore <span class="tag">&lt;/&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/css/pse-element.png" alt="pseudo-selector"></p>
+</blockquote>
+<h3 id="其他选择器"><a href="#其他选择器" class="headerlink" title="其他选择器"></a>其他选择器</h3><blockquote>
+<p>除以上介绍的常用的选择器， 跟多的选择器请访问： <a href="http://www.w3school.com.cn/cssref/css_selectors.asp" target="_blank" rel="noopener">CSS 选择器参考手册</a></p>
+</blockquote>
+<h2 id="样式继承"><a href="#样式继承" class="headerlink" title="样式继承"></a>样式继承</h2><blockquote>
+<p><strong>样式继承</strong>: CSS样式不仅可以应用的到选择器指定的元素， 还会应用的他的后代元素<br>例如： .inherit1 选择的目标元素为 p 元素， i 作为 p 的子元素继承了 p 元素的样式<br>CSS 样式声明会沿着DOM树，向下传播到后代元素;但后代元素的样式声明则不能反方向向祖先元素传播<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.inherit1</span> &#123; <span class="attribute">color</span>: blue; &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-class">.inherit2</span> &#123; <span class="attribute">color</span>: yellow; &#125;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"inherit1"</span>&gt;</span>NUAA is short for <span class="tag">&lt;<span class="name">i</span>&gt;</span> Nanjing University of Aeronautics and Astronautics<span class="tag">&lt;/<span class="name">i</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>NUAA is short for <span class="tag">&lt;<span class="name">i</span> <span class="attr">class</span>=<span class="string">"inherit2"</span>&gt;</span> Nanjing University of Aeronautics and Astronautics<span class="tag">&lt;/<span class="name">i</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/css/inherit.png" alt="inherit"><br><strong>注意</strong>一般而言， 大多数框属性无法继承， 例如： 外边距， 内边距， 边框， 背景等。</p>
+</blockquote>
+<h2 id="样式层叠"><a href="#样式层叠" class="headerlink" title="样式层叠"></a>样式层叠</h2><blockquote>
+<p>如果存在两条规则，且这两条规则影响的是同一个DOM元素的同一个样式(例如： 下面的两条规则）， 因此这两条规则形成了冲突， 此时那条规则具有更高的优先级，战胜另一条规则， 例如：<br>h1 { color: red; }<br>h2 { color: blue; }<br>此时就涉及到 CSS 中一个非常重要的概念<em>层叠</em>也是 CSS 命名来源之一。<br>CSS 层叠样式就是， 通过选择器的特殊性和继承， 让样式层叠在一起， 层叠规则如下：  </p>
+</blockquote>
+<h3 id="1、找出声明"><a href="#1、找出声明" class="headerlink" title="1、找出声明"></a>1、找出声明</h3><blockquote>
+<p>找出所有相关CSS声明， 这些声明都能影响到某一个DOM元素<br>如果两条规则影响同一个DOM元素，但声明不同，则这两条规则同时生效，<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">p</span> &#123; <span class="attribute">color</span>: blue; &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">p</span> &#123; <span class="attribute">font-size</span>: <span class="number">24px</span>; &#125;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>NUAA is short for Nanjing University of Aeronautics and Astronautics<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/css/css-rule2.png" alt="rule2"><br>如果两条规则影响同一个DOM元素，声明相同，就需要考虑以下规则了   </p>
+</blockquote>
+<h3 id="2、按权重和来源排序"><a href="#2、按权重和来源排序" class="headerlink" title="2、按权重和来源排序"></a>2、按权重和来源排序</h3><blockquote>
+<p>标志 !important 的声明权重要高于没有 !important 的声明<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">p</span> &#123; <span class="attribute">color</span>: blue <span class="meta">!important</span>; &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">p</span> &#123; <span class="attribute">color</span>: yellow; &#125;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span>&gt;</span>NUAA is short for Nanjing University of Aeronautics and Astronautics<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/css/css-rule1.png" alt="important"><br>不带 ！important 的声明， 不管写得如何的天花乱坠， 优先级都没有带有 ！important 的声明优先级高, 正因 !important 杀伤范围太大， 在开发过程中不推荐使用  </p>
+</blockquote>
+<blockquote>
+<p>CSS 样式来源一共有三种： 创作人员， 读者， 用户代理</p>
+<ul>
+<li>创作人员： 就是页面开发者(即前端开发)编写的样式， 称为创作人员样式  </li>
+<li>读者： 浏览器用户，如果用户为网页样式添加了个性化配置，这些样式称为读者样式  </li>
+<li>用户代理： 用户代理是指浏览器本身， 一般浏览器都会为一些元素提供默认样式， 这些样式称为用户代理样式  </li>
+</ul>
+</blockquote>
+<blockquote>
+<p>声明优先级排序<br>1、读者的带有 ！important 的声明<br>2、创作人员的带有 ！important 的声明<br>3、创作人员的正常声明<br>4、读者的正常声明<br>5、用户代理的声明  </p>
+</blockquote>
+<blockquote>
+<p>开发过程中一般需要考虑前4级， 任何声明都会胜过用户代理样式。  </p>
+</blockquote>
+<h3 id="3、按特殊性排序"><a href="#3、按特殊性排序" class="headerlink" title="3、按特殊性排序"></a>3、按特殊性排序</h3><blockquote>
+<p>特殊性(specificity)： 是指选择器的特殊性， 对于每个跪着，用户代理(浏览器)都会计算选择器的特殊性， 并将特殊性附加到CSS规则的各个声明。<br>按特殊性对元素给定的所有声明进行排序， 特殊性高的声明优先级高， 在声明特殊性最高的会在所有声明冲突中胜出<br>特殊性是页面开发中最常用的   </p>
+</blockquote>
+<blockquote>
+<h4 id="特殊性表述"><a href="#特殊性表述" class="headerlink" title="特殊性表述"></a>特殊性表述</h4><ul>
+<li>使用内联样式，即在元素 style 属性中添加样式： 加 1,0,0,0  </li>
+<li>使用元素 ID属性值作为选择器的： 加 0,1,0,0  </li>
+<li>使用元素的 class属性值、属性(例如：title, type等)、伪类作为选择器： 加 0,0,1,0  </li>
+<li>使用元素名称， 伪元素 作为选择器： 加 0,0,0,1  </li>
+<li>使用通配符和结合符( * )作为选择器: 对特殊性没有任何帮助  </li>
+</ul>
+</blockquote>
+<blockquote>
+<p>例子：</p>
+<ul>
+<li>p { color: red; } /<em>specificity = 0,0,0,1 </em>/</li>
+<li>p i { color: purple; } /<em>specificity = 0,0,0,2 </em>/</li>
+<li>.class-a { color: blue; } /<em>specificity = 0,0,1,0 </em>/</li>
+<li>*.class-a { color: yellow; } /<em>specificity = 0,0,1,0 </em>/</li>
+<li>p.class-a { color: maroon; } /<em>specificity = 0,0,1,1 </em>/</li>
+<li>p.class-a i.class-b { color: block; } /<em> specificity = 0,0,2,2 </em>/</li>
+<li>input[type=”button”] { color: pink; } /<em> specificity = 0,0,1,0 </em>/</li>
+<li>#id-a { color: silver; } /<em> specificity = 0,1,0,0 </em>/</li>
+<li>p.class-a i#id-b { color: blue; } /<em> specificity = 0,1,1,2 </em>/</li>
+</ul>
+</blockquote>
+<blockquote>
+<p>特殊性比较：   </p>
+<blockquote>
+<p>先比较最高位， 如果 A 的最高为大于 B 最高为，则 A 胜出; 例如： 0,1,0,0 &gt; 0,0,10,0; 0,1,1,0 &gt; 0,0,0,10;<br>如果 A, B 的最高为相同， 就比较次高位， 次高位数值高的声明胜出， 以此类推…<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">p</span><span class="selector-class">.class-a</span> <span class="selector-tag">span</span><span class="selector-class">.class-b</span> &#123; <span class="attribute">color</span>: blue; &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-id">#id-b</span> &#123; <span class="attribute">color</span>: yellow; &#125;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"class-a"</span>&gt;</span>NUAA is short for <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"class-b"</span> <span class="attr">id</span>=<span class="string">"id-b"</span>&gt;</span>Nanjing University of Aeronautics and Astronautics<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p><img src="/images/css/css-rule3.png" alt="specificity"><br>在规则 p.class-a span.class-b { color: blue; } 中， 声明 color 的特殊性为 0，0,2,2<br>在规则 #id-b { color: blue; } 中， 声明 color 的特殊性为 0，1,0,0, 特殊性高，胜出</p>
+</blockquote>
+<blockquote>
+<p>内联样式的特殊行比其他规则的声明的特殊性都高， <strong>所有写在 元素 style 中的样式是无法通过 CSS 去修改的 (!important 声明除外)</strong></p>
+</blockquote>
+<h2 id="4、按顺序排序"><a href="#4、按顺序排序" class="headerlink" title="4、按顺序排序"></a>4、按顺序排序</h2><blockquote>
+<p>如果两个规则的 权重， 来源， 特殊性完全相同， 那么在样式表中后出现的声明会胜出<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">p</span> &#123; <span class="attribute">color</span>: blue; <span class="attribute">color</span>: seagreen;&#125;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">p</span> <span class="attr">class</span>=<span class="string">"class-a"</span>&gt;</span>NUAA is short for <span class="tag">&lt;<span class="name">span</span> <span class="attr">class</span>=<span class="string">"class-b"</span> <span class="attr">id</span>=<span class="string">"id-b"</span>&gt;</span>Nanjing University of Aeronautics and Astronautics<span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p><img src="/images/css/css-rule4.png" alt="rule4"></p>
+</blockquote>
+<blockquote>
+<p><strong>推荐链接样式顺序 LVHA</strong><br>因为伪类拥有相同的特殊性， 因此与元素匹配比较时最后一个声明会胜出<br>在点击链接时会同时生效伪类： ：link, :hover, ：active， 如果将 ：active 放在最后，点击链接时可以获得期望的效果<br>一般在推荐的链接样式： link-visited-hover-active(LVHA)<br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">a</span><span class="selector-pseudo">:link</span> &#123; <span class="attribute">color</span>: blue; &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">a</span><span class="selector-pseudo">:visited</span> &#123; <span class="attribute">color</span>: purple;&#125;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">a</span><span class="selector-pseudo">:hover</span> &#123; <span class="attribute">color</span>: green; &#125;</span></span><br><span class="line"><span class="css">    <span class="selector-tag">a</span><span class="selector-pseudo">:active</span> &#123; <span class="attribute">color</span>: orange;&#125;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">style</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">a</span> <span class="attr">href</span>=<span class="string">"//baidu.com"</span> <span class="attr">target</span>=<span class="string">"_blank"</span>&gt;</span>Baidu.com<span class="tag">&lt;/<span class="name">a</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/css/" rel="tag">#css</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/11/09/base-html-intro/" rel="next" title="html 基础介绍">
+                <i class="fa fa-chevron-left"></i> html 基础介绍
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/21/base-eslint-config/" rel="prev" title="ESLint 配置">
+                ESLint 配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/02/base-css-selector/" data-title="css-选择器" data-url="https://feifeiyum.github.io/2016/12/02/base-css-selector/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#CSS-基础"><span class="nav-number">1.</span> <span class="nav-text">CSS 基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS-语法"><span class="nav-number">1.1.</span> <span class="nav-text">CSS 语法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CSS选择器"><span class="nav-number">1.2.</span> <span class="nav-text">CSS选择器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#元素选择器"><span class="nav-number">1.2.1.</span> <span class="nav-text">元素选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#选择器分组"><span class="nav-number">1.2.2.</span> <span class="nav-text">选择器分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#声明分组"><span class="nav-number">1.2.3.</span> <span class="nav-text">声明分组</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#类选择器和ID选择器"><span class="nav-number">1.2.4.</span> <span class="nav-text">类选择器和ID选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#属性选择器"><span class="nav-number">1.2.5.</span> <span class="nav-text">属性选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#HTML文档树结构"><span class="nav-number">1.2.6.</span> <span class="nav-text">HTML文档树结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#后代选择器"><span class="nav-number">1.2.7.</span> <span class="nav-text">后代选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子选择器"><span class="nav-number">1.2.8.</span> <span class="nav-text">子选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#相邻兄弟元素选择器"><span class="nav-number">1.2.9.</span> <span class="nav-text">相邻兄弟元素选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#伪类选择器"><span class="nav-number">1.2.10.</span> <span class="nav-text">伪类选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#伪元素选择器"><span class="nav-number">1.2.11.</span> <span class="nav-text">伪元素选择器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#其他选择器"><span class="nav-number">1.2.12.</span> <span class="nav-text">其他选择器</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#样式继承"><span class="nav-number">1.3.</span> <span class="nav-text">样式继承</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#样式层叠"><span class="nav-number">1.4.</span> <span class="nav-text">样式层叠</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、找出声明"><span class="nav-number">1.4.1.</span> <span class="nav-text">1、找出声明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、按权重和来源排序"><span class="nav-number">1.4.2.</span> <span class="nav-text">2、按权重和来源排序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、按特殊性排序"><span class="nav-number">1.4.3.</span> <span class="nav-text">3、按特殊性排序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#特殊性表述"><span class="nav-number">1.4.3.1.</span> <span class="nav-text">特殊性表述</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4、按顺序排序"><span class="nav-number">1.5.</span> <span class="nav-text">4、按顺序排序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number">1.6.</span> <span class="nav-text">END</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

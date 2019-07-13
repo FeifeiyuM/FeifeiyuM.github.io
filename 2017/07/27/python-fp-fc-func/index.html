@@ -1,0 +1,767 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="fp,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="First-class ObjectsFunctions in python area first-class objects:  created at runtime assigned to a variable or element in a data structure passed as an argument to function returned as the result of a">
+<meta name="keywords" content="fp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fluent Python Study Notes - First-class Functions">
+<meta property="og:url" content="https://feifeiyum.github.io/2017/07/27/python-fp-fc-func/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="First-class ObjectsFunctions in python area first-class objects:  created at runtime assigned to a variable or element in a data structure passed as an argument to function returned as the result of a">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.296Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fluent Python Study Notes - First-class Functions">
+<meta name="twitter:description" content="First-class ObjectsFunctions in python area first-class objects:  created at runtime assigned to a variable or element in a data structure passed as an argument to function returned as the result of a">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Fluent Python Study Notes - First-class Functions | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Fluent Python Study Notes - First-class Functions
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-07-27T19:49:34+08:00" content="2017-07-27">
+              2017-07-27
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/07/27/python-fp-fc-func/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/27/python-fp-fc-func/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="First-class-Objects"><a href="#First-class-Objects" class="headerlink" title="First-class Objects"></a>First-class Objects</h1><p>Functions in python area first-class objects:</p>
+<ul>
+<li>created at runtime</li>
+<li>assigned to a variable or element in a data structure</li>
+<li>passed as an argument to function</li>
+<li>returned as the result of a function </li>
+</ul>
+<a id="more"></a>
+<h2 id="Treating-a-function-like-an-object"><a href="#Treating-a-function-like-an-object" class="headerlink" title="Treating a function like an object"></a>Treating a function like an object</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">factorial</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="string">"""this is doc"""</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span> <span class="keyword">if</span> n &lt; <span class="number">2</span> <span class="keyword">else</span> n * factorial(n<span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line">factorial(<span class="number">5</span>) <span class="comment"># output =&gt; 120</span></span><br><span class="line"><span class="comment"># __doc__ is one of several attributes of function objects</span></span><br><span class="line">factorial.__doc__ <span class="comment"># output =&gt; this is doc</span></span><br><span class="line"></span><br><span class="line">type(factorial) <span class="comment"># output =&gt; &lt;type 'function'&gt;</span></span><br><span class="line"><span class="comment"># assign function to a variable</span></span><br><span class="line">fact = factorial <span class="comment"># output =&gt; &lt;function factorial at 0x7feb48d505f0&gt;</span></span><br><span class="line">fact(<span class="number">5</span>) <span class="comment"># ouput =&gt; 120</span></span><br><span class="line"><span class="comment"># pass factorial as an argument to map function</span></span><br><span class="line">map(factorial, range(<span class="number">5</span>)) <span class="comment"># oupput =&gt; [1, 1, 2, 6, 24]</span></span><br></pre></td></tr></table></figure>
+<h1 id="Higher-order-Functions"><a href="#Higher-order-Functions" class="headerlink" title="Higher-order Functions"></a>Higher-order Functions</h1><p>A function that takes a function as argument or returns a function as result is a higher-order function. e.g. <strong>map</strong> function.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fruits = [<span class="string">'strawberry'</span>, <span class="string">'fig'</span>, <span class="string">'apple'</span>, <span class="string">'cherry'</span>, <span class="string">'raspberry'</span>, <span class="string">'banana'</span>]</span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reverse</span><span class="params">(word)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> word[::<span class="number">-1</span>]</span><br><span class="line"><span class="comment"># to sort a list of words, according to the function reverse, </span></span><br><span class="line"><span class="comment"># sorted tokes reverse as an argument, sorted is a higher-order functions</span></span><br><span class="line">sorted(fruits, key=reverse)</span><br></pre></td></tr></table></figure>
+<h2 id="Modern-replacements-for-map-filter-and-reduce"><a href="#Modern-replacements-for-map-filter-and-reduce" class="headerlink" title="Modern replacements for map, filter, and reduce"></a>Modern replacements for map, filter, and reduce</h2><p>Functional languages commonly offer the map, filter and reduce higher-order functions.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#python 2.7</span></span><br><span class="line">map(fact, filter(<span class="keyword">lambda</span> n: n % <span class="number">2</span>, range(<span class="number">5</span>)))</span><br><span class="line"><span class="comment"># output =&gt; [1, 6]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># python 3.5</span></span><br><span class="line">map(fact, filter(<span class="keyword">lambda</span> n: n % <span class="number">2</span>, range(<span class="number">5</span>)))</span><br><span class="line"><span class="comment"># ouput =&gt; &lt;map object at 0x7f6ac35e5e10&gt;</span></span><br><span class="line">list(map(fact, filter(<span class="keyword">lambda</span> n: n % <span class="number">2</span>, range(<span class="number">5</span>))))</span><br><span class="line"><span class="comment"># output =&gt; [1, 6]</span></span><br></pre></td></tr></table></figure></p>
+<p>In python 3, map and filter return generators – a form of iterator, so their direct substitute is now a generator expression.<br>In python 2, map and filter return lists, therefore their closest alternative is a listcomp</p>
+<p>The reduce function was demoted from a built-in in python 2 to the functools module in python 3. Its most common use case, summation, is better served by the sum built-in available since python 2.3.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python 2.7</span></span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> add</span><br><span class="line">sum(range(<span class="number">100</span>)) <span class="comment"># output =&gt; 4950</span></span><br><span class="line">reduce(add, range(<span class="number">100</span>)) <span class="comment"># output =&gt; 4950</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># python 3.5</span></span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> add</span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line">sum(range(<span class="number">100</span>)) <span class="comment"># ouput =&gt; 4950</span></span><br><span class="line">reduce(add, range(<span class="number">100</span>)) <span class="comment"># output =&gt; 4950</span></span><br></pre></td></tr></table></figure>
+<h1 id="Anonymous-Functions"><a href="#Anonymous-Functions" class="headerlink" title="Anonymous Functions"></a>Anonymous Functions</h1><p>The lambda keyword creates an anonymous function within a python expression. The simple syntax of python limits the body of lambda functions to be pure expressions. In other words, the body of a lambda cannot make assignments or use any other python statement such as <strong>while, try</strong> etc.  </p>
+<p>The lambda syntax is just syntactic sugar: a lambda expression creates a function object just like the def statement.</p>
+<h1 id="The-seven-flavors-of-callable-objects"><a href="#The-seven-flavors-of-callable-objects" class="headerlink" title="The seven flavors of callable objects"></a>The seven flavors of callable objects</h1><p>The call operator, i.e. (), may be applied to other objects beyond user-defined functions. To determine whether an objects is callable, use the callable() built-in function.</p>
+<p>The python Data Model documentation lists seven callable types:</p>
+<ul>
+<li><p>User-defined functions</p>
+<blockquote>
+<p>create with def statements or lambda expressions.</p>
+</blockquote>
+</li>
+<li><p>Built-in functions</p>
+<blockquote>
+<p>a function implemented in C (for CPython), like len or time.strftime</p>
+</blockquote>
+</li>
+<li><p>Built-in methods</p>
+<blockquote>
+<p>methods implemented in C, like dict.get.</p>
+</blockquote>
+</li>
+<li><p>Methods</p>
+<blockquote>
+<p>functions defined in the body of a class.</p>
+</blockquote>
+</li>
+<li><p>Classes</p>
+<blockquote>
+<p>when invoked, a class runs its <strong>new</strong> method to create an instance, then <strong>init</strong> to initialize it, and finally the instance is returned to the caller.</p>
+</blockquote>
+</li>
+<li><p>Class instances</p>
+<blockquote>
+<p>if a class defines a <strong>call</strong> method, then its instances may be invoked as functions.</p>
+</blockquote>
+</li>
+<li><p>Generator functions</p>
+<blockquote>
+<p>functions or methods that use the yield keyword. Then called, generator functions return a generator object.</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'1234'</span></span><br><span class="line"></span><br><span class="line">abs, str, test, <span class="number">13</span></span><br><span class="line"><span class="comment"># output =&gt; (&lt;built-in function abs&gt;, &lt;type 'str'&gt;, &lt;function test at 0x7f686d9115f0&gt;, 13)</span></span><br><span class="line"></span><br><span class="line">[callable(obj) <span class="keyword">for</span> obj <span class="keyword">in</span> (abs, str, test, <span class="number">13</span>)]</span><br><span class="line"><span class="comment"># output =&gt; [True, True, True, False]</span></span><br></pre></td></tr></table></figure>
+<h1 id="Function-introspection"><a href="#Function-introspection" class="headerlink" title="Function introspection"></a>Function introspection</h1><p>Functions objects have many attributes. Using built-in function <strong>dir()</strong>, we can revals all the attributes of a object.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dir(abs)</span><br><span class="line"><span class="comment"># output=&gt; ['__call__', '__class__', '__cmp__', '__delattr__', '__doc__', '__eq__', '__format__', '__ge__', '__getattribute__', '__gt__', '__hash__', '__init__', '__le__', '__lt__', '__module__', '__name__', '__ne__', '__new__', '__reduce__', '__reduce_ex__', '__repr__', '__self__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__']</span></span><br></pre></td></tr></table></figure>
+<h1 id="From-positional-to-keyword-only-paramters"><a href="#From-positional-to-keyword-only-paramters" class="headerlink" title="From positional to keyword-only paramters"></a>From positional to keyword-only paramters</h1><p>One of the best features of python functions is the extremely flexible parameter handling mechanism, enhanced with keywords-only argumetns in python 3. Closely related are the use of * and ** to “explode” iterables and mappings into seperate arguments when we call a function.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">tag</span><span class="params">(name, cls=None, *content, **attrs)</span>:</span></span><br><span class="line">    <span class="comment"># cls can't placed behind *content in python 2.7</span></span><br><span class="line">    <span class="comment"># tag(name, *content, cls=None, **attrs) works in python 3.5</span></span><br><span class="line">    <span class="string">"""Generate on of more HTML tags"""</span></span><br><span class="line">    print(<span class="string">'name: %r, content: %r, cls: %r, attrs: %r'</span> %(name, content, cls, attrs))</span><br><span class="line">    <span class="keyword">if</span> cls != <span class="literal">None</span>:</span><br><span class="line">        attrs[<span class="string">'calss'</span>] = cls</span><br><span class="line">    <span class="keyword">if</span> attrs:</span><br><span class="line">        attr_str = <span class="string">''</span>.join(<span class="string">' %s="%s"'</span> % (attr, value)</span><br><span class="line">                            <span class="keyword">for</span> attr, value <span class="keyword">in</span> sorted(attrs.items())</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        attr_str = <span class="string">''</span></span><br><span class="line">    <span class="keyword">if</span> content:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'\n'</span>.join(<span class="string">'&lt;%s%s&gt;%s&lt;/%s&gt;'</span> % </span><br><span class="line">                        (name, attr_str, c, name) <span class="keyword">for</span> c <span class="keyword">in</span> content)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        <span class="keyword">return</span> <span class="string">'&lt;%s%s /&gt;'</span> % (name, attr_str)</span><br><span class="line"></span><br><span class="line"><span class="comment"># A signle positional argument produces an empty tag with that name</span></span><br><span class="line">print(tag(<span class="string">'br'</span>))</span><br><span class="line"><span class="comment"># output =&gt;  name: 'br', content: (), cls: None, attrs: &#123;&#125;</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;br /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Any number of arguments after the second are captured by *content as a tuple</span></span><br><span class="line">print(tag(<span class="string">'p'</span>, <span class="literal">None</span>, <span class="string">'hello'</span>))</span><br><span class="line"><span class="comment"># output =&gt; name: 'p', content: ('hello',), cls: None, attrs: &#123;&#125;</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;p&gt;hello&lt;/p&gt;</span></span><br><span class="line">print(tag(<span class="string">'p'</span>, <span class="literal">None</span>, <span class="string">'hello'</span>, <span class="string">'world'</span>))</span><br><span class="line"><span class="comment"># output =&gt; name: 'p', content: ('hello', 'world'), cls: None, attrs: &#123;&#125;</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;p&gt;hello&lt;/p&gt;\n&lt;p&gt;world&lt;/p&gt;</span></span><br><span class="line">print(tag(<span class="string">'p'</span>, <span class="string">'sidebar'</span>, <span class="string">'hello'</span>, <span class="string">'world'</span>))</span><br><span class="line"><span class="comment"># output =&gt; name: 'p', content: ('hello', 'world'), cls: 'sidebar', attrs: &#123;&#125;</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;p calss="sidebar"&gt;hello&lt;/p&gt;\n&lt;p calss="sidebar"&gt;world&lt;/p&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Keyword arguments not explicitly named in the tag signature are captured by **attrs as a dict</span></span><br><span class="line">print(tag(content=<span class="string">'testing'</span>, name=<span class="string">'img'</span>))</span><br><span class="line"><span class="comment"># output =&gt; name: 'img', content: (), cls: None, attrs: &#123;'content': 'testing'&#125;</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;img content="testing" /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Prefixing th my_tag dict with ** passes all its items as seperate arguments which are then bound to the named paramters, with the remaining caught by **attrs.</span></span><br><span class="line">my_tag = &#123;</span><br><span class="line">    <span class="string">'name'</span>: <span class="string">'img'</span>,</span><br><span class="line">    <span class="string">'title'</span>: <span class="string">'Sunset'</span>,</span><br><span class="line">    <span class="string">'src'</span>: <span class="string">'sunset.jpg'</span>,</span><br><span class="line">    <span class="string">'cls'</span>: <span class="string">'framed'</span></span><br><span class="line">&#125;</span><br><span class="line">print(tag(**my_tag))</span><br><span class="line"><span class="comment"># output =&gt; name: 'img', content: (), cls: 'framed', attrs: &#123;'src': 'sunset.jpg', 'title': 'Sunset'&#125;</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;img calss="framed" src="sunset.jpg" title="Sunset" /&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="Function-Annotaions"><a href="#Function-Annotaions" class="headerlink" title="Function Annotaions"></a>Function Annotaions</h1><p>Python 3 provides syntax to attach metadata to the paramters of a function declaration and its return value.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python 3.5</span></span><br><span class="line"><span class="comment"># Annotated clip function</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">clip</span><span class="params">(text:str, max_len:<span class="string">'int &gt; 0'</span>=<span class="number">80</span>)</span> -&gt; str:</span></span><br><span class="line">    print(<span class="string">'text: %s, max_len: %s'</span>, (text, max_len))</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'hello feifeiyu'</span></span><br><span class="line"></span><br><span class="line">clip.__annotation__</span><br><span class="line"><span class="comment"># output =&gt; &#123;'max_len': 'int &gt; 0', 'text': &lt;class 'str'&gt;, 'return': &lt;class 'str'&gt;&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Extracting annotations from the function signature</span></span><br><span class="line"><span class="keyword">from</span> inspect <span class="keyword">import</span> signature</span><br><span class="line">sig = signature(clip)</span><br><span class="line">sig.return_annotation</span><br><span class="line"><span class="comment"># output =&gt; &lt;class 'str'&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> param <span class="keyword">in</span> sig.parameters.values():</span><br><span class="line">    note = repr(param.annotation).ljust(<span class="number">13</span>)</span><br><span class="line">    print(note, <span class="string">':'</span>, param.name, <span class="string">'='</span>, param.default)</span><br><span class="line"></span><br><span class="line"><span class="comment"># output =&gt; &lt;class 'str'&gt; : text = &lt;class 'inspect._empty'&gt;</span></span><br><span class="line"><span class="comment">#           'int &gt; 0'     : max_len = 80</span></span><br></pre></td></tr></table></figure>
+<p>Each argument in the function declaration may have an annotation expression preceded by “:”. If there is a default value, the annotation goes between the argument name and the = sign. To annotate the return value, add -&gt; and another expression between th ) and the : at the tail of the function declaration.</p>
+<p>The only thing python does with annotations is to store them in the <strong>annotation</strong> attribute of the function. Nothing else: no checks, enforcement, validation, or any other actions is performed.</p>
+<h1 id="Packages-for-functional-programing"><a href="#Packages-for-functional-programing" class="headerlink" title="Packages for functional programing"></a>Packages for functional programing</h1><h2 id="The-operator-module"><a href="#The-operator-module" class="headerlink" title="The operator module"></a>The operator module</h2><p>Often in functional programming it is convenient to use an arithmetic operator as a function.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> mul</span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> reduce</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">fact</span><span class="params">(n)</span>:</span></span><br><span class="line">    <span class="keyword">return</span> reduce(mul, range(<span class="number">1</span>, n+<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line">fact(<span class="number">5</span>)</span><br><span class="line"><span class="comment"># output =&gt; 120</span></span><br></pre></td></tr></table></figure>
+<p>itemgetter: it is function to pick items from sequences.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">metro_data = [</span><br><span class="line">    (<span class="string">'Tokyo'</span>, <span class="string">'JP'</span>, <span class="number">36.933</span>, (<span class="number">35.689722</span>, <span class="number">139.691667</span>)),</span><br><span class="line">    (<span class="string">'Delhi NCR'</span>, <span class="string">'IN'</span>, <span class="number">21.935</span>, (<span class="number">28.613889</span>, <span class="number">77.208889</span>)),</span><br><span class="line">    (<span class="string">'Mexico City'</span>, <span class="string">'MX'</span>, <span class="number">20.142</span>, (<span class="number">19.433333</span>, <span class="number">-99.133333</span>)),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> itemgetter</span><br><span class="line">cc_name = itemgetter(<span class="number">1</span>, <span class="number">0</span>)</span><br><span class="line"><span class="keyword">for</span> city <span class="keyword">in</span> metro_data:</span><br><span class="line">    print(cc_name(city))</span><br><span class="line"></span><br><span class="line"><span class="comment"># output =&gt; ('JP', 'Tokyo')</span></span><br><span class="line"><span class="comment"># output =&gt; ('IN', 'Delhi NCR')</span></span><br><span class="line"><span class="comment"># output =&gt; ('MX', 'Mexico City')</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> city <span class="keyword">in</span> sorted(metro_data, key=itemgetter(<span class="number">1</span>))</span><br><span class="line">    print(city)</span><br><span class="line"></span><br><span class="line"><span class="comment"># output =&gt; ('Delhi NCR', 'IN', 21.935, (28.613889, 77.208889))</span></span><br><span class="line"><span class="comment"># output =&gt; ('Tokyo', 'JP', 36.933, (35.689722, 139.691667))</span></span><br><span class="line"><span class="comment"># output =&gt; ('Mexico City', 'MX', 20.142, (19.433333, -99.133333))</span></span><br></pre></td></tr></table></figure>
+<p>A sibling of itemgetter is attrgetter, which creates functions to extract object attributes by name.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">dc = &#123;<span class="string">'name'</span>: <span class="string">'feifeiyu'</span>&#125;</span><br><span class="line"><span class="comment"># use dir to check attributes of object dict</span></span><br><span class="line">dir(dc)</span><br><span class="line"><span class="comment"># use attrgetter to extract attribute 'pop' of dict</span></span><br><span class="line">ag = attrgetter(<span class="string">'pop'</span>)</span><br><span class="line">ag(dc)</span><br><span class="line"><span class="comment"># ouput =&gt; &lt;function pop&gt;</span></span><br></pre></td></tr></table></figure>
+<p>methodcaller: it creates calls a method by name on the object given as argument</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> methodcaller</span><br><span class="line">num = range(<span class="number">10</span>)</span><br><span class="line">list_pop = methodcaller(<span class="string">'pop'</span>)</span><br><span class="line">list_pop(num)</span><br><span class="line"><span class="comment"># output =&gt; 9</span></span><br><span class="line">num</span><br><span class="line"><span class="comment"># output =&gt; [0, 1, 2, 3, 4, 5, 6, 7, 8]</span></span><br></pre></td></tr></table></figure>
+<h2 id="Freezing-arguments-with-functools-partial"><a href="#Freezing-arguments-with-functools-partial" class="headerlink" title="Freezing arguments with functools.partial"></a>Freezing arguments with functools.partial</h2><p>functools.partial is a higher-roder function that allows partial application of a function. Given a function, a partial application produces a new callable with some of the arguments of the original function fixed.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> operator <span class="keyword">import</span> mul</span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> partial</span><br><span class="line">triple = partial(mul, <span class="number">3</span>)</span><br><span class="line">triple(<span class="number">7</span>)</span><br><span class="line"><span class="comment"># output =&gt; 21</span></span><br><span class="line">list(map(triple, range(<span class="number">10</span>)))</span><br><span class="line"><span class="comment"># output =&gt; [0, 3, 6, 9, 12, 15, 18, 21, 24, 27]</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># tag function </span></span><br><span class="line">pic = partial(tag, <span class="string">'img'</span>, cls=<span class="string">'pic-frame'</span>)</span><br><span class="line">pic(src=<span class="string">'feifeiyu.png'</span>)</span><br><span class="line"><span class="comment"># output =&gt; &lt;img class="pic-frame" src="feifeiyu.png" /&gt;</span></span><br></pre></td></tr></table></figure>
+<h1 id="END"><a href="#END" class="headerlink" title="END"></a>END</h1>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/fp/" rel="tag">#fp</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/15/python-fp-textbytes/" rel="next" title="Fluent Python Study Notes - Text versus Bytes">
+                <i class="fa fa-chevron-left"></i> Fluent Python Study Notes - Text versus Bytes
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/23/python-fp-decoclos/" rel="prev" title="Fluent Python Study Notes - Function decorators and closures">
+                Fluent Python Study Notes - Function decorators and closures <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/07/27/python-fp-fc-func/" data-title="Fluent Python Study Notes - First-class Functions" data-url="https://feifeiyum.github.io/2017/07/27/python-fp-fc-func/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#First-class-Objects"><span class="nav-number">1.</span> <span class="nav-text">First-class Objects</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Treating-a-function-like-an-object"><span class="nav-number">1.1.</span> <span class="nav-text">Treating a function like an object</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Higher-order-Functions"><span class="nav-number">2.</span> <span class="nav-text">Higher-order Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Modern-replacements-for-map-filter-and-reduce"><span class="nav-number">2.1.</span> <span class="nav-text">Modern replacements for map, filter, and reduce</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Anonymous-Functions"><span class="nav-number">3.</span> <span class="nav-text">Anonymous Functions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-seven-flavors-of-callable-objects"><span class="nav-number">4.</span> <span class="nav-text">The seven flavors of callable objects</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Function-introspection"><span class="nav-number">5.</span> <span class="nav-text">Function introspection</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#From-positional-to-keyword-only-paramters"><span class="nav-number">6.</span> <span class="nav-text">From positional to keyword-only paramters</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Function-Annotaions"><span class="nav-number">7.</span> <span class="nav-text">Function Annotaions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Packages-for-functional-programing"><span class="nav-number">8.</span> <span class="nav-text">Packages for functional programing</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-operator-module"><span class="nav-number">8.1.</span> <span class="nav-text">The operator module</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Freezing-arguments-with-functools-partial"><span class="nav-number">8.2.</span> <span class="nav-text">Freezing arguments with functools.partial</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#END"><span class="nav-number">9.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

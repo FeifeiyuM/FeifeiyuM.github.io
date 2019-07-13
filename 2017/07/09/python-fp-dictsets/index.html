@@ -1,0 +1,755 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="fp,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="The dict type is not only widely used in our programs but also a fundamental part of the python implementation. Module namesapce, class and instance attributes and funciton keyword arguments are some">
+<meta name="keywords" content="fp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fluent Python Study Notes - Dictionaries and Sets">
+<meta property="og:url" content="https://feifeiyum.github.io/2017/07/09/python-fp-dictsets/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="The dict type is not only widely used in our programs but also a fundamental part of the python implementation. Module namesapce, class and instance attributes and funciton keyword arguments are some">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://feifeiyum.github.io/images/python/dict_hash.png">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.296Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fluent Python Study Notes - Dictionaries and Sets">
+<meta name="twitter:description" content="The dict type is not only widely used in our programs but also a fundamental part of the python implementation. Module namesapce, class and instance attributes and funciton keyword arguments are some">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/python/dict_hash.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Fluent Python Study Notes - Dictionaries and Sets | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Fluent Python Study Notes - Dictionaries and Sets
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-07-09T10:07:54+08:00" content="2017-07-09">
+              2017-07-09
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/07/09/python-fp-dictsets/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/07/09/python-fp-dictsets/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>The dict type is not only widely used in our programs but also a fundamental part of the python implementation. Module namesapce, class and instance attributes and funciton keyword arguments are some of the fundamental constructs where dictionaries are deployed.<br><a id="more"></a><br>Hash tables are the engines behind python’s dicts and sets.</p>
+<h1 id="hashable"><a href="#hashable" class="headerlink" title="hashable"></a>hashable</h1><blockquote>
+<p>An object is hashable if it has a hash value which never changes during its lifetime, and can be compared to other objects. Hashable objects which compare eqaul must have the same hash value.<br>The atomic immutable types (str, bytes, numeric types) are all hashable. All of python’s immutable built-in objects are hashable except tuple, because tupe may contain reference to unhashable objects.</p>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># the various means of building a dict:</span></span><br><span class="line">a = dict(one=<span class="number">1</span>, two=<span class="number">2</span>, three=<span class="number">3</span>)</span><br><span class="line">b = &#123;<span class="string">'one'</span>: <span class="number">1</span>, <span class="string">'tow'</span>: <span class="number">2</span>, <span class="string">'three'</span>: <span class="number">3</span>&#125;</span><br><span class="line">c = dict(zip([<span class="string">'one'</span>, <span class="string">'two'</span>, <span class="string">'three'</span>], [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]))</span><br><span class="line">d = dict([(<span class="string">'two'</span>, <span class="number">2</span>), (<span class="string">'three'</span>, <span class="number">3</span>), (<span class="string">'one'</span>, <span class="number">1</span>)])</span><br><span class="line">e = dict(&#123;<span class="string">'three'</span>: <span class="number">3</span>, <span class="string">'one'</span>: <span class="number">1</span>, <span class="string">'two'</span>: <span class="number">2</span>&#125;)</span><br><span class="line">a == b == c == d == e  <span class="comment"># output =&gt; true</span></span><br></pre></td></tr></table></figure>
+<h1 id="dict-comprehensions"><a href="#dict-comprehensions" class="headerlink" title="dict comprehensions"></a>dict comprehensions</h1><p>Since python 2.7 the syntax of listcomps and genexps was applied to dict comprehensions and set comprehensions. A dictcomp builds a dict instance buy producing key:value pair from any iterable.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># dict comprehensions example</span></span><br><span class="line">dial_codes = [(<span class="number">86</span>, <span class="string">'China'</span>), (<span class="number">91</span>, <span class="string">'India'</span>), (<span class="number">7</span>, <span class="string">'Russia'</span>), (<span class="number">81</span>, <span class="string">'Japan'</span>)]</span><br><span class="line">cnty_code = &#123;country: code <span class="keyword">for</span> code, country <span class="keyword">in</span> dial_codes&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Handling-missing-Keys"><a href="#Handling-missing-Keys" class="headerlink" title="Handling missing Keys"></a>Handling missing Keys</h1><p>d.get(key, default) is an alternative to d[key] whenever a default value is more convenient than handling KeyError.<br>When updating the value found in dict, using either <strong>getitem</strong> or get is awkward and inefficient. d.setdefault(key, default) is another option to update dict, which provides a significant speedup by avoiding redundant key lookups.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">info = &#123;<span class="string">'xiao'</span>: [<span class="number">1</span>,<span class="number">3</span>,<span class="number">4</span>], <span class="string">'ming'</span>: [<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]&#125;</span><br><span class="line"><span class="comment"># lookup key one</span></span><br><span class="line">xong = info.get(<span class="string">'xong'</span>, []) <span class="comment"># get with default, ouput =&gt; []</span></span><br><span class="line">xong.append(<span class="number">4</span>)</span><br><span class="line"><span class="comment"># lookup key two</span></span><br><span class="line">info[<span class="string">'xong'</span>] = xong</span><br><span class="line">info <span class="comment"># output =&gt; &#123;'xong': [4], 'xiao': [1, 3, 4], 'ming': [3, 4, 5, 6]&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># if use setdfault, we only to lookup key once</span></span><br><span class="line">info.setdefault(<span class="string">'qing'</span>, []).append(<span class="number">2</span>) </span><br><span class="line">info <span class="comment"># output =&gt; &#123;'xong': [4], 'qing': [2], 'xiao': [1, 3, 4], 'ming': [3, 4, 5, 6]&#125;</span></span><br><span class="line">info.setdefault(<span class="string">'ming'</span>, []).append(<span class="number">7</span>)</span><br><span class="line">info <span class="comment"># ouput =&gt; &#123;'xong': [4], 'qing': [2], 'xiao': [1, 3, 4], 'ming': [3, 4, 5, 6, 7]&#125;</span></span><br></pre></td></tr></table></figure>
+<h1 id="Mapping-with-flexible-key-lookup"><a href="#Mapping-with-flexible-key-lookup" class="headerlink" title="Mapping with flexible key lookup"></a>Mapping with flexible key lookup</h1><p>Sometimes it is convenient to have mappings that return some made-up value when a missing key is searched. There are two main approaches to this: one is to use a default dict instead of plain dict. The other is to subclass dict or any other mapping type and add a <strong>missing</strong> method.</p>
+<h2 id="defaultdict"><a href="#defaultdict" class="headerlink" title="defaultdict"></a>defaultdict</h2><p>collections.defaultdict provides a solution to elegantly handle the missing keys. When instantiating a defaultdict, you provide a callable which is used to produce a default value whenever <strong>getitem</strong> is passed a non-existent key argument.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># example of defaultdict</span></span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> defaultdict</span><br><span class="line">info = defaultdict(list)</span><br><span class="line"><span class="comment"># updating the dict without checking the keys whether is exist or not</span></span><br><span class="line">info[<span class="string">'xiao'</span>].append(<span class="number">1</span>)</span><br><span class="line">info[<span class="string">'ming'</span>].append(<span class="number">7</span>)</span><br><span class="line">info <span class="comment"># output =&gt; defaultdict(&lt;type 'list'&gt;, &#123;'xiao': [1, 1], 'ming': [7]&#125;)</span></span><br></pre></td></tr></table></figure>
+<h2 id="The-missing-method"><a href="#The-missing-method" class="headerlink" title="The missing method"></a>The <strong>missing</strong> method</h2><p>Underlying the way mappings deal with missing keys is the aptly named <strong>missing</strong> method. This method is not defined in the base dict class, but dict is aware of it if you subclass dict and provide a <strong>missing</strong> method, the standard dict.<strong>getitem</strong> will call it whenever a key is not found, instead of raising KeyError</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StrKeyDict</span><span class="params">(dict)</span>:</span></span><br><span class="line"><span class="comment"># StrKeyDict inherits from dict</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__missing__</span><span class="params">(self, key)</span>:</span></span><br><span class="line">    <span class="comment"># check whether key is already a str,  If it is, and it's missing, raise KeyError</span></span><br><span class="line">        <span class="keyword">if</span> isinstance(key, str):</span><br><span class="line">            <span class="keyword">raise</span> KeyError(key)</span><br><span class="line">        <span class="keyword">return</span> self[str(key)]</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, key, default=None)</span>:</span></span><br><span class="line">    <span class="comment"># The get method delegates to __getitem__ by using the self[key] notation; that</span></span><br><span class="line">    <span class="comment"># gives the opportunity for our __missing__ to act.</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            <span class="keyword">return</span> self[key]</span><br><span class="line">        <span class="keyword">except</span> KeyError:</span><br><span class="line">            <span class="keyword">return</span> default</span><br></pre></td></tr></table></figure>
+<h1 id="Variations-of-dict"><a href="#Variations-of-dict" class="headerlink" title="Variations of dict"></a>Variations of dict</h1><p>The various mapping types included in collections module of the standard library.</p>
+<h2 id="collections-OrderedDict"><a href="#collections-OrderedDict" class="headerlink" title="collections.OrderedDict"></a>collections.OrderedDict</h2><p>Maintains keys in insertion order, allowing iteration over items in a predictable order. The popitem method of an OrderedDict pops the first item by default, but if called as my_odict.popitem(last=True), it pops the last item added.</p>
+<h2 id="collections-ChainMap"><a href="#collections-ChainMap" class="headerlink" title="collections.ChainMap"></a>collections.ChainMap</h2><p>Holds a list of mappings which can be searched as one. The lookup is performed on each mapping in order, and succeeds if the key is found in any them.</p>
+<h2 id="collections-Counter"><a href="#collections-Counter" class="headerlink" title="collections.Counter"></a>collections.Counter</h2><p>A mapping that holds an integer count for each key. Updating an existing key adds to its count. This can be used to count instances of hashable objects (the keys ) or as a multiset – a set that hold serveral occurrences of each element.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> collections</span><br><span class="line">ct = collections.Counter(<span class="string">'feifeiyu'</span>) </span><br><span class="line">ct <span class="comment"># output =&gt; Counter(&#123;'i': 2, 'e': 2, 'f': 2, 'y': 1, 'u': 1&#125;)</span></span><br><span class="line">ct.update(<span class="string">'isnick'</span>)</span><br><span class="line">ct <span class="comment"># output =&gt; Counter(&#123;'i': 4, 'e': 2, 'f': 2, 'c': 1, 'k': 1, 'n': 1, 's': 1, 'u': 1, 'y': 1&#125;)</span></span><br><span class="line">ct.most_common(<span class="number">1</span>) <span class="comment"># output =&gt; [('i', 4)]</span></span><br></pre></td></tr></table></figure>
+<h2 id="collections-UserDict"><a href="#collections-UserDict" class="headerlink" title="collections.UserDict"></a>collections.UserDict</h2><p>A pure python implementation of a mapping that works like a standard dict, which is designed to be subclassed. The main reason why it’s preferable ot subclass from UserDict than dict is that the built-in has some implementation shortcust that end up forcing us to override methods that we can just inherit from UserDict with no problems.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> UserDict</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StrKeyDict</span><span class="params">(UserDict)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__missing__</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> isinstance(key, str):</span><br><span class="line">            <span class="keyword">raise</span> KeyError(key)</span><br><span class="line">        <span class="keyword">return</span> self[str(key)]</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__setitem__</span><span class="params">(self, key, item)</span>:</span></span><br><span class="line">        self.data[str(key)] = item</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__contains__</span><span class="params">(self, key)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> str(key) <span class="keyword">in</span> self.data</span><br></pre></td></tr></table></figure>
+<h2 id="Immutable-mappings"><a href="#Immutable-mappings" class="headerlink" title="Immutable mappings"></a>Immutable mappings</h2><p>Since python 3.3 the types module provides a wrapper class MappingProxyType, which given a mapping, returns a mappingproxy instance that is a read-only but dynamic view of the original mapping.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> types <span class="keyword">import</span> MappingProxyType</span><br><span class="line">d = &#123;<span class="string">'one'</span>: <span class="number">1</span>&#125;</span><br><span class="line">d_proxy = MappingProxyType(d)</span><br><span class="line">d_proxy <span class="comment"># output =&gt; mappingproxy(&#123;'one': 1&#125;)</span></span><br><span class="line">d_proxy[<span class="string">'one'</span>] <span class="comment"># output =&gt; 1</span></span><br><span class="line">d_proxy[<span class="string">'two'</span>] = <span class="string">'x'</span> <span class="comment"># raise error: TypeError: 'mappingproxy' object does not support item assignment</span></span><br><span class="line">d[<span class="string">'two'</span>] = <span class="number">2</span></span><br><span class="line">d_proxy <span class="comment"># output =&gt; mappingproxy(&#123;'one': 1, 'two': 2&#125;)</span></span><br><span class="line">d_proxy[<span class="string">'two'</span>] <span class="comment"># output =&gt; 2</span></span><br></pre></td></tr></table></figure>
+<h1 id="Set-theory"><a href="#Set-theory" class="headerlink" title="Set theory"></a>Set theory</h1><p>A set is a collection of unique objects, a basic use case is removing duplication.<br>Set elements must be hashable. </p>
+<p>Set types implement the essential set operations as infix operators.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># given two sets sl and sh</span></span><br><span class="line">sl = set([<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">3</span>,<span class="number">2</span>])</span><br><span class="line">sh = set([<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>,<span class="number">4</span>])</span><br><span class="line">sl <span class="comment"># output =&gt; set([1, 2, 3, 4])</span></span><br><span class="line">sh <span class="comment"># output =&gt; set([3,4,5,6])</span></span><br><span class="line"><span class="comment"># sl | sh returns their union</span></span><br><span class="line">sl | sh <span class="comment"># output =&gt; set([1, 2, 3, 4, 5, 6])</span></span><br><span class="line"><span class="comment"># sl &amp; sh returns their intersection</span></span><br><span class="line">sl &amp; sh <span class="comment"># output =&gt; set([3,4])</span></span><br><span class="line"><span class="comment"># sl - sh returns the difference</span></span><br><span class="line">sl - sh <span class="comment"># output =&gt; set([1, 2])</span></span><br><span class="line">sh - sl <span class="comment"># output =&gt; set([5,6])</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="set-literals"><a href="#set-literals" class="headerlink" title="set literals"></a>set literals</h2><p>The syntax of set literals – {1}, {1, 2}, looks exactly like the math notation. But, there is no literal notation for the empty set, we must use set() to initiate a empty set. If you write {}, you are creating an empty dict.<br>Literal set syntax like {1, 2, 3} is both faster and more readable than calling the constructor set([1,2,3]).</p>
+<p>frozenset has no special syntax to represent, they must be created by calling the constructor.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">frozenset(range(<span class="number">10</span>)) </span><br><span class="line"><span class="comment"># output =&gt; frozenset(&#123;0, 1, 2, 3, 4, 5, 6, 7, 8, 9&#125;)</span></span><br><span class="line">`</span><br></pre></td></tr></table></figure></p>
+<h2 id="set-comprehensions"><a href="#set-comprehensions" class="headerlink" title="set comprehensions"></a>set comprehensions</h2><p>Set comprehensions (setcomps) were added in python 2.7.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&#123;chr(i) <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">32</span>, <span class="number">40</span>)&#125;</span><br><span class="line"><span class="comment"># output =&gt; set(['!', ' ', '#', '"', '%', '$', "'", '&amp;'])</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="The-hash-table-algorithm"><a href="#The-hash-table-algorithm" class="headerlink" title="The hash table algorithm"></a>The hash table algorithm</h1><p>To fetch the value of my_dict[search_key], python calls hash(search_key) to obtain the hash value of search_key and uses the least significant bits of that number as offset to look up a bucket in hash table (the number of bits used depends on the current size of the table). If the found bucket is empty, KeyError is raised. Otherwise the found bucket has an item – a found_key:found_value pair, and then python checks whether search_key == fund_key. if they match, that was the item sought: found_value is returned.  </p>
+<p>However, if search_key and found_key do not match, this is a hash collision. This happens because a hash function maps arbitrary objects to a small number of bits, and in addition the hash table is indexed with a subset of those bits. To resolve the collision, the algorithm then takes different bits in the hash, massages them in a particular way and uses the result as an offset to look up a different bucket. If that is empty, KeyError is raised; If not, either the keys match and the item value is returned, or the collision resolution process is repeated. </p>
+<p><img src="/images/python/dict_hash.png" alt="dict_hash"><br><strong>Futher reading</strong> <a href="https://foofish.net/python_dict_implements.html" target="_blank" rel="noopener">dict implementation Principles</a></p>
+<p>The Process to insert or update an item is the same, except that when an empty bucket is located, the new item is put there, and when a bucket with a matching key if found, the value in that bucket is overwritten with the new value.</p>
+<p>Additionally, when inserting items python may determine that the hash table is too crowded and rebuild it to a new location with more room. As the hash table grows, so does the number of hash bits used as bucket offsets, and this keeps the rate of collision low.</p>
+<h1 id="Pratical-consequences-of-how-dict-works"><a href="#Pratical-consequences-of-how-dict-works" class="headerlink" title="Pratical consequences of how dict works"></a>Pratical consequences of how dict works</h1><h2 id="keys-must-be-hashable-objects"><a href="#keys-must-be-hashable-objects" class="headerlink" title="keys must be hashable objects"></a>keys must be hashable objects</h2><blockquote>
+<ul>
+<li>It supports the hash() function via a <strong>hash</strong>() method that always returns the same value over the lifetime of the object.</li>
+<li>It supperts equality via an <strong>eq</strong>() method</li>
+<li>If a == b is True then hash(a) == hash(b) must also be True  </li>
+</ul>
+</blockquote>
+<p>User-defined types are hashable by default because their hash value is their id() and they all compare not equal.  </p>
+<h2 id="dicts-have-significant-memory-overhead"><a href="#dicts-have-significant-memory-overhead" class="headerlink" title="dicts have significant memory overhead"></a>dicts have significant memory overhead</h2><p>Because a dict uses a hash table internally, and hash tables must be sparse to work, they are not space efficient. For example, if you are handling a large quantity of records it makes sense to store thme in a list of tuples or named tuples instead of using a list of dictionaries in JSON style, with one dict per record. Replacing dicts with tuples reduces them memory usage in two ways: by removing the overhead of one hash table per record and by not storing the field names again with each record.</p>
+<h2 id="Key-search-is-very-fast"><a href="#Key-search-is-very-fast" class="headerlink" title="Key search is very fast"></a>Key search is very fast</h2><p>The dict implementation is an example of trading space for time: dictionaries have significant memory overhead, but they provide fast access regardless of the size of the dictionary, as long as it fits in memory.</p>
+<h2 id="Key-ordering-depends-on-insertion-order"><a href="#Key-ordering-depends-on-insertion-order" class="headerlink" title="Key ordering depends on insertion order"></a>Key ordering depends on insertion order</h2><p>When a hash collision happens, the second key ends up in position that it would not normally occupy if it had been inserted first. So ad dict builts as dict([(key1, value1), (key2, value2)]) compares equal to dict([(key2, value2), (key1, value1)]), but their key ordering may not be the same if the hashes of key1 and key2 collide.</p>
+<h2 id="Adding-items-to-a-dict-may-change-the-order-of-existing-keys"><a href="#Adding-items-to-a-dict-may-change-the-order-of-existing-keys" class="headerlink" title="Adding items to a dict may change the order of existing keys"></a>Adding items to a dict may change the order of existing keys</h2><p>Whenever you add a new item to a dict, the python interpretor may decide that the hash table of that dictionary needs to grow. This entails building a new, bigger hash table, and adding all current items to the new table. During this process, new(but different) hash coillsions may happen, with the result taht the keys are likely to be ordered differently in the new hash table. All of this is implementation-dependent, so you cannot reliably predict when it happen.<br>If you are iterating over the dictionary keys and changing them at the same time, your loop may not scan all the items as expected.</p>
+<h1 id="Practical-consequences-of-how-sets-work"><a href="#Practical-consequences-of-how-sets-work" class="headerlink" title="Practical consequences of how sets work"></a>Practical consequences of how sets work</h1><p>The set and frozenset types are also implemented with a hash table, except that each bucket holds only a reference to the element(as if it were a key in a dict, but without a value to go with it). </p>
+<blockquote>
+<ul>
+<li>Set elements must be hashable objects</li>
+<li>Sets have a significant memory overhead</li>
+<li>Membership testing is very efficent</li>
+<li>Element ordering depends on insertion order</li>
+<li>Adding elements to a set may change the order of other elements</li>
+</ul>
+</blockquote>
+<h1 id="Other-mappings"><a href="#Other-mappings" class="headerlink" title="Other mappings"></a>Other mappings</h1><ul>
+<li>defaultdict</li>
+<li>OrderedDict</li>
+<li>ChainMap</li>
+<li>Counter</li>
+</ul>
+<h1 id="END"><a href="#END" class="headerlink" title="END"></a>END</h1>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/fp/" rel="tag">#fp</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/06/27/python-fp-sequence/" rel="next" title="Fluent Python Study Notes - Built-in Sequences">
+                <i class="fa fa-chevron-left"></i> Fluent Python Study Notes - Built-in Sequences
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/07/15/python-fp-textbytes/" rel="prev" title="Fluent Python Study Notes - Text versus Bytes">
+                Fluent Python Study Notes - Text versus Bytes <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/07/09/python-fp-dictsets/" data-title="Fluent Python Study Notes - Dictionaries and Sets" data-url="https://feifeiyum.github.io/2017/07/09/python-fp-dictsets/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#hashable"><span class="nav-number">1.</span> <span class="nav-text">hashable</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#dict-comprehensions"><span class="nav-number">2.</span> <span class="nav-text">dict comprehensions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Handling-missing-Keys"><span class="nav-number">3.</span> <span class="nav-text">Handling missing Keys</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mapping-with-flexible-key-lookup"><span class="nav-number">4.</span> <span class="nav-text">Mapping with flexible key lookup</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#defaultdict"><span class="nav-number">4.1.</span> <span class="nav-text">defaultdict</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#The-missing-method"><span class="nav-number">4.2.</span> <span class="nav-text">The missing method</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Variations-of-dict"><span class="nav-number">5.</span> <span class="nav-text">Variations of dict</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#collections-OrderedDict"><span class="nav-number">5.1.</span> <span class="nav-text">collections.OrderedDict</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#collections-ChainMap"><span class="nav-number">5.2.</span> <span class="nav-text">collections.ChainMap</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#collections-Counter"><span class="nav-number">5.3.</span> <span class="nav-text">collections.Counter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#collections-UserDict"><span class="nav-number">5.4.</span> <span class="nav-text">collections.UserDict</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Immutable-mappings"><span class="nav-number">5.5.</span> <span class="nav-text">Immutable mappings</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Set-theory"><span class="nav-number">6.</span> <span class="nav-text">Set theory</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#set-literals"><span class="nav-number">6.1.</span> <span class="nav-text">set literals</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#set-comprehensions"><span class="nav-number">6.2.</span> <span class="nav-text">set comprehensions</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-hash-table-algorithm"><span class="nav-number">7.</span> <span class="nav-text">The hash table algorithm</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Pratical-consequences-of-how-dict-works"><span class="nav-number">8.</span> <span class="nav-text">Pratical consequences of how dict works</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#keys-must-be-hashable-objects"><span class="nav-number">8.1.</span> <span class="nav-text">keys must be hashable objects</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dicts-have-significant-memory-overhead"><span class="nav-number">8.2.</span> <span class="nav-text">dicts have significant memory overhead</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Key-search-is-very-fast"><span class="nav-number">8.3.</span> <span class="nav-text">Key search is very fast</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Key-ordering-depends-on-insertion-order"><span class="nav-number">8.4.</span> <span class="nav-text">Key ordering depends on insertion order</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adding-items-to-a-dict-may-change-the-order-of-existing-keys"><span class="nav-number">8.5.</span> <span class="nav-text">Adding items to a dict may change the order of existing keys</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Practical-consequences-of-how-sets-work"><span class="nav-number">9.</span> <span class="nav-text">Practical consequences of how sets work</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Other-mappings"><span class="nav-number">10.</span> <span class="nav-text">Other mappings</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#END"><span class="nav-number">11.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

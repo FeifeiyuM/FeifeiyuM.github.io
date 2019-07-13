@@ -1,0 +1,723 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="fp,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="DecoratorsA decorator is a callable that takes another functions as argument (the decorated function). The decorator may perform some processing with the decorated function, and returns it or repalces">
+<meta name="keywords" content="fp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fluent Python Study Notes - Function decorators and closures">
+<meta property="og:url" content="https://feifeiyum.github.io/2017/08/23/python-fp-decoclos/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="DecoratorsA decorator is a callable that takes another functions as argument (the decorated function). The decorator may perform some processing with the decorated function, and returns it or repalces">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.296Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fluent Python Study Notes - Function decorators and closures">
+<meta name="twitter:description" content="DecoratorsA decorator is a callable that takes another functions as argument (the decorated function). The decorator may perform some processing with the decorated function, and returns it or repalces">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Fluent Python Study Notes - Function decorators and closures | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Fluent Python Study Notes - Function decorators and closures
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-08-23T19:18:52+08:00" content="2017-08-23">
+              2017-08-23
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/08/23/python-fp-decoclos/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/08/23/python-fp-decoclos/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Decorators"><a href="#Decorators" class="headerlink" title="Decorators"></a>Decorators</h1><p>A decorator is a callable that takes another functions as argument (the decorated function). The decorator may perform some processing with the decorated function, and returns it or repalces it with another function or callable object.<br><a id="more"></a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">deco</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">'running inner'</span></span><br><span class="line">        <span class="keyword">return</span> func()</span><br><span class="line">    <span class="keyword">return</span> inner</span><br><span class="line"></span><br><span class="line"><span class="meta">@deco</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">target</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'running target'</span></span><br><span class="line"></span><br><span class="line">target()</span><br><span class="line"><span class="comment"># output =&gt; running inner</span></span><br><span class="line"><span class="comment"># output =&gt; running target</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> target</span><br><span class="line"><span class="comment"># output =&gt; &lt;function inner at 0x7f44d20e8c80&gt;</span></span><br><span class="line"><span class="comment"># now target is a reference to function inner</span></span><br></pre></td></tr></table></figure>
+<p>Strictly speaking, decorators are just syntactic sugar. you can always simply call a decorator like any regular callable, passing another function.</p>
+<h1 id="How-decorators-executed"><a href="#How-decorators-executed" class="headerlink" title="How decorators executed"></a>How decorators executed</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line">registry = []</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">register</span><span class="params">(func)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">inner</span><span class="params">()</span>:</span></span><br><span class="line">        print(<span class="string">'running register(%s)'</span> % func)</span><br><span class="line">        registry.append(func)</span><br><span class="line">        <span class="keyword">return</span> func()</span><br><span class="line">    <span class="keyword">return</span> inner </span><br><span class="line"></span><br><span class="line"><span class="meta">@register</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'running f1()'</span>)</span><br><span class="line"></span><br><span class="line"><span class="meta">@register</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'running f2()'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f3</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'running f3()'</span>)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">main</span><span class="params">()</span>:</span></span><br><span class="line">    print(<span class="string">'running main()'</span>)</span><br><span class="line">    print(<span class="string">'register 1 -&gt; %r'</span> % registry)</span><br><span class="line">    f1()</span><br><span class="line">    f2()</span><br><span class="line">    f3()</span><br><span class="line">    print(<span class="string">'register 2 -&gt; %r'</span> % registry)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    main()</span><br><span class="line"><span class="comment"># output =&gt;</span></span><br><span class="line"><span class="comment"># running main()</span></span><br><span class="line"><span class="comment"># register 1 -&gt; []</span></span><br><span class="line"><span class="comment"># running register(&lt;function f1 at 0x7f2c481038c8&gt;)</span></span><br><span class="line"><span class="comment"># running f1()</span></span><br><span class="line"><span class="comment"># running register(&lt;function f2 at 0x7f2c481039d8&gt;)</span></span><br><span class="line"><span class="comment"># running f2()</span></span><br><span class="line"><span class="comment"># running f3()</span></span><br><span class="line"><span class="comment"># register 2 -&gt; [&lt;function f1 at 0x7f2c481038c8&gt;, &lt;function f2 at 0x7f2c481039d8&gt;]</span></span><br></pre></td></tr></table></figure>
+<p>Test in python 2.9 and python 3.5, it is different with the author said as the decorators is runing right after the decorated function is defined in books(page 185, 186). the decorators is running just before the decorated funtion is running.</p>
+<p>Most decorators do not change the decorated function, they usually do it by defining an inner function and returning it to replace the decorated fucniton.</p>
+<h1 id="Variable-Scope-rules"><a href="#Variable-Scope-rules" class="headerlink" title="Variable Scope rules"></a>Variable Scope rules</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">b = <span class="number">6</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">(a)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> a</span><br><span class="line">    <span class="keyword">print</span> b</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span><span class="params">(a)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> a</span><br><span class="line">    <span class="keyword">print</span> b</span><br><span class="line">    b = <span class="number">9</span></span><br><span class="line"></span><br><span class="line">f1(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># output =&gt; 3</span></span><br><span class="line"><span class="comment"># output =&gt; 6</span></span><br><span class="line"></span><br><span class="line">f2(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># output =&gt; 6</span></span><br><span class="line"><span class="comment"># Traceback (most recent call last):</span></span><br><span class="line"><span class="comment">#  File "deco.py", line 58, in &lt;module&gt;</span></span><br><span class="line"><span class="comment">#    f2(3)</span></span><br><span class="line"><span class="comment">#  File "deco.py", line 54, in f2</span></span><br><span class="line"><span class="comment">#    print b</span></span><br><span class="line"><span class="comment"># UnboundLocalError: local variable 'b' referenced before assignment</span></span><br></pre></td></tr></table></figure>
+<p>Python compiles the body of the function, it decides that b is a local variable because it is assined within the function.<br>When call f2(3), the body of f2 fetches and prints the value of the local variable a, but when trying to fetch b, it discoves that b is unbound.</p>
+<p>This is a design choice: python does not require you to declare variables, but assumes that a variable assigned in th body of function is local.</p>
+<p>If you want the interpreter to treat b as gloabl variable in spite of the assignment within the function, you can use the gloabl declaration.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">b = <span class="number">6</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f3</span><span class="params">(a)</span>:</span></span><br><span class="line">    <span class="keyword">global</span> b</span><br><span class="line">    <span class="keyword">print</span> a</span><br><span class="line">    <span class="keyword">print</span> b</span><br><span class="line">    b = <span class="number">9</span></span><br><span class="line"></span><br><span class="line">f3(<span class="number">3</span>)</span><br><span class="line"><span class="comment"># output =&gt; 3</span></span><br><span class="line"><span class="comment"># output =&gt; 6</span></span><br></pre></td></tr></table></figure>
+<h1 id="Closures"><a href="#Closures" class="headerlink" title="Closures"></a>Closures</h1><p>A closure is function with extended scope that encompasses non-global variables referenced in the body of the function but not defined there. It does not matter whether the function is anonymous or not, what matters is that it can access non-global varialble that are defined outside its body.</p>
+<p>Closures are functions that retains the bindings of the free varaibles that exist when the function is defined, so that they can be used later when the functions is invoked and the defining scope is no longer available.</p>
+<h1 id="The-nonlocal-declaration"><a href="#The-nonlocal-declaration" class="headerlink" title="The nonlocal declaration"></a>The nonlocal declaration</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_avg</span><span class="params">()</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    total = <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">avg</span><span class="params">(val)</span>:</span></span><br><span class="line">        count += <span class="number">1</span></span><br><span class="line">        total += val</span><br><span class="line">        <span class="keyword">return</span> total / count</span><br><span class="line">    <span class="keyword">return</span> avg</span><br><span class="line"></span><br><span class="line">avg = make_avg()</span><br><span class="line"><span class="keyword">print</span> avg(<span class="number">10</span>)</span><br><span class="line"><span class="comment"># output =&gt; </span></span><br><span class="line"><span class="comment"># Traceback (most recent call last):</span></span><br><span class="line"><span class="comment">#   File "deco.py", line 72, in &lt;module&gt;</span></span><br><span class="line"><span class="comment">#     avg(10)</span></span><br><span class="line"><span class="comment">#   File "deco.py", line 66, in avg</span></span><br><span class="line"><span class="comment">#     count += 1</span></span><br><span class="line"><span class="comment"># UnboundLocalError: local variable 'count' referenced before assignment</span></span><br></pre></td></tr></table></figure>
+<p>The problem is that the statement count += 1 actually means the same as count = count + 1, when count is a number or any immutable type. So we are actually assigning to count in the body of <strong>avg</strong>, and that makes it local variable. The same problem affacts the <strong>total</strong> variable. </p>
+<p>To save the above problem, the nonlocal declaration was introduced in python 3. It lets you flag a variable as a free variable even when it is assigned a new value within the function. If a new value is assigned to a nonlocal variable, the binding stored in the closure is changed.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python 3.5</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_avg</span><span class="params">()</span>:</span></span><br><span class="line">    count = <span class="number">0</span></span><br><span class="line">    total = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">avg</span><span class="params">(val)</span>:</span></span><br><span class="line">        <span class="keyword">nonlocal</span> count, total</span><br><span class="line">        count += <span class="number">1</span></span><br><span class="line">        total += val</span><br><span class="line">        <span class="keyword">return</span> total / count</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> avg</span><br><span class="line"></span><br><span class="line">print(avg(<span class="number">10</span>))</span><br><span class="line"><span class="comment"># output =&gt; 10.0</span></span><br><span class="line">print(avg(<span class="number">12</span>))</span><br><span class="line"><span class="comment"># output =&gt; 11.0</span></span><br></pre></td></tr></table></figure>
+<h1 id="Decorators-in-the-standard-library"><a href="#Decorators-in-the-standard-library" class="headerlink" title="Decorators in the standard library"></a>Decorators in the standard library</h1><p>Python has three built-in functions that are designed to decorate methods: property, classmethod and staticmethod.<br>Another frequently seen decorator is functools.wraps, a helper for building well-behaved decorators.</p>
+<h2 id="functools-lru-cache"><a href="#functools-lru-cache" class="headerlink" title="functools.lru_cache"></a>functools.lru_cache</h2><p>functools.lru_cache is very practical decorator that implements memoization: an optimization technique which works by saving the results of previous invocations of an expensive function, avoiding repeat computations on previously used arguments.</p>
+<p>lru_cache can be tuned by passing two optional arguments. It’s full signature is:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">functools.lru_cache(maxize=<span class="number">128</span>, typed=<span class="literal">False</span>)</span><br></pre></td></tr></table></figure></p>
+<p>The maxsize arguments determines how many call results are stored. After the cache is full, older results are discarded to make room. For optimal performance, maxsize should be a power of 2. Type typed argument, if set to True, stores results of different argument types separately.</p>
+<h2 id="Generic-functions-with-single-dispatch"><a href="#Generic-functions-with-single-dispatch" class="headerlink" title="Generic functions with single dispatch"></a>Generic functions with single dispatch</h2><p>The new functools.singledispatch decorator is python 3.4 allows each module to contribute to the overall solution, and lets you easily provide a specialized function even for classes that you can’t edit. If you decorate a plain function with @singledispatch it becomes a generic functions: a group of functions to perform the same operation in different ways, depending on the type of the first argument. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># python 3.5</span></span><br><span class="line"><span class="keyword">from</span> functools <span class="keyword">import</span> singledispatch</span><br><span class="line"><span class="keyword">from</span> collections <span class="keyword">import</span> abc</span><br><span class="line"><span class="keyword">import</span> numbers</span><br><span class="line"><span class="keyword">import</span> html</span><br><span class="line"></span><br><span class="line"><span class="meta">@singledispatch </span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">htmlize</span><span class="params">(obj)</span>:</span></span><br><span class="line">    print(<span class="string">'in htmlize(obj)'</span>)</span><br><span class="line">    content = html.escape(repr(obj))</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'&lt;pre&gt;&#123;&#125;&lt;/pre&gt;'</span>.format(content)</span><br><span class="line"></span><br><span class="line"><span class="meta">@htmlize.register(str)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_</span><span class="params">(text)</span>:</span></span><br><span class="line">    print(<span class="string">'in _(text)'</span>)</span><br><span class="line">    content = html.escape(text).replace(<span class="string">'\n'</span>, <span class="string">'&lt;br&gt;\n'</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'&lt;p&gt;&#123;0&#125;&lt;/p&gt;'</span>.format(content)</span><br><span class="line"></span><br><span class="line"><span class="meta">@htmlize.register(numbers.Integral)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_</span><span class="params">(n)</span>:</span></span><br><span class="line">    print(<span class="string">'in _(n)'</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'&lt;pre&gt;&#123;0&#125; (0x&#123;0:x&#125;)&lt;/pre&gt;'</span>.format(n)</span><br><span class="line"></span><br><span class="line"><span class="meta">@htmlize.register(tuple)</span></span><br><span class="line"><span class="meta">@htmlize.register(abc.MutableSequence)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">_</span><span class="params">(seq)</span>:</span></span><br><span class="line">    print(<span class="string">'in _(seq)'</span>)</span><br><span class="line">    inner = <span class="string">'&lt;/li&gt;\n&lt;li&gt;'</span>.join(htmlize(item) <span class="keyword">for</span> item <span class="keyword">in</span> seq)</span><br><span class="line">    <span class="keyword">return</span> <span class="string">'&lt;ul&gt;\n&lt;li&gt;'</span> + inner + <span class="string">'&lt;/li&gt;\n&lt;/ul&gt;'</span></span><br><span class="line"></span><br><span class="line">print(htmlize(&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;))</span><br><span class="line"><span class="comment"># output =&gt; in htmlize(obj)</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;pre&gt;&#123;1, 2, 3&#125;&lt;/pre&gt;</span></span><br><span class="line">print(htmlize(<span class="string">'feifeiyu'</span>))</span><br><span class="line"><span class="comment"># output =&gt; in _(text)</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;p&gt;feifeiyu&lt;/p&gt;</span></span><br><span class="line">print(htmlize(abs))</span><br><span class="line"><span class="comment"># output =&gt; in htmlize(obj)</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;pre&gt;&amp;lt;built-in function abs&amp;gt;&lt;/pre&gt;</span></span><br><span class="line">print(htmlize(<span class="number">42</span>))</span><br><span class="line"><span class="comment"># output =&gt; in _(n)</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;pre&gt;42 (0x2a)&lt;/pre&gt;</span></span><br><span class="line">print(htmlize([<span class="string">'alpha'</span>, <span class="number">66</span>, &#123;<span class="number">3</span>,<span class="number">2</span>,<span class="number">1</span>&#125;]))</span><br><span class="line"><span class="comment"># output =&gt; in _(seq)</span></span><br><span class="line"><span class="comment"># output =&gt; in _(text)</span></span><br><span class="line"><span class="comment"># output =&gt; in _(n)</span></span><br><span class="line"><span class="comment"># output =&gt; in htmlize(obj)</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;ul&gt;</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;li&gt;&lt;p&gt;alpha&lt;/p&gt;&lt;/li&gt;</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;li&gt;&lt;pre&gt;66 (0x42)&lt;/pre&gt;&lt;/li&gt;</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;li&gt;&lt;pre&gt;&#123;1, 2, 3&#125;&lt;/pre&gt;&lt;/li&gt;</span></span><br><span class="line"><span class="comment"># output =&gt; &lt;/ul&gt;</span></span><br></pre></td></tr></table></figure>
+<p>@singledispatch: register the specialized functions to hanlde ABCs (abstract classes) such as numbers.Integral and abc.MutableSequence instead of concrete implementations like int and list. This allows your code to support a greater variety of compatible types. For example, a python extension can provide alternatives to the int type with fixed bit lengths as subclasses of numbers.Integral.</p>
+<p>A notable quality of the singledispatch mechanism is that you can register specialized functions anywhere in the system, in any module.</p>
+<h1 id="Stacked-decorators"><a href="#Stacked-decorators" class="headerlink" title="Stacked decorators"></a>Stacked decorators</h1><p>When two decorators @d1 and @d2 are applied to a function f in that order, the result is the same as f = d1(d2(f))</p>
+<h1 id="Parametrized-Decorators"><a href="#Parametrized-Decorators" class="headerlink" title="Parametrized Decorators"></a>Parametrized Decorators</h1><p>When parsing a decorator in source code, python takes the decorated function and passes it as the first argument to the decorator function. How to make a decorator accept other arguments? The answer is: make a decorator factory that takes those arguments and returns a decorator, which is then applied to the function to be decorated.</p>
+<h2 id="A-parametrized-registration-decorator"><a href="#A-parametrized-registration-decorator" class="headerlink" title="A parametrized registration decorator"></a>A parametrized registration decorator</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">registry = set()</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">register</span><span class="params">(active=True)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">decorator</span><span class="params">(func)</span>:</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">'runing register(avctive=%s) -&gt; decorate(%s)'</span> % (active, func)</span><br><span class="line">        <span class="keyword">if</span> active:</span><br><span class="line">            registry.add(func)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            registry.discard(func)</span><br><span class="line">        <span class="keyword">return</span> func</span><br><span class="line">    <span class="keyword">return</span> decorator</span><br><span class="line"></span><br><span class="line"><span class="meta">@register(active=False)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f1</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'running f1()'</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@register()</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f2</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'running f2()'</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f3</span><span class="params">()</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">'running f3()'</span></span><br><span class="line"></span><br><span class="line">f1()</span><br><span class="line">f2()</span><br><span class="line">f3()</span><br><span class="line"><span class="keyword">print</span> registry</span><br><span class="line"><span class="comment"># output =&gt;</span></span><br><span class="line"><span class="comment"># runing register(avctive=False) -&gt; decorate(&lt;function f1 at 0x7f1bfbd61c80&gt;)</span></span><br><span class="line"><span class="comment"># runing register(avctive=True) -&gt; decorate(&lt;function f2 at 0x7f1bfbd61cf8&gt;)</span></span><br><span class="line"><span class="comment"># running f1()</span></span><br><span class="line"><span class="comment"># running f2()</span></span><br><span class="line"><span class="comment"># running f3()</span></span><br><span class="line"><span class="comment"># set([&lt;function f2 at 0x7f1bfbd61cf8&gt;])</span></span><br></pre></td></tr></table></figure>
+<p>In order to make it easy to enable or disable the function registration performed by register, an optional active parameter which, if False skips registering the decorated function.</p>
+<p>As shown in above example, the new register function is not a decorator but a decorator factory. When called, it returns the actual decorator that will be applied to the target function.</p>
+<p>instead of using the @ syntax, we used register as a regular function, the syntax ineeded to decorate a function f would be register()(f) to add f to the register(active=False)(f) to remove it.</p>
+<h1 id="End"><a href="#End" class="headerlink" title="End"></a>End</h1>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/fp/" rel="tag">#fp</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/27/python-fp-fc-func/" rel="next" title="Fluent Python Study Notes - First-class Functions">
+                <i class="fa fa-chevron-left"></i> Fluent Python Study Notes - First-class Functions
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/09/06/python-fp-obj/" rel="prev" title="Fluent Python Study Notes - Object references, mutability and recycling">
+                Fluent Python Study Notes - Object references, mutability and recycling <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/08/23/python-fp-decoclos/" data-title="Fluent Python Study Notes - Function decorators and closures" data-url="https://feifeiyum.github.io/2017/08/23/python-fp-decoclos/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Decorators"><span class="nav-number">1.</span> <span class="nav-text">Decorators</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How-decorators-executed"><span class="nav-number">2.</span> <span class="nav-text">How decorators executed</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Variable-Scope-rules"><span class="nav-number">3.</span> <span class="nav-text">Variable Scope rules</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Closures"><span class="nav-number">4.</span> <span class="nav-text">Closures</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#The-nonlocal-declaration"><span class="nav-number">5.</span> <span class="nav-text">The nonlocal declaration</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Decorators-in-the-standard-library"><span class="nav-number">6.</span> <span class="nav-text">Decorators in the standard library</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#functools-lru-cache"><span class="nav-number">6.1.</span> <span class="nav-text">functools.lru_cache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Generic-functions-with-single-dispatch"><span class="nav-number">6.2.</span> <span class="nav-text">Generic functions with single dispatch</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Stacked-decorators"><span class="nav-number">7.</span> <span class="nav-text">Stacked decorators</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Parametrized-Decorators"><span class="nav-number">8.</span> <span class="nav-text">Parametrized Decorators</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#A-parametrized-registration-decorator"><span class="nav-number">8.1.</span> <span class="nav-text">A parametrized registration decorator</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#End"><span class="nav-number">9.</span> <span class="nav-text">End</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

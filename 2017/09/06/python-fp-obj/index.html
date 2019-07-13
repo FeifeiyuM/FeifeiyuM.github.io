@@ -1,0 +1,752 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="fp,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="Identity, equality and aliasesIn python, every object has an identity, a type and a value. An object’s identity never changes once it has been created; you may think of it as the object’s address in m">
+<meta name="keywords" content="fp">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Fluent Python Study Notes - Object references, mutability and recycling">
+<meta property="og:url" content="https://feifeiyum.github.io/2017/09/06/python-fp-obj/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="Identity, equality and aliasesIn python, every object has an identity, a type and a value. An object’s identity never changes once it has been created; you may think of it as the object’s address in m">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.296Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Fluent Python Study Notes - Object references, mutability and recycling">
+<meta name="twitter:description" content="Identity, equality and aliasesIn python, every object has an identity, a type and a value. An object’s identity never changes once it has been created; you may think of it as the object’s address in m">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Fluent Python Study Notes - Object references, mutability and recycling | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Fluent Python Study Notes - Object references, mutability and recycling
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-09-06T19:03:10+08:00" content="2017-09-06">
+              2017-09-06
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/09/06/python-fp-obj/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/09/06/python-fp-obj/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Identity-equality-and-aliases"><a href="#Identity-equality-and-aliases" class="headerlink" title="Identity, equality and aliases"></a>Identity, equality and aliases</h1><p>In python, every object has an identity, a type and a value. An object’s identity never changes once it has been created; you may think of it as the object’s address in memory. The <strong>is</strong> operator compares the identify of two objects; the id() function returns an integer representing its identify. The real meaning of an object’s id is implementation-dependent.</p>
+<a id="more"></a>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">yu = &#123;<span class="string">'name'</span>: <span class="string">'feifeiyu'</span>, <span class="string">'age'</span>: <span class="number">23</span>&#125;</span><br><span class="line">fei = yu</span><br><span class="line"><span class="keyword">print</span> fei <span class="keyword">is</span> yu</span><br><span class="line"><span class="comment"># output =&gt; True</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'id(fei)=%s, id(yu)=%s'</span> % (id(fei), id(yu))</span><br><span class="line"><span class="comment"># output =&gt; id(fei)=140066670235272, id(yu)=140066670235272</span></span><br><span class="line">yufei = &#123;<span class="string">'name'</span>: <span class="string">'feifeiyu'</span>, <span class="string">'age'</span>: <span class="number">23</span>&#125;</span><br><span class="line"><span class="keyword">print</span> yu == yufei</span><br><span class="line"><span class="comment"># output =&gt; True</span></span><br><span class="line"><span class="keyword">print</span> yu <span class="keyword">is</span> yufei</span><br><span class="line"><span class="comment"># output =&gt; False</span></span><br><span class="line"><span class="keyword">print</span> id(yufei)</span><br><span class="line"><span class="comment"># output =&gt; 140066670245320</span></span><br></pre></td></tr></table></figure>
+<p>In above code, yu and fei are aliases: two variable bound to the same object. on the other hand, yufei is not an alias for yu, they have different identifies and are bound to distinct objects. The objects bound to yu and yufei have same value – that’s what == compares.</p>
+<h2 id="Choosing-operators-between-and-is"><a href="#Choosing-operators-between-and-is" class="headerlink" title="Choosing operators between == and is"></a>Choosing operators between == and is</h2><p>The == operator compares the values of objects(the data they hold), while is compares their identifies.<br>we often care about values and not identities, so == appears more frequently than is in python code.</p>
+<p>However, if you are comparing a variable to singleton, then it makes sense to use <strong>is</strong>. By far, the most common case is checking whether a variable is bound to None.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">x <span class="keyword">is</span> <span class="literal">None</span></span><br><span class="line"><span class="comment"># its negation</span></span><br><span class="line">x <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span></span><br></pre></td></tr></table></figure></p>
+<p>The <strong>is</strong> operator is faster than ==, because if cannot be overloaded, So Python does not have to find and invoke special methods to evaluate is, and computing is as simple as comparing two integer ids.<br>In contrast, a == b is syntactic sugar for a.<strong>eq</strong>(b). The <strong>eq</strong> method inherited from object compares object ids, so it produces the same result as is. But most built-in types override <strong>eq</strong> with more meaningful implementations tath actually take into account the values of the object attributes.</p>
+<h1 id="Copies-are-shallow-by-default"><a href="#Copies-are-shallow-by-default" class="headerlink" title="Copies are shallow by default"></a>Copies are shallow by default</h1><p>The easiest way to copy a list(or most built-in mutable collections) is to use the built-in constructor for the type itself.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">l1 = [<span class="number">3</span>, [<span class="number">66</span>, <span class="number">55</span>, <span class="number">44</span>], (<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>)]</span><br><span class="line">l2 = list(l1)</span><br><span class="line"><span class="keyword">print</span> id(l1), id(l2)</span><br><span class="line"><span class="comment"># output =&gt; 140066670707128 140066652306752</span></span><br><span class="line"><span class="comment"># l1, l2 have different identifies</span></span><br><span class="line"><span class="keyword">print</span> id(l1[<span class="number">1</span>]), id(l2[<span class="number">1</span>])</span><br><span class="line"><span class="comment"># output =&gt; 140066652306248 140066652306248</span></span><br><span class="line"><span class="comment"># the second element of l1 and l2 hold the same identify</span></span><br><span class="line">l1[<span class="number">1</span>].append(<span class="number">33</span>)</span><br><span class="line"><span class="keyword">print</span> l1</span><br><span class="line"><span class="comment"># output =&gt; [3, [66, 55, 44, 33], (7, 8, 9)]</span></span><br><span class="line"><span class="keyword">print</span> l2</span><br><span class="line"><span class="comment"># output =&gt; [3, [66, 55, 44, 33], (7, 8, 9)]</span></span><br><span class="line">l1[<span class="number">0</span>] = <span class="number">6</span></span><br><span class="line"><span class="comment"># base type</span></span><br><span class="line"><span class="keyword">print</span> l1</span><br><span class="line"><span class="comment"># output =&gt; [6, [55, 55, 44, 33], (7, 8, 9)]</span></span><br><span class="line"><span class="keyword">print</span> l2</span><br><span class="line"><span class="comment"># output =&gt; [3, [66, 55, 44, 33], (7, 8, 9)] </span></span><br><span class="line"><span class="comment"># imutable object</span></span><br><span class="line"><span class="comment"># hold the same identify of l1[2] and l2[2]</span></span><br><span class="line"><span class="keyword">print</span> id(l1[<span class="number">2</span>]), id(l2[<span class="number">2</span>])</span><br><span class="line"><span class="comment"># output =&gt; 140066653249040 140066653249040</span></span><br><span class="line">l1[<span class="number">2</span>] += (<span class="number">10</span>, <span class="number">11</span>)</span><br><span class="line"><span class="comment"># id(l1[2]) has changed: += creates a new tuple and rebinds the variable l1[2]</span></span><br><span class="line"><span class="keyword">print</span> id(l1[<span class="number">2</span>]), id(l2[<span class="number">2</span>])</span><br><span class="line"><span class="comment"># output =&gt; 140066652287920 140066653249040</span></span><br></pre></td></tr></table></figure></p>
+<p>Using the constructor produces a shallow copy, the outermost container is duplicated, but the copy is filled with references to the same items held by the original container. This saves memory and causes no problems if all items are immutable. But if there are mutable items, this may lead to unpleasant surprises.</p>
+<h2 id="Deep-and-shallow-copies-of-arbitrary-objects"><a href="#Deep-and-shallow-copies-of-arbitrary-objects" class="headerlink" title="Deep and shallow copies of arbitrary objects"></a>Deep and shallow copies of arbitrary objects</h2><p>The copy module provides the deepcopy and copy functions that return deep adn shallow copies of arbitrary objects.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> copy</span><br><span class="line"></span><br><span class="line">l1 = [<span class="number">3</span>, [<span class="number">66</span>, <span class="number">55</span>, <span class="number">44</span>], (<span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>)]</span><br><span class="line">l2 = copy.copy(l1)</span><br><span class="line">l3 = copy.deepcopy(l1)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'id(l1)=%s, id(l2)=%s, id(l3)=%s'</span> % (id(l1), id(l2), id(l3))</span><br><span class="line"><span class="comment"># output =&gt; id(l1)=140063262851800, id(l2)=140063271641528, id(l3)=140063271582176</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'id(l1[1])=%s, id(l2[1])=%s, id(l3[1])=%s'</span> % (id(l1[<span class="number">1</span>]), id(l2[<span class="number">1</span>]), id(l3[<span class="number">1</span>]))</span><br><span class="line"><span class="comment"># output =&gt; id(l1[1])=140063262908072, id(l2[1])=140063262908072, id(l3[1])=140063271582320</span></span><br></pre></td></tr></table></figure></p>
+<p>Note that making deep copies is not a simple matter in the general case. Objects may hava cyclic references which would cause a naive algorithm to enter an infinite loop. The deepcopy function remembers the objects already copied to handle cyclic references gracefully. </p>
+<h1 id="Function-parameters-as-references"><a href="#Function-parameters-as-references" class="headerlink" title="Function parameters as references"></a>Function parameters as references</h1><p>The only mode of parameter passing in python is call by sharing. Call by sharing means that each formal parameter of the function gets a copy of each reference in the arguments.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(a, b)</span>:</span></span><br><span class="line">    a += b</span><br><span class="line">    <span class="keyword">return</span> a</span><br><span class="line"></span><br><span class="line">x = <span class="number">1</span></span><br><span class="line">y = <span class="number">2</span></span><br><span class="line">f(x, y)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'x=%s, y=%s'</span> % (x, y)</span><br><span class="line"><span class="comment"># output =&gt; x=1, y=2 (parameters are not changed)</span></span><br><span class="line">a = [<span class="number">1</span>, <span class="number">2</span>]</span><br><span class="line">b = [<span class="number">3</span>, <span class="number">4</span>]</span><br><span class="line">f(a, b)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'a=%r, b=%r'</span> % (a, b)</span><br><span class="line"><span class="comment"># output =&gt; a=[1, 2, 3, 4], b=[3, 4] (parameters are changed)</span></span><br><span class="line">m = (<span class="number">10</span>, <span class="number">20</span>)</span><br><span class="line">n = (<span class="number">30</span>, <span class="number">40</span>)</span><br><span class="line">f(m, n)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'m=%r, n=%r'</span> % (m, n)</span><br><span class="line"><span class="comment"># output =&gt; m=(10, 20), n=(30, 40) (parameters are not changed)</span></span><br></pre></td></tr></table></figure></p>
+<h1 id="Mutable-types-as-parameter-defaults-bad-idea"><a href="#Mutable-types-as-parameter-defaults-bad-idea" class="headerlink" title="Mutable types as parameter defaults: bad idea"></a>Mutable types as parameter defaults: bad idea</h1><p>Optional parameters with default values are a great feature of python function definitions, allowing our APIs to evolve while remaining backward-compatible. However, we should avoid mutable objects as default values for parameters.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">params</span><span class="params">(vals=[])</span>:</span></span><br><span class="line">    <span class="keyword">return</span> vals</span><br><span class="line"></span><br><span class="line">ts1 = params(vals=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line">ts2 = params()</span><br><span class="line">ts3 = params()</span><br><span class="line"><span class="keyword">print</span> <span class="string">'ts1=%r, ts2=%r, ts3=%r'</span> % (ts1, ts2, ts3)</span><br><span class="line"><span class="comment"># output =&gt; ts1=[1, 2, 3], ts2=[], ts3=[]</span></span><br><span class="line">ts2.append(<span class="number">2</span>)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'ts1=%r, ts2=%r, ts3=%r'</span> % (ts1, ts2, ts3)</span><br><span class="line"><span class="comment"># ts1=[1, 2, 3], ts2=[2], ts3=[2]</span></span><br><span class="line"><span class="comment"># ts3 has changed</span></span><br></pre></td></tr></table></figure></p>
+<p>The issue with mutable defaults explains why None is often used as the default value for parameters that may receive mutable values.</p>
+<h1 id="del-and-garbage-collection"><a href="#del-and-garbage-collection" class="headerlink" title="del and garbage collection"></a>del and garbage collection</h1><p>The <strong>del</strong> statement deletes names, not objects. An object may be garbage collected as result of a <strong>del</strong> command, but only if the variable deleted holds the last reference to the object, or if the object becomes unreachable. Rebinding a variable may also cause the number of references to an object reach zero, causing its destruction.</p>
+<p>In CPython the primary algorithm for garbage collection is reference counting. Essentially, each object keeps count of how many references point to it. As soon as that refcount reaches zero, the object is immediately destroyed: CPython calls the <strong>del</strong> method on the object (if defined) and then frees the memory allocated to the object.</p>
+<h1 id="Weak-references"><a href="#Weak-references" class="headerlink" title="Weak references"></a>Weak references</h1><p>The presence of references is what keeps an object alive in memory. When the reference count of an object reaches zero, the garbage collector disposes of it. But sometimes it is useful to have a reference to an object that does not keep it around longer than necessary. A common use case is a cache.</p>
+<p>Weak references to an object do not increase its reference count. The object that is the target of a reference is called referent. Therefore, we say that a weak reference does not prevent the referent from being garbage collected.</p>
+<p>Weak references are useful in caching applications because you don’t want the cached objects to be kept alive just because they are referenced by the cache.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> weakref</span><br><span class="line">a_set = &#123;<span class="number">0</span>, <span class="number">1</span>&#125;</span><br><span class="line">wref = weakref.ref(a_set)</span><br><span class="line"></span><br><span class="line">wref</span><br><span class="line"><span class="comment"># output =&gt; &lt;weakref at 0x7f98ed10b6d8; to 'set' at 0x7f98ede923f0&gt;</span></span><br><span class="line">wref()</span><br><span class="line"><span class="comment"># output =&gt; &#123;0, 1&#125;</span></span><br><span class="line">a_set = &#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125;</span><br><span class="line">wref()</span><br><span class="line"><span class="comment"># output =&gt; &#123;0, 1&#125;</span></span><br><span class="line">wref() <span class="keyword">is</span> <span class="literal">None</span></span><br><span class="line"><span class="comment"># output =&gt; False</span></span><br></pre></td></tr></table></figure>
+<h1 id="Tricks-python-plays-with-immutables"><a href="#Tricks-python-plays-with-immutables" class="headerlink" title="Tricks python plays with immutables"></a>Tricks python plays with immutables</h1><p>For variable of instances <strong>str</strong>, <strong>bytes</strong>, <strong>tuple</strong>, <strong>frozenset</strong>, when they assigned to other variables do not make copies, but return references to the instances.<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">num1 = <span class="number">12</span></span><br><span class="line">num2 = num1</span><br><span class="line"><span class="keyword">print</span> num1 <span class="keyword">is</span> num2</span><br><span class="line"><span class="comment"># output =&gt; True</span></span><br><span class="line">num2 = <span class="number">13</span></span><br><span class="line"><span class="keyword">print</span> num1 <span class="keyword">is</span> num2</span><br><span class="line"><span class="comment"># output =&gt; False</span></span><br><span class="line">str1 = <span class="string">'feifeiyu'</span></span><br><span class="line">str2 = str1</span><br><span class="line"><span class="keyword">print</span> str1 <span class="keyword">is</span> str2</span><br><span class="line"><span class="comment"># output =&gt; True</span></span><br><span class="line">tu1 = (<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line">tu2 = tu1</span><br><span class="line"><span class="keyword">print</span> tu1 <span class="keyword">is</span> tu2</span><br><span class="line"><span class="comment"># output =&gt; True</span></span><br><span class="line">tu2 = tuple(tu1)</span><br><span class="line"><span class="keyword">print</span> tu1 <span class="keyword">is</span> tu2</span><br><span class="line"><span class="comment"># output =&gt; True</span></span><br><span class="line">tu2 = (<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line"><span class="keyword">print</span> tu1 <span class="keyword">is</span> tu2</span><br><span class="line"><span class="comment"># output =&gt; False</span></span><br></pre></td></tr></table></figure></p>
+<p>The tricks discussed in this section, are white lies, they save memory and make interpreter faster. Do not worry about them, they should not give you any trouble because they ony apply to immutable types.</p>
+<h1 id="Object-representations"><a href="#Object-representations" class="headerlink" title="Object representations"></a>Object representations</h1><p>Thanks to the python data model, user-defined types can behave as naturally as the built-in types. And this can be accomplished without inheritance, in the spirit of duck typing: you just implement the methods needed for your objects to behave as expected.</p>
+<p>Every object-oriented language has at least one standard way of getting a string representation from any object. python has two:</p>
+<ul>
+<li><p>repr()</p>
+<blockquote>
+<p>Returns a string representing the object as the developer wants to see it.</p>
+</blockquote>
+</li>
+<li><p>str()</p>
+<blockquote>
+<p>Retruns a string representing the object as the user wants to see it.</p>
+</blockquote>
+<p>we can implement the special methods <strong>repr</strong> and <strong>str</strong> to support repr() and str().</p>
+</li>
+</ul>
+<h1 id="classmethod-vs-staticmethod"><a href="#classmethod-vs-staticmethod" class="headerlink" title="classmethod vs staticmethod"></a>classmethod vs staticmethod</h1><p><strong>Decorator classmethod</strong> is used to define a method that operates on the class and not on instances. classmethod changes the way the method is called, so it receives the class itself as the first argument, instead of an instance. Its most common use is for alternate constructors.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># alternate constructors</span></span><br><span class="line"><span class="meta">@classmethod</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">frombytes</span><span class="params">(cls, octets)</span>:</span></span><br><span class="line">    typecode = chr(octets[<span class="number">0</span>])</span><br><span class="line">    memv = memoryview(octets[<span class="number">1</span>:]).cast(typecode)</span><br><span class="line">    <span class="comment"># unpack the memoryview resulting from </span></span><br><span class="line">    <span class="comment"># the cast into the pair of arguments needed for the constructor</span></span><br><span class="line">    <span class="keyword">return</span> cls(*memv)</span><br></pre></td></tr></table></figure>
+<p>In contrast, the staticmethod decorator changes a method so that it receives no special first argument. in essence, a static method is just like a plain function that happens to live in a class body, instead of being defined at module level.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Demo</span>:</span></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">classmeth</span><span class="params">(*args)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> args</span><br><span class="line">    </span><br><span class="line"><span class="meta">    @staticmethod</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">statmeth</span><span class="params">(*args)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> args</span><br><span class="line"></span><br><span class="line">Demo.classmeth()</span><br><span class="line"><span class="comment"># output =&gt; (&lt;class __main__.Demo at 0x7f5df12a1ae0&gt;,)</span></span><br><span class="line">Demo.classmeth(<span class="string">'span'</span>)</span><br><span class="line"><span class="comment"># output =&gt; (&lt;class __main__.Demo at 0x7f5df12a1ae0&gt;, 'span')</span></span><br><span class="line">Demo.statmeth()</span><br><span class="line"><span class="comment"># output =&gt; ()</span></span><br><span class="line">Demo.statmeth(<span class="string">'span'</span>)</span><br><span class="line"><span class="comment"># output =&gt; ('span',)</span></span><br></pre></td></tr></table></figure>
+<h1 id="Formatted-displays"><a href="#Formatted-displays" class="headerlink" title="Formatted displays"></a>Formatted displays</h1><p>The format() built-in function and the str.format() method delegate the actual for matting to each type by calling their .<strong>format</strong>(format_spec) method. The format_spec is a formatting specifier, which is either:</p>
+<ul>
+<li>The second argument in format(obj, format_spec)</li>
+<li>whatever appears after the colon in a replacement field delimited with {} inside a format string used with str.format()</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"> brl = <span class="number">1</span>/<span class="number">2.43</span></span><br><span class="line"> brl</span><br><span class="line"> <span class="comment"># output =&gt; 0.4115226337448559</span></span><br><span class="line"> format(brl, <span class="string">'0.4f'</span>)</span><br><span class="line"> <span class="comment"># output =&gt; 0.4115</span></span><br><span class="line"></span><br><span class="line"><span class="string">' 1 BRL = &#123;rate:0.2f&#125; USD'</span>.format(rate=brl)</span><br><span class="line"><span class="comment"># output =&gt; ' 1 BRL = 0.41 USD'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># base 2 output</span></span><br><span class="line">format(<span class="number">12</span>, <span class="string">'b'</span>)</span><br><span class="line"><span class="comment"># output =&gt; '1100'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#base 16 output</span></span><br><span class="line">format(<span class="number">12</span>, <span class="string">'x'</span>)</span><br><span class="line"><span class="comment"># ouput =&gt; 'c'</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># % for a percentage display</span></span><br><span class="line">format(<span class="number">1.0</span>/<span class="number">3.0</span>, <span class="string">'.1%'</span>)</span><br><span class="line"><span class="comment"># ouput =&gt; '33.3%'</span></span><br></pre></td></tr></table></figure>
+<h1 id="Hashable-object"><a href="#Hashable-object" class="headerlink" title="Hashable object"></a>Hashable object</h1><p>Usually, python object are unhashable, so it can not put in a set. How to make a object hashable, we must implement <strong>hash</strong> method. We also need to make object instances immutable by use @property decorator.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vector2d</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x, y)</span>:</span></span><br><span class="line">        self.__x = float(x)</span><br><span class="line">        self.__y = float(y)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># marks the getter method of a property</span></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">x</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.__x</span><br><span class="line">    </span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">y</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> self.__y</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__hash__</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> hash(self.x) ^ hash(self.y)</span><br><span class="line"></span><br><span class="line">v1 = Vector2d(<span class="number">3</span>, <span class="number">4</span>)</span><br><span class="line">v2 = Vector2d(<span class="number">3.1</span>, <span class="number">4.2</span>)</span><br><span class="line">hash(v1), hash(v2)</span><br><span class="line"><span class="comment"># output =&gt; (7, 384307168202284039)</span></span><br><span class="line">set([v1, v2])</span><br><span class="line">&#123;Vector2d(<span class="number">3.1</span>, <span class="number">4.2</span>), Vector2d(<span class="number">3.0</span>, <span class="number">4.0</span>)&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Private-and-“Protected”-attributes-in-Python"><a href="#Private-and-“Protected”-attributes-in-Python" class="headerlink" title="Private and “Protected” attributes in Python"></a>Private and “Protected” attributes in Python</h1><p>In python there is no way to create private variables in strong sense of the <strong>private</strong> modifier in java. What python has is a simple mechanism to prevent accidental overwriting of a “private” attribute in a subclass.</p>
+<h2 id="private-attributes"><a href="#private-attributes" class="headerlink" title="private attributes"></a>private attributes</h2><p>if you name an instance attribute in the form <strong>name (two leading underscores and zero or at most on trailing underscore), python stores the name in the instance </strong>dict__ prefixed with a leading underscore and the class name. This language feature goes by the lovely of name mangling.</p>
+<h2 id="protected-attributes"><a href="#protected-attributes" class="headerlink" title="protected attributes"></a>protected attributes</h2><p>In python, we use just one underscore prefix to ‘protect’ attributes by convention, eg.slef._x. The single underscore prefix has no special meaning to the python interpreter when used in attribute names, but it’s a very strong convention among python programmers that you should not access such attributes from outside the class.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Vector</span><span class="params">(object)</span>:</span></span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, x, y, z, m)</span>:</span></span><br><span class="line"></span><br><span class="line">        self.__x = x <span class="comment"># private attribute</span></span><br><span class="line">        self._y = y <span class="comment"># protected attribute</span></span><br><span class="line">        self.__z_ = z <span class="comment"># private attribute</span></span><br><span class="line">        self.__m__ = m  <span class="comment"># __xx__ is preserved for python special variable, we can not use it</span></span><br><span class="line"></span><br><span class="line">vec = Vector(<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>)</span><br><span class="line">vec.__dict__</span><br><span class="line"><span class="comment"># output =&gt; &#123;'__m__': 4, '_Vector__x': 1, '_Vector__z_': 3, '_y': 2&#125;</span></span><br><span class="line">vec.__x</span><br><span class="line"><span class="comment"># output =&gt; AttributeError: 'Vector' object has no attribute '__x'</span></span><br><span class="line">vec._y </span><br><span class="line"><span class="comment"># output =&gt; 2</span></span><br><span class="line">vec.__z_</span><br><span class="line"><span class="comment"># output =&gt; AttributeError: 'Vector' object has no attribute '__z_'</span></span><br><span class="line">vec.__m__</span><br><span class="line"><span class="comment"># output =&gt; 4</span></span><br><span class="line">vec._Vector__x</span><br><span class="line"><span class="comment"># output =&gt; 1</span></span><br><span class="line">vec._Vector__z_</span><br><span class="line"><span class="comment"># output =&gt; 3</span></span><br></pre></td></tr></table></figure>
+<p>Name mangling used in python private attributes is about safety, not security: it’s designed to prevent accidental access and not intentional wrongdoing.</p>
+<h1 id="Save-space-with-the-slots-class-attribute"><a href="#Save-space-with-the-slots-class-attribute" class="headerlink" title="Save space with the slots class attribute"></a>Save space with the <strong>slots</strong> class attribute</h1><p>By default, python stores instance attributes in a per-instance dict named <strong>dict</strong>. while, dictionaries hava s significant memory overhead because of the underlying hash table used to provide fast access. If you are dealing with millions of instances with few attributes, the <strong>slots</strong> class attribute can save a lot of memory, by letting the interpreter store the instance attributes in a tuple instead of a dict.</p>
+<h2 id="The-problems-with-slots"><a href="#The-problems-with-slots" class="headerlink" title="The problems with slots"></a>The problems with <strong>slots</strong></h2><ul>
+<li>You must remember to redeclare <strong>slots</strong> in each subclass, since the inherited attribute is ignored by the interpreter.</li>
+<li>Instances will only be able to have the attributes listed in <strong>slots</strong>, unless you include <strong>dict</strong> in slots.</li>
+<li>Instances cannot be targets of weak references unless you remember to include <strong>weakref</strong> in <strong>slots</strong></li>
+</ul>
+<h1 id="Overriding-class-attribtutes"><a href="#Overriding-class-attribtutes" class="headerlink" title="Overriding class attribtutes"></a>Overriding class attribtutes</h1><h1 id="End"><a href="#End" class="headerlink" title="End"></a>End</h1>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/fp/" rel="tag">#fp</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/08/23/python-fp-decoclos/" rel="next" title="Fluent Python Study Notes - Function decorators and closures">
+                <i class="fa fa-chevron-left"></i> Fluent Python Study Notes - Function decorators and closures
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/04/08/front-pwa/" rel="prev" title="PWA 简单实践分享">
+                PWA 简单实践分享 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/09/06/python-fp-obj/" data-title="Fluent Python Study Notes - Object references, mutability and recycling" data-url="https://feifeiyum.github.io/2017/09/06/python-fp-obj/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Identity-equality-and-aliases"><span class="nav-number">1.</span> <span class="nav-text">Identity, equality and aliases</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Choosing-operators-between-and-is"><span class="nav-number">1.1.</span> <span class="nav-text">Choosing operators between == and is</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Copies-are-shallow-by-default"><span class="nav-number">2.</span> <span class="nav-text">Copies are shallow by default</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Deep-and-shallow-copies-of-arbitrary-objects"><span class="nav-number">2.1.</span> <span class="nav-text">Deep and shallow copies of arbitrary objects</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Function-parameters-as-references"><span class="nav-number">3.</span> <span class="nav-text">Function parameters as references</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mutable-types-as-parameter-defaults-bad-idea"><span class="nav-number">4.</span> <span class="nav-text">Mutable types as parameter defaults: bad idea</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#del-and-garbage-collection"><span class="nav-number">5.</span> <span class="nav-text">del and garbage collection</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Weak-references"><span class="nav-number">6.</span> <span class="nav-text">Weak references</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Tricks-python-plays-with-immutables"><span class="nav-number">7.</span> <span class="nav-text">Tricks python plays with immutables</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Object-representations"><span class="nav-number">8.</span> <span class="nav-text">Object representations</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#classmethod-vs-staticmethod"><span class="nav-number">9.</span> <span class="nav-text">classmethod vs staticmethod</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Formatted-displays"><span class="nav-number">10.</span> <span class="nav-text">Formatted displays</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Hashable-object"><span class="nav-number">11.</span> <span class="nav-text">Hashable object</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Private-and-“Protected”-attributes-in-Python"><span class="nav-number">12.</span> <span class="nav-text">Private and “Protected” attributes in Python</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#private-attributes"><span class="nav-number">12.1.</span> <span class="nav-text">private attributes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#protected-attributes"><span class="nav-number">12.2.</span> <span class="nav-text">protected attributes</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Save-space-with-the-slots-class-attribute"><span class="nav-number">13.</span> <span class="nav-text">Save space with the slots class attribute</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-problems-with-slots"><span class="nav-number">13.1.</span> <span class="nav-text">The problems with slots</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Overriding-class-attribtutes"><span class="nav-number">14.</span> <span class="nav-text">Overriding class attribtutes</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#End"><span class="nav-number">15.</span> <span class="nav-text">End</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

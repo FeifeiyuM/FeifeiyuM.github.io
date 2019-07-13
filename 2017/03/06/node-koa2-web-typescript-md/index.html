@@ -1,0 +1,778 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="koa,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="本文是对之前 KOA2系列 文章的一次总结、升级、优化， 也是基于 TypeScript 对之前 Web 框架的重写.    本文介绍的 KOA Web 框架特点：   基于 JavaScript 超集 TypeScript 重写   Web Session 存储于 redis 缓存   引入 ORM 框架 node-orm2 管理 models 对象, 本文采用 mysql 数据库   引入数据">
+<meta name="keywords" content="koa">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于 KOA2 + Typescript 的 web 开发框架介绍">
+<meta property="og:url" content="https://feifeiyum.github.io/2017/03/06/node-koa2-web-typescript-md/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="本文是对之前 KOA2系列 文章的一次总结、升级、优化， 也是基于 TypeScript 对之前 Web 框架的重写.    本文介绍的 KOA Web 框架特点：   基于 JavaScript 超集 TypeScript 重写   Web Session 存储于 redis 缓存   引入 ORM 框架 node-orm2 管理 models 对象, 本文采用 mysql 数据库   引入数据">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.295Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于 KOA2 + Typescript 的 web 开发框架介绍">
+<meta name="twitter:description" content="本文是对之前 KOA2系列 文章的一次总结、升级、优化， 也是基于 TypeScript 对之前 Web 框架的重写.    本文介绍的 KOA Web 框架特点：   基于 JavaScript 超集 TypeScript 重写   Web Session 存储于 redis 缓存   引入 ORM 框架 node-orm2 管理 models 对象, 本文采用 mysql 数据库   引入数据">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 基于 KOA2 + Typescript 的 web 开发框架介绍 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                基于 KOA2 + Typescript 的 web 开发框架介绍
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-03-06T16:34:18+08:00" content="2017-03-06">
+              2017-03-06
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/node/" itemprop="url" rel="index">
+                    <span itemprop="name">node</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/06/node-koa2-web-typescript-md/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/06/node-koa2-web-typescript-md/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文是对之前 <a href="https://feifeiyum.github.io/categories/node/">KOA2系列</a> 文章的一次总结、升级、优化， 也是基于 TypeScript 对之前 Web 框架的重写.   </p>
+<p>本文介绍的 KOA Web 框架特点：</p>
+<blockquote>
+<ul>
+<li>基于 JavaScript 超集 TypeScript 重写  </li>
+<li>Web Session 存储于 redis 缓存  </li>
+<li>引入 ORM 框架 node-orm2 管理 models 对象, 本文采用 mysql 数据库  </li>
+<li>引入数据库迁移管理工具 migrate-orm2  </li>
+<li>参考 Django 路径设计思路， 重新设计文件目录  </li>
+<li>使用 PM2 管理守护 Web 进程  </li>
+</ul>
+</blockquote>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>该工程可能在 windows 环境下不太友好<br><a id="more"></a></p>
+<h2 id="环境要求"><a href="#环境要求" class="headerlink" title="环境要求"></a>环境要求</h2><p>1、Node 环境 node &gt;= 7.6 （需要原生的 async/await 语法支持)<br>2、推荐采用 yarn 管理依赖， 使用npm 也可以<br>3、TypeScript &gt;= 2.x<br>4、PM2 安装配置</p>
+<blockquote>
+<ul>
+<li>全局安装 PM2: npm install -g pm2  </li>
+<li>安装 PM2 的 TypeScript 解释器： pm2 install typescript (执行该命令建议翻墙)</li>
+</ul>
+</blockquote>
+<p>5、获得 mysql 数据库配置参数<br>6、获得 redis 缓存配置参数  </p>
+<h2 id="使用该框架"><a href="#使用该框架" class="headerlink" title="使用该框架"></a>使用该框架</h2><p>框架 git 仓库地址： <a href="https://github.com/FeifeiyuM/koa2-typescript" target="_blank" rel="noopener">https://github.com/FeifeiyuM/koa2-typescript</a><br>1、拉取框架代码 git clone <a href="mailto:git@github.com" target="_blank" rel="noopener">git@github.com</a>:FeifeiyuM/koa2-typescript.git<br>2、安装依赖: yarn install ( npm install )<br>3、添加 mysql &amp; redis 配置参数， (如何修改在后面介绍)<br>4、启动服务：</p>
+<blockquote>
+<ul>
+<li>开发环境启动服务: 在工程根目录下执行命令： npm start  </li>
+<li>生产环境部署服务： 在工程跟目录下执行命令： npm run deploy  </li>
+</ul>
+</blockquote>
+<p>5、数据库更新迁移：(需要编写更新文件)</p>
+<blockquote>
+<ul>
+<li>执行数据库迁移命令： npm run migrate  </li>
+</ul>
+</blockquote>
+<p>6、删除开启的所有 PM2 进程  </p>
+<blockquote>
+<ul>
+<li>执行删除进程命令： npm run del</li>
+</ul>
+</blockquote>
+<h2 id="工程目录结构"><a href="#工程目录结构" class="headerlink" title="工程目录结构"></a>工程目录结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">koats</span><br><span class="line">  ├──config # 工程需要的相关配置文件，存放在该路径下  </span><br><span class="line">  |   ├──env.config.ts # 用于存放系统需要的相关配置参数， 例如：数据库，缓存，端口  </span><br><span class="line">  |   ├──pm2.dev.config.json # 开发环境下，PM2 启动的配置文件  </span><br><span class="line">  |   └──pm2.prod.config.json # 生产环境下， PM2 启动的配置文件  </span><br><span class="line">  |</span><br><span class="line">  ├──migrations # msyql 更新迁移相关脚本目录</span><br><span class="line">  |   ├──index.ts # migrate 执行的脚本入口文件</span><br><span class="line">  |   ├──001-test.js # 这样的文件会有很多，是数据库更新的相关配置脚本</span><br><span class="line">  |   └──...</span><br><span class="line">  |</span><br><span class="line">  ├──src #开发文件路径</span><br><span class="line">  |   ├──utils  # 公共模块的存放路径，例如下面本工程中添加的：</span><br><span class="line">  |   |   ├──auth.ts # 用户验证模块</span><br><span class="line">  |   |   ├──orm.ts # 建立 orm 模块与数据库连接的公共模块</span><br><span class="line">  |   |   ├──redis.ts # 连接 redis 的公共模块</span><br><span class="line">  |   |   ├──session.ts # session 存取的公共模块  </span><br><span class="line">  |   |   └──test.ts # 测试脚本</span><br><span class="line">  |   |</span><br><span class="line">  |   ├──base #与业务无关的相关逻辑代码</span><br><span class="line">  |   |   ├──api.ts # api 接口文件</span><br><span class="line">  |   |   ├──models.ts # 该 models.ts 用于初始化其他业务相关的 models </span><br><span class="line">  |   |   ├──router.ts # 用于设置与业务无关的相关路由， 例如 首页等</span><br><span class="line">  |   |   └──test.ts # 测试脚本</span><br><span class="line">  |   |</span><br><span class="line">  |   ├──account # 业务模块，用路径名区分业务，每个路径下都包含如下四个文件， 例如 account 表示用户管理相关业务   </span><br><span class="line">  |   |   ├──api.ts # api 接口文件</span><br><span class="line">  |   |   ├──models.ts # orm 数据模型文件， 将数据库字段转换成相应的数据对象</span><br><span class="line">  |   |   ├──router.ts # 与该业务相关的路由配置</span><br><span class="line">  |   |   └──test.ts # 测试脚本</span><br><span class="line">  |   |</span><br><span class="line">  |   ├──pets # 另一个业务</span><br><span class="line">  |   |</span><br><span class="line">  |   ├──app.ts # 整个 Web 工程的入口文件</span><br><span class="line">  |   └──views #view层文件放置路径， 模板、js、css/less等文件</span><br><span class="line">  |       ├──layout # 公共模板文件</span><br><span class="line"></span><br><span class="line">  ├──views #展示层代码，即 html 文件路径</span><br><span class="line">  |   ├──layout # nujunks 模板文件的公共模板路径</span><br><span class="line">  |   |   ├──base-h5.html # 移动端的公共模板</span><br><span class="line">  |   |   └──...</span><br><span class="line">  |   ├──base # 与业务无关相关页面</span><br><span class="line">  |   |   ├──home.html #首页</span><br><span class="line">  |   |   └──...</span><br><span class="line">  |   ├──account # 业务相关页面，推荐此类路径命名与 src 路径下的业务命名一致</span><br><span class="line">  |   |   └──...</span><br><span class="line">  |   └──... # 如果需要加入打包相关工具的话，推荐加在该路径下</span><br><span class="line">  |</span><br><span class="line">  ├──public # 静态文件路径</span><br><span class="line">  ├──logs  # 日志文件输出路径</span><br><span class="line">  ├──node_modules # node依赖路径，node引入依赖自动生成</span><br><span class="line">  ├──package.json # 工程管理文件，系统依赖管理，启动命令、环境变量配置，</span><br><span class="line">  ├──tsconfig.json # TypeScript 配置文件 </span><br><span class="line">  ├──.gitignore</span><br><span class="line">  └──README.md</span><br></pre></td></tr></table></figure>
+<h2 id="config-配置信息"><a href="#config-配置信息" class="headerlink" title="config 配置信息"></a>config 配置信息</h2><h3 id="1、env-config-js-文件"><a href="#1、env-config-js-文件" class="headerlink" title="1、env.config.js 文件"></a>1、env.config.js 文件</h3><blockquote>
+<p>该文件中主要用于编辑系统相关的配置信息，例如数据库连接，开放端口号等信息<br>该文件主要配置信息主要分为两部分，一部分是开发环境的配置参数， 另一部分是生成环境的配置数据<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//判断当前环境类型</span></span><br><span class="line"><span class="keyword">const</span> isProdEnv:boolean = process.env.NODE_ENV === <span class="string">'production'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//开发环境下的配置参数</span></span><br><span class="line"><span class="comment">//listen port</span></span><br><span class="line"><span class="keyword">let</span> listenPort:<span class="built_in">Number</span> = <span class="number">3000</span></span><br><span class="line"><span class="comment">//Redis Config </span></span><br><span class="line"><span class="keyword">let</span> redis = &#123;</span><br><span class="line">	port: <span class="number">6379</span>,</span><br><span class="line">	host: <span class="string">'192.168.1.100'</span>,</span><br><span class="line">	db: <span class="number">8</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//Mysql Config</span></span><br><span class="line"><span class="keyword">let</span> mysql = &#123;</span><br><span class="line">	host: <span class="string">'192.168.1.100'</span>,</span><br><span class="line">	database: <span class="string">'nodeweb'</span>,</span><br><span class="line">	user: <span class="string">'root'</span>,</span><br><span class="line">	password: <span class="string">'mysql123'</span>,</span><br><span class="line">	protocol: <span class="string">'mysql'</span>,</span><br><span class="line">	port: <span class="string">'3306'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//生产环境下的配置参数</span></span><br><span class="line"><span class="keyword">if</span>(isProdEnv) &#123;  <span class="comment">//覆盖开发环境的参数</span></span><br><span class="line">	listenPort = <span class="number">3000</span></span><br><span class="line">	redis = &#123;</span><br><span class="line">		port: <span class="number">6379</span>,</span><br><span class="line">		host: <span class="string">'192.168.1.100'</span>,</span><br><span class="line">		db: <span class="number">9</span></span><br><span class="line">	&#125;</span><br><span class="line">	mysql = &#123;</span><br><span class="line">		host: <span class="string">'192.168.1.100'</span>,</span><br><span class="line">		database: <span class="string">'nodeweb'</span>,</span><br><span class="line">		user: <span class="string">'root'</span>,</span><br><span class="line">		password: <span class="string">'mysql123'</span>,</span><br><span class="line">		protocol: <span class="string">'mysql'</span>,</span><br><span class="line">		port: <span class="string">'3306'</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//模块导出 </span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">	listenPort: listenPort,</span><br><span class="line">	redis: redis,</span><br><span class="line">	mysql: mysql</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="2、PM2-启动配置文件"><a href="#2、PM2-启动配置文件" class="headerlink" title="2、PM2 启动配置文件"></a>2、PM2 启动配置文件</h3><blockquote>
+<p>PM2 启动文件分为开发、生产两个， 两个文件大致相同<br>name: PM2指进程名; script： 入口执行文件，即 app.ts;<br>log_file: 指日志文件，PM2 会自动搜集系统输出日志，并输出至 logs 目录下的 app.log 文件<br>error_file: error及以上级别日志， 输出至 logs 目录下的 err.log 文件<br><a href="http://pm2.keymetrics.io/docs/usage/application-declaration/" target="_blank" rel="noopener">PM2 配置编写说明</a><br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="attr">"apps"</span> : [&#123;</span><br><span class="line">		<span class="attr">"name"</span>: <span class="string">"devenv"</span>, </span><br><span class="line">		<span class="attr">"script"</span>: <span class="string">"./src/app.ts"</span>,</span><br><span class="line">		<span class="attr">"instances"</span>: <span class="number">1</span>,</span><br><span class="line">		<span class="attr">"exec_mode"</span>: <span class="string">"fork"</span>,</span><br><span class="line">		<span class="attr">"watch"</span>: <span class="literal">true</span>,</span><br><span class="line">		<span class="attr">"ignore_watch"</span> : [<span class="string">"node_modules"</span>, <span class="string">"public"</span>, <span class="string">"logs"</span>, <span class="string">"views"</span>, <span class="string">"package.json"</span>, <span class="string">"config"</span>, <span class="string">".git/*"</span>],</span><br><span class="line">		<span class="attr">"out_file"</span>: <span class="string">"./logs/app.log"</span>,</span><br><span class="line">		<span class="attr">"error_file"</span>: <span class="string">"./logs/err.log"</span>,</span><br><span class="line">		<span class="attr">"log_date_format"</span> : <span class="string">"YYYY-MM-DD HH:mm Z"</span>,</span><br><span class="line">		<span class="attr">"combine_logs"</span>: <span class="literal">true</span>,</span><br><span class="line">		<span class="attr">"listen_timeout"</span>: <span class="number">8000</span>,</span><br><span class="line">		<span class="attr">"kill_timeout"</span>: <span class="number">1600</span>,</span><br><span class="line">		<span class="attr">"env"</span>: &#123;</span><br><span class="line">			<span class="attr">"NODE_ENV"</span>: <span class="string">"development"</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;]</span><br><span class="line">&#125;</span><br><span class="line">&#123;</span><br><span class="line">	<span class="attr">"apps"</span> : [&#123;</span><br><span class="line">		<span class="attr">"name"</span>: <span class="string">"prodenv"</span>,</span><br><span class="line">		<span class="attr">"script"</span>: <span class="string">"./src/app.ts"</span>,</span><br><span class="line">		<span class="attr">"instances"</span>: <span class="number">1</span>,</span><br><span class="line">		<span class="attr">"exec_mode"</span>: <span class="string">"fork"</span>,</span><br><span class="line">		<span class="attr">"watch"</span>: <span class="literal">false</span>,</span><br><span class="line">		<span class="attr">"out_file"</span>: <span class="string">"./logs/app.log"</span>,</span><br><span class="line">		<span class="attr">"error_file"</span>: <span class="string">"./logs/err.log"</span>,</span><br><span class="line">		<span class="attr">"log_date_format"</span> : <span class="string">"YYYY-MM-DD HH:mm Z"</span>,</span><br><span class="line">		<span class="attr">"combine_logs"</span>: <span class="literal">true</span>,</span><br><span class="line">		<span class="attr">"listen_timeout"</span>: <span class="number">8000</span>,</span><br><span class="line">		<span class="attr">"kill_timeout"</span>: <span class="number">1600</span>,</span><br><span class="line">		<span class="attr">"env"</span>: &#123;</span><br><span class="line">			<span class="attr">"NODE_ENV"</span>: <span class="string">"production"</span></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="TypeScript-配置"><a href="#TypeScript-配置" class="headerlink" title="TypeScript 配置"></a>TypeScript 配置</h3><p>TypeScript 配置文件 tsconfig.json  <a href="https://www.typescriptlang.org/docs/handbook/tsconfig-json.html" target="_blank" rel="noopener">tsconfig 配置</a><br><figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="attr">"compilerOptions"</span>: &#123;</span><br><span class="line">        <span class="attr">"module"</span>: <span class="string">"commonjs"</span>,</span><br><span class="line">        <span class="attr">"target"</span>: <span class="string">"es2016"</span>,</span><br><span class="line">        <span class="attr">"noImplicitAny"</span>: <span class="literal">false</span>,</span><br><span class="line">        <span class="attr">"removeComments"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">"preserveConstEnums"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">"sourceMap"</span>: <span class="literal">true</span>,</span><br><span class="line">        <span class="attr">"outDir"</span>: <span class="string">"build"</span>,</span><br><span class="line">        <span class="attr">"watch"</span>: <span class="literal">false</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="attr">"files"</span>: [</span><br><span class="line">        <span class="string">"src/app.ts"</span></span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="系统入口文件-app-ts"><a href="#系统入口文件-app-ts" class="headerlink" title="系统入口文件 app.ts"></a>系统入口文件 app.ts</h2><p>src 目录下的 app.ts 文件与之前<a href="https://feifeiyum.github.io/categories/node/">KOA2系列</a>文章中介绍的大致相当， 不作详细介绍<br><strong>注意：</strong> 模块引入时， 有些模块不能直接采用 import Koa from ‘koa’, 需要改成： import * as Koa from ‘koa’   </p>
+<h2 id="utils-模块介绍"><a href="#utils-模块介绍" class="headerlink" title="utils 模块介绍"></a>utils 模块介绍</h2><p>1、session.ts: 参考 <a href="https://feifeiyum.github.io/2016/09/18/node-koa2-web-session/">koa2-web-Session</a></p>
+<p>2、redis.ts: 参考 <a href="https://feifeiyum.github.io/2016/09/18/node-koa2-web-datapersist/">koa2-web-数据持久化</a></p>
+<p>3、orm.ts: 参考 <a href="https://feifeiyum.github.io/2016/09/18/node-koa2-web-datapersist/">koa2-web-数据持久化</a>， <a href="https://github.com/dresende/node-orm2" target="_blank" rel="noopener">node-orm2</a> 具体 model 配置将在后面介绍  </p>
+<p>4、auth.ts: 用户认证模块，这个是 koa-router 的中间件函数， 在路由中执行<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">enum UserType &#123;  <span class="comment">//用户类型定义</span></span><br><span class="line">	<span class="keyword">super</span> = <span class="number">0</span>,</span><br><span class="line">	normal = <span class="number">1</span>,</span><br><span class="line">	operator = <span class="number">2</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> userAuth = <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">	<span class="keyword">if</span>(ctx.session.isLogin) &#123; <span class="comment">//判断 Session 中的状态判断登入状态</span></span><br><span class="line">		<span class="keyword">await</span> next() </span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		ctx.status = <span class="number">403</span>  <span class="comment">//认证失败</span></span><br><span class="line">		ctx.body = &#123;<span class="attr">ERROR</span>: <span class="string">'user is not autherized'</span>&#125; <span class="comment">//直接返回错误码</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="base-路径下文件介绍"><a href="#base-路径下文件介绍" class="headerlink" title="base 路径下文件介绍"></a>base 路径下文件介绍</h2><p>1、该目录下需要介绍是 models.js 文件，这个文件主要是用来初始化其他业务的 model<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//init models</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> Log4js <span class="keyword">from</span> <span class="string">'koa-log4'</span></span><br><span class="line"><span class="keyword">const</span> logger = Log4js.getLogger(<span class="string">'models'</span>)</span><br><span class="line"><span class="keyword">import</span> DbConn <span class="keyword">from</span> <span class="string">'../utils/orm'</span> <span class="comment">//引入 utils 中的 orm 连接模块</span></span><br><span class="line"><span class="keyword">import</span> &#123; User &#125; <span class="keyword">from</span> <span class="string">'../account/models'</span> <span class="comment">//引入 account 中的 user model 初始化函数</span></span><br><span class="line"><span class="keyword">import</span> &#123; Pets &#125; <span class="keyword">from</span> <span class="string">'../pets/models'</span> <span class="comment">//引入 pets 中 pets model 初始化函数</span></span><br><span class="line"><span class="comment">//定义一个全局的 orm 对象， 防止调用该 InitModels 模块时反复连接数据库</span></span><br><span class="line"><span class="keyword">let</span> connection:any = <span class="literal">null</span></span><br><span class="line"><span class="comment">//分别初始化每个model, </span></span><br><span class="line"><span class="keyword">const</span> setUp = (db):<span class="function"><span class="params">void</span> =&gt;</span> &#123;</span><br><span class="line">	User(db)</span><br><span class="line">	Pets(db)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> InitModels = ():<span class="built_in">Promise</span>&lt;any&gt; =&gt; &#123;</span><br><span class="line">	<span class="keyword">if</span>(connection &amp;&amp; connection !== <span class="string">'initing'</span>) &#123;</span><br><span class="line">		logger.info(<span class="string">'models has been inited'</span>) <span class="comment">//如果已经初始化过，直接返回实例化的 orm 对象</span></span><br><span class="line">		<span class="keyword">return</span> <span class="built_in">Promise</span>.resolve(connection)</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		connection = <span class="string">'initing'</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;  <span class="comment">//如果未初始化， 连接数据库</span></span><br><span class="line">			DbConn(<span class="literal">null</span>).then(<span class="function"><span class="params">db</span> =&gt;</span> &#123;</span><br><span class="line">				setUp(db) </span><br><span class="line">				logger.info(<span class="string">'models inited successfuly'</span>)</span><br><span class="line">				connection = db <span class="comment">//赋值全局变量</span></span><br><span class="line">				resolve(db) <span class="comment">//返回 orm 实例化对象</span></span><br><span class="line">			&#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">				logger.info(<span class="string">'models inited failed'</span>)</span><br><span class="line">				reject(err) <span class="comment">//放回错误</span></span><br><span class="line">			&#125;)</span><br><span class="line">		&#125;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> InitModels</span><br></pre></td></tr></table></figure></p>
+<p>2、api.ts, router.ts, test.ts 用法与其他业务模块的类似，在后面介绍 </p>
+<h2 id="业务模块-Account为例"><a href="#业务模块-Account为例" class="headerlink" title="业务模块 (Account为例)"></a>业务模块 (Account为例)</h2><p>1、数据建模( models.ts )， 将数据库中的某一张表，对应映射成一个数据对象。</p>
+<blockquote>
+<p>这一块主要涉及 node-orm2 的使用， 详细文档可以参考 <a href="https://github.com/dresende/node-orm2/wiki" target="_blank" rel="noopener">node-orm2 wiki</a><br>主要设计的知识点有 node-orm2 wiki 中的 <a href="https://github.com/dresende/node-orm2/wiki/Defining-Models" target="_blank" rel="noopener">Defining Models</a>,  <a href="https://github.com/dresende/node-orm2/wiki/Defining-Associations" target="_blank" rel="noopener">Defining Associations</a><br>以用户表为例：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> orm <span class="keyword">from</span> <span class="string">'orm'</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">const</span> User = (db):<span class="function"><span class="params">void</span> =&gt;</span> &#123; <span class="comment">//以函数形式导出， 给上面介绍的 InitModels() 调用</span></span><br><span class="line">	<span class="keyword">const</span> user = db.define(<span class="string">'user'</span>, &#123; <span class="comment">// 'user' 为表名， 对应数据库中的 user 表</span></span><br><span class="line">		<span class="comment">// id 字段， 对应 user 表中的 id 字段， </span></span><br><span class="line">		<span class="comment">//&#123; &#125;， 中描述的是该字段的属性， 具体查看 node-orm2 wiki 中的 Model Properties</span></span><br><span class="line">		id: &#123;<span class="attr">type</span>: <span class="string">'serial'</span>, <span class="attr">key</span>: <span class="literal">true</span>&#125;,</span><br><span class="line">		password: &#123;<span class="attr">type</span>: <span class="string">'text'</span>, <span class="attr">size</span>: <span class="number">128</span>, <span class="attr">required</span>: <span class="literal">true</span>&#125;, <span class="comment">// user 表中的 password 字段</span></span><br><span class="line">		type: &#123;<span class="attr">type</span>: <span class="string">'integer'</span>, <span class="attr">size</span>: <span class="number">0</span>|<span class="number">1</span>|<span class="number">2</span>, <span class="attr">defaultValue</span>: <span class="number">0</span>&#125;,</span><br><span class="line">		nick: &#123;<span class="attr">type</span>: <span class="string">'text'</span>, <span class="attr">required</span>: <span class="literal">true</span>&#125;,</span><br><span class="line">		mobile: &#123;<span class="attr">type</span>: <span class="string">'text'</span>, <span class="attr">required</span>: <span class="literal">true</span>&#125;,</span><br><span class="line">		last_login: &#123;<span class="attr">type</span>: <span class="string">'date'</span>, <span class="attr">time</span>: <span class="literal">true</span>&#125;,</span><br><span class="line">		create_time: &#123;<span class="attr">type</span>: <span class="string">'date'</span>, <span class="attr">time</span>: <span class="literal">true</span>, <span class="attr">required</span>: <span class="literal">true</span>&#125;,</span><br><span class="line">		update_time: &#123;<span class="attr">type</span>: <span class="string">'date'</span>, <span class="attr">time</span>: <span class="literal">true</span>, <span class="attr">required</span>: <span class="literal">true</span>&#125;</span><br><span class="line">	&#125;, &#123;</span><br><span class="line">		validations: &#123;  <span class="comment">//提交字段校验 具体查看 node-orm2 wiki 中的 Model Validations</span></span><br><span class="line">			nick: [ </span><br><span class="line">				orm.enforce.unique(<span class="string">'nick has been used'</span>), <span class="comment">//唯一性校验</span></span><br><span class="line">				orm.enforce.ranges.length(<span class="number">5</span>, <span class="literal">undefined</span>, <span class="string">'nick must be at least 5 letters long'</span>),</span><br><span class="line">				orm.enforce.ranges.length(<span class="literal">undefined</span>, <span class="number">30</span>, <span class="string">'nick can not be longer than 30 letters'</span>) <span class="comment">//长度校验</span></span><br><span class="line">			],</span><br><span class="line">			mobile: [</span><br><span class="line">				orm.enforce.unique(<span class="string">'this mobile has be registed'</span>), <span class="comment">//唯一性校验</span></span><br><span class="line">				orm.enforce.ranges.length(<span class="number">11</span>, <span class="number">11</span>, <span class="string">'mobile number length must be 11'</span>)</span><br><span class="line">			]</span><br><span class="line">		&#125;,</span><br><span class="line">		hooks: &#123;  <span class="comment">//事件钩子， 定义了数据存取的各个阶段， 具体查看 node-orm2 wiki 中的 Model Hooks</span></span><br><span class="line">			beforeValidation(next) &#123;</span><br><span class="line">				<span class="keyword">this</span>.create_time = <span class="keyword">new</span> <span class="built_in">Date</span>().toISOString().slice(<span class="number">0</span>, <span class="number">19</span>)</span><br><span class="line">				<span class="keyword">return</span> next()</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		methods: &#123; <span class="comment">//序列化输出， 为 user 对象定义一个 baseInfo 方法，获取对应字段</span></span><br><span class="line">			baseInfo() &#123;</span><br><span class="line">				<span class="keyword">return</span> &#123;</span><br><span class="line">					nick: <span class="keyword">this</span>.nick,</span><br><span class="line">					mobile: <span class="keyword">this</span>.mobile,</span><br><span class="line">					type: <span class="keyword">this</span>.type</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>2、定义接口(api.ts), 将主要的业务逻辑放在 api.ts 中实现， 包括 数据存取，更新， 相关业务逻辑</p>
+<blockquote>
+<p>以 Account 下 api.ts 为例：主要实现用户创建和用户信息读取的功能<br>需要注意的点：</p>
+<ul>
+<li>在 api.ts 中导入的是 utils 中的 InitModels 方法</li>
+<li>api 类中必须定义一个init()方法， 用于初始化整个 model,</li>
+<li>api 中所有的方法返回的都为 Promise 对象</li>
+<li>api 中主要用到的是数据库 增，删，改，查功能， 涉及的知识点有 node-orm2 wiki 中的 <a href="https://github.com/dresende/node-orm2/wiki/Finding-items" target="_blank" rel="noopener">Finding Items</a>,  <a href="https://github.com/dresende/node-orm2/wiki/Creating-and-Updating-Items" target="_blank" rel="noopener">Creating and Updating Items</a>,  <a href="https://github.com/dresende/node-orm2/wiki/Aggregation" target="_blank" rel="noopener">Aggregation</a></li>
+</ul>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> Log4js <span class="keyword">from</span> <span class="string">'koa-log4'</span></span><br><span class="line"><span class="comment">//这边要特别注意，在此导入的是 base 目录下的 model 初始化函数</span></span><br><span class="line"><span class="comment">// 而不是在当前路径下，定义的 models.ts</span></span><br><span class="line"><span class="keyword">import</span> InitModels <span class="keyword">from</span> <span class="string">'../base/models'</span> </span><br><span class="line"><span class="keyword">const</span> logger = Log4js.getLogger(<span class="string">'account'</span>)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Account</span> </span>&#123;</span><br><span class="line">	userM: any = <span class="literal">null</span>  <span class="comment">//用于存储实例话后的 user Model</span></span><br><span class="line">	models: any = <span class="literal">null</span> <span class="comment">//存储整个 model 对象</span></span><br><span class="line">	<span class="keyword">constructor</span>() &#123;&#125;</span><br><span class="line">	<span class="comment">//初始化 model, 这个每个 api 类中必须定义的一个方法</span></span><br><span class="line">	<span class="comment">//用于初始化 model 对象</span></span><br><span class="line">	init():<span class="built_in">Promise</span>&lt;any&gt; &#123;  </span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">			InitModels().then(<span class="function"><span class="params">db</span> =&gt;</span> &#123;</span><br><span class="line">				<span class="keyword">this</span>.userM = db.models.user <span class="comment">//提取 user model</span></span><br><span class="line">				<span class="keyword">this</span>.models = db.models <span class="comment">//实例化后的整个 model</span></span><br><span class="line">				resolve(<span class="literal">true</span>)</span><br><span class="line">			&#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">				reject(<span class="literal">false</span>)</span><br><span class="line">			&#125;)</span><br><span class="line">		&#125;)</span><br><span class="line">	&#125;</span><br><span class="line">	getById(id:number):<span class="built_in">Promise</span>&lt;any&gt; &#123; <span class="comment">//根据用户id, 拉取用户信息</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">			<span class="keyword">this</span>.userM.get(id, (err, result) =&gt; &#123;</span><br><span class="line">				<span class="keyword">if</span>(err) &#123;</span><br><span class="line">					reject(err)</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="comment">//调用 user model 中 method 中定义的 baseInfo 方法</span></span><br><span class="line">				<span class="comment">//输出有效信息</span></span><br><span class="line">				resolve(result.baseInfo) </span><br><span class="line">			&#125;)</span><br><span class="line">		&#125;)</span><br><span class="line">	&#125;</span><br><span class="line">	createUser(userInfo):<span class="built_in">Promise</span>&lt;any&gt; &#123; <span class="comment">//实现业务逻辑 创建用户</span></span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params">resolve, reject</span>) =&gt;</span> &#123;</span><br><span class="line">			<span class="keyword">const</span> createTime = <span class="keyword">new</span> <span class="built_in">Date</span>().toISOString().slice(<span class="number">0</span>, <span class="number">19</span>)</span><br><span class="line">			userInfo.update_time = createTime</span><br><span class="line">			logger.debug(<span class="string">'to create user'</span>, userInfo)</span><br><span class="line">			<span class="comment">//采用 user model 对象中的 create 方法，创建一条数据库数据</span></span><br><span class="line">			<span class="keyword">this</span>.userM.create(userInfo, (err, result) =&gt; &#123;</span><br><span class="line">				<span class="keyword">if</span>(err) &#123;</span><br><span class="line">					reject(err) </span><br><span class="line">				&#125;</span><br><span class="line">				resolve(result)</span><br><span class="line">			&#125;)</span><br><span class="line">		&#125;)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> Account</span><br></pre></td></tr></table></figure>
+<p>3、路由编写 (router.ts), 实现页面渲染 或 http 接口</p>
+<blockquote>
+<p>路由编写同之前的 KOA2系列 中的 <a href="https://feifeiyum.github.io/2016/09/18/node-koa2-web-rest/">REST 接口</a>编写类似<br>本文中的添加的内容是 koa-router 中间件， 以实现用户登入校验<br>注意： 每个 router.ts 都要添加 model 初始化的代码， 主要为了保证在接口调用前 model 都已初始化<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> Router <span class="keyword">from</span> <span class="string">'koa-router'</span></span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> Log4js <span class="keyword">from</span> <span class="string">'koa-log4'</span></span><br><span class="line"><span class="keyword">import</span> Account <span class="keyword">from</span> <span class="string">'./api'</span> <span class="comment">//导入之前编写的 api 类 </span></span><br><span class="line"><span class="keyword">import</span> &#123; userAuth &#125; <span class="keyword">from</span> <span class="string">'../utils/auth'</span> <span class="comment">//导入用户认证函数</span></span><br><span class="line"><span class="keyword">import</span> &#123; errAnal &#125; <span class="keyword">from</span> <span class="string">'../utils/error'</span> <span class="comment">//异常处理函数</span></span><br><span class="line"><span class="keyword">const</span> router = <span class="keyword">new</span> Router()</span><br><span class="line"><span class="keyword">let</span> account:any = <span class="literal">null</span> <span class="comment">// 全局存储 account 对象</span></span><br><span class="line"><span class="keyword">const</span> logger = Log4js.getLogger(<span class="string">'account'</span>)</span><br><span class="line"><span class="comment">//该函数是初始化 model 中间件</span></span><br><span class="line"><span class="keyword">const</span> initAccount = <span class="keyword">async</span> (ctx, next) =&gt; &#123;  </span><br><span class="line">	<span class="keyword">if</span>(!account) &#123; <span class="comment">//如果 account 对象为定义， 保证该对象只会初始化一次</span></span><br><span class="line">		account = <span class="keyword">new</span> Account()</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="keyword">await</span> account.init() <span class="comment">//等待 account 初始化成功， 本质上是等待整个 model 初始化成功</span></span><br><span class="line">		&#125; <span class="keyword">catch</span>(err) &#123;</span><br><span class="line">			logger.error(<span class="string">'account init failed'</span>)</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">await</span> next() </span><br><span class="line">	&#125; <span class="keyword">else</span> &#123; <span class="comment">//如果已经初始化的话，直接下一步</span></span><br><span class="line">		<span class="keyword">await</span> next()</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">//当有请求进入时，先检查 account 是否已经初始化</span></span><br><span class="line"><span class="comment">//这部分代码同 api 中 init()方法配合使用， 时必须添加的</span></span><br><span class="line">router.use(initAccount) </span><br><span class="line">router.prefix(<span class="string">'/account'</span>) <span class="comment">//给当前文件中的 所有路由都加个 account 前缀</span></span><br><span class="line"><span class="comment">//如下 /account/info/:id 这个接口访问需要登入</span></span><br><span class="line"><span class="comment">//在进入到逻辑处理函数前，先添加 userAuth 函数验证用户</span></span><br><span class="line"><span class="comment">//如果验证通过 则进入到之后的逻辑处理函数， </span></span><br><span class="line"><span class="comment">//如果处理失败， userAuth 函数中会直接返回错误</span></span><br><span class="line">router.get(<span class="string">'/info/:id'</span>, userAuth, <span class="keyword">async</span>(ctx) =&gt; &#123;</span><br><span class="line">	<span class="keyword">let</span> id = <span class="built_in">Number</span>(ctx.params.id)</span><br><span class="line">	<span class="keyword">let</span> userInfo:any = <span class="literal">null</span></span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		userInfo = <span class="keyword">await</span> account.getById(id)</span><br><span class="line">	&#125; <span class="keyword">catch</span>(err) &#123;</span><br><span class="line">		logger.error(err)</span><br><span class="line">	&#125;</span><br><span class="line">	ctx.body = <span class="built_in">JSON</span>.stringify(userInfo)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">// 如下： /account/register 这个接口不需要用户验证, 则不用添加 userAuth 方法</span></span><br><span class="line">router.post(<span class="string">'/register'</span>, <span class="keyword">async</span> (ctx) =&gt; &#123;</span><br><span class="line">	<span class="keyword">let</span> nick:string = ctx.request.body.nick</span><br><span class="line">	<span class="keyword">let</span> mobile:string = ctx.request.body.mobile</span><br><span class="line">	<span class="keyword">let</span> password:string = ctx.request.body.password</span><br><span class="line">	<span class="keyword">let</span> type:number = <span class="built_in">Number</span>(ctx.request.body.type)</span><br><span class="line">	<span class="keyword">let</span> user = &#123;</span><br><span class="line">		nick: nick,</span><br><span class="line">		mobile: mobile,</span><br><span class="line">		password: password,</span><br><span class="line">		type: type</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">let</span> result:any = <span class="literal">null</span></span><br><span class="line">	<span class="keyword">try</span> &#123;</span><br><span class="line">		result = <span class="keyword">await</span> account.createUser(user)</span><br><span class="line">		ctx.body = <span class="built_in">JSON</span>.stringify(result)</span><br><span class="line">	&#125; <span class="keyword">catch</span>(err) &#123;</span><br><span class="line">		logger.error(<span class="string">'in error'</span>, err)</span><br><span class="line">		errAnal(ctx, err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> router</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>4、 test.ts 用于编写测试脚本  </p>
+<h2 id="数据库迁移-migration"><a href="#数据库迁移-migration" class="headerlink" title="数据库迁移 migration"></a>数据库迁移 migration</h2><p>本框架中采用的数据库迁移工具是 <a href="https://github.com/locomote/node-migrate-orm2" target="_blank" rel="noopener">migrate-orm2</a><br>执行命令： npm run migrate 会执行 migrations/index.ts 脚本， 根据脚本中的配置会相应调用那些数据库更新脚本，(例如： 001-test.js)<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> MigrateTask <span class="keyword">from</span> <span class="string">'migrate-orm2'</span> </span><br><span class="line"><span class="keyword">import</span> * <span class="keyword">as</span> Log4js <span class="keyword">from</span> <span class="string">'koa-log4'</span></span><br><span class="line"><span class="keyword">import</span> DbConn <span class="keyword">from</span> <span class="string">'../src/utils/orm'</span> </span><br><span class="line"><span class="keyword">const</span> logger = Log4js.getLogger(<span class="string">'migrate'</span>)</span><br><span class="line">logger.info(<span class="string">'to start migrate'</span>)</span><br><span class="line">DbConn(<span class="literal">null</span>).then(<span class="function"><span class="params">conn</span> =&gt;</span> &#123;</span><br><span class="line">	logger.info(<span class="string">'orm connect successfully'</span>)</span><br><span class="line">	<span class="keyword">const</span> task = <span class="keyword">new</span> MigrateTask(conn.driver)</span><br><span class="line">	<span class="comment">//第一步生成新的迁移脚本 001.test.js</span></span><br><span class="line">	<span class="comment">//在 001-test.js 中会包含up, down 两个方法</span></span><br><span class="line">	<span class="comment">//在up, down 方法中可以编写数据库迁移操作： 如： createTable， addColumn 等</span></span><br><span class="line">	<span class="comment">// task.generate('test', (err, resp) =&gt; &#123;  </span></span><br><span class="line">	<span class="comment">// 	if(err) &#123;</span></span><br><span class="line">	<span class="comment">// 		logger.error(err)</span></span><br><span class="line">	<span class="comment">// 	&#125; else &#123;</span></span><br><span class="line">	<span class="comment">// 		logger.debug('result' ,resp)</span></span><br><span class="line">	<span class="comment">// 	&#125;</span></span><br><span class="line">	<span class="comment">// &#125;</span></span><br><span class="line">	task.up(<span class="string">'001-test.js'</span>, (err, resp) =&gt; &#123; <span class="comment">//执行 001-test.js 中的 up 方法</span></span><br><span class="line">		logger.info(<span class="string">'----task up finished----'</span>)</span><br><span class="line">		<span class="keyword">if</span>(err) &#123;</span><br><span class="line">			logger.error(err)</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			logger.debug(<span class="string">'result'</span>, resp)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;)</span><br><span class="line">	task.down(<span class="string">'001-test.js'</span>, (err, resp) =&gt; &#123; <span class="comment">//执行 001-test.js 中的 down 方法</span></span><br><span class="line">		logger.info(<span class="string">'----task down finished----'</span>)</span><br><span class="line">		<span class="keyword">if</span>(err) &#123;</span><br><span class="line">			logger.debug(err)</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			logger.info(<span class="string">'result'</span>, resp)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;).catch(<span class="function"><span class="params">err</span> =&gt;</span> &#123;</span><br><span class="line">	logger.error(<span class="string">'orm connect failed'</span>)</span><br><span class="line">&#125;)</span><br></pre></td></tr></table></figure></p>
+<p><strong>注意：</strong></p>
+<blockquote>
+<ul>
+<li>migrate-orm2 工具目前(2017/03/07)无法实现修改字段名称</li>
+<li>dropColumn（或 drop相关操作）请谨慎使用， 有时会将整个表给删除 </li>
+</ul>
+</blockquote>
+<h2 id="package-json-模块"><a href="#package-json-模块" class="headerlink" title="package.json 模块"></a>package.json 模块</h2><blockquote>
+<p>package.json 中主要介绍系统的启动命令, 在 script 中编写<br>npm start: 按开发环境配置启动整个工程， 并输出日志<br>npm run deploy: 按生产环境配置启动整个工程，<br>npm run migrate: 执行数据库迁移脚本<br>npm run del: 删除所有 PM2 正在运行的进程<br><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">"scripts": &#123;</span><br><span class="line">	"start": "pm2 start config/pm2.dev.config.json &amp;&amp; pm2 logs",</span><br><span class="line">	"deploy": "pm2 start config/pm2.prod.config.json",</span><br><span class="line">	"migrate": "pm2 start migrations/index.ts &amp;&amp; pm2 logs",</span><br><span class="line">	"del": "pm2 delete all"</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/koa/" rel="tag">#koa</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/02/19/essay-memory-sorrow/" rel="next" title="回忆是思念的愁">
+                <i class="fa fa-chevron-left"></i> 回忆是思念的愁
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/03/22/base-js-normal-skill/" rel="prev" title="JavaScript 代码质量优化浅谈">
+                JavaScript 代码质量优化浅谈 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/06/node-koa2-web-typescript-md/" data-title="基于 KOA2 + Typescript 的 web 开发框架介绍" data-url="https://feifeiyum.github.io/2017/03/06/node-koa2-web-typescript-md/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#问题"><span class="nav-number">1.</span> <span class="nav-text">问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#环境要求"><span class="nav-number">2.</span> <span class="nav-text">环境要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用该框架"><span class="nav-number">3.</span> <span class="nav-text">使用该框架</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程目录结构"><span class="nav-number">4.</span> <span class="nav-text">工程目录结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#config-配置信息"><span class="nav-number">5.</span> <span class="nav-text">config 配置信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、env-config-js-文件"><span class="nav-number">5.1.</span> <span class="nav-text">1、env.config.js 文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、PM2-启动配置文件"><span class="nav-number">5.2.</span> <span class="nav-text">2、PM2 启动配置文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TypeScript-配置"><span class="nav-number">5.3.</span> <span class="nav-text">TypeScript 配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#系统入口文件-app-ts"><span class="nav-number">6.</span> <span class="nav-text">系统入口文件 app.ts</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#utils-模块介绍"><span class="nav-number">7.</span> <span class="nav-text">utils 模块介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#base-路径下文件介绍"><span class="nav-number">8.</span> <span class="nav-text">base 路径下文件介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#业务模块-Account为例"><span class="nav-number">9.</span> <span class="nav-text">业务模块 (Account为例)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库迁移-migration"><span class="nav-number">10.</span> <span class="nav-text">数据库迁移 migration</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#package-json-模块"><span class="nav-number">11.</span> <span class="nav-text">package.json 模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number">12.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

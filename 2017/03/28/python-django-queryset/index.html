@@ -1,0 +1,800 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="django,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="说明Models 层是 Django 框架中最强大的部分之一， 大大方便了 Web 层与数据层的交互。由于对 Model 层缺少系统理解，在使用 model Api 时经常需要查找文档， 在此做一次系统地整理。本文主要是对 Django Model 文档的翻译， 文档地址">
+<meta name="keywords" content="django">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Django QuerySet 方法梳理">
+<meta property="og:url" content="https://feifeiyum.github.io/2017/03/28/python-django-queryset/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="说明Models 层是 Django 框架中最强大的部分之一， 大大方便了 Web 层与数据层的交互。由于对 Model 层缺少系统理解，在使用 model Api 时经常需要查找文档， 在此做一次系统地整理。本文主要是对 Django Model 文档的翻译， 文档地址">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.295Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Django QuerySet 方法梳理">
+<meta name="twitter:description" content="说明Models 层是 Django 框架中最强大的部分之一， 大大方便了 Web 层与数据层的交互。由于对 Model 层缺少系统理解，在使用 model Api 时经常需要查找文档， 在此做一次系统地整理。本文主要是对 Django Model 文档的翻译， 文档地址">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Django QuerySet 方法梳理 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Django QuerySet 方法梳理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-03-28T10:54:05+08:00" content="2017-03-28">
+              2017-03-28
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/28/python-django-queryset/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/28/python-django-queryset/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h3><p>Models 层是 Django 框架中最强大的部分之一， 大大方便了 Web 层与数据层的交互。由于对 Model 层缺少系统理解，在使用 model Api 时经常需要查找文档， 在此做一次系统地整理。<br>本文主要是对 Django Model 文档的翻译， <a href="https://docs.djangoproject.com/en/1.10/topics/db/queries/#queryset-model-example" target="_blank" rel="noopener">文档地址</a><br><a id="more"></a></p>
+<h3 id="Model-层对象"><a href="#Model-层对象" class="headerlink" title="Model 层对象"></a>Model 层对象</h3><p>一个model类对应数据库中的一张表， 类中的属性代表数据库中的各个字段。 类实例化后的对象， 代表数据库中的一条记录。<br>本文将基于下面的 models 对象展开, 由 Blog, Author, Entry 三个 models 组成。 Blog, Author 是两个独立的 model(表), 没有任何外键字段。 Entry 和 Blog 是多对一的关系， 通过外键关联; Entry 和 Author 是多对多关系。<br>假设 Blog 类所在目录为 mysite/blog/models.py, Author 类所在目录为 mysite/author/models.py, Entry 类所在目录为 mysite/entry/models.py  </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Blog</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">100</span>)</span><br><span class="line">    tagline = models.TextField()</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Author</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">200</span>)</span><br><span class="line">    email = models.EmailField()</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Entry</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    blog = models.ForeignKey(Blog)</span><br><span class="line">    headline = models.CharField(max_length=<span class="number">255</span>) //外键</span><br><span class="line">    body_text = models.TextField()</span><br><span class="line">    pub_date = models.DateField()</span><br><span class="line">    mod_date = models.DateField()</span><br><span class="line">    authors = models.ManyToManyField(Author)  // 多对多</span><br><span class="line">    n_comments = models.IntegerField()</span><br><span class="line">    n_pingbacks = models.IntegerField()</span><br><span class="line">    rating = models.IntegerField()</span><br></pre></td></tr></table></figure>
+<h3 id="创建-model-对象"><a href="#创建-model-对象" class="headerlink" title="创建 model 对象"></a>创建 model 对象</h3><p>Model 对象实例化之后，可以调用 save() 方法其写入到数据库。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> blog.models <span class="keyword">import</span> Blog</span><br><span class="line"></span><br><span class="line"><span class="comment"># 实例化对象</span></span><br><span class="line">b = Blog(name=<span class="string">'Beatles Blog'</span>, tagline=<span class="string">'All the latest Beatles news.'</span>)  </span><br><span class="line"><span class="comment"># 将对象写入数据库</span></span><br><span class="line">b.save()</span><br></pre></td></tr></table></figure></p>
+<p>当执行 save() 函数时， ORM 会执行 INSERT SQL 语句， 将数据写入数据库。在调用 save() 函数之前， 实例不会执行 INSERT 操作。</p>
+<h3 id="保存对象更新"><a href="#保存对象更新" class="headerlink" title="保存对象更新"></a>保存对象更新</h3><p>假设： 上例中的 b 实例已经存入数据库， 现在要更新 b 中的 tagline 字段。先更新 tagline 对应的值，然后执行 save() 操作。如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#更新 tagline 字段</span></span><br><span class="line">b.tagline = <span class="string">'All the latest Beatles new 03/28'</span></span><br><span class="line"><span class="comment"># 将更新写入数据库</span></span><br><span class="line">b.save()</span><br></pre></td></tr></table></figure></p>
+<p>当执行 save() 操作时， ORM 会执行 UPDATE SQL 语句。</p>
+<h3 id="保存外键字段"><a href="#保存外键字段" class="headerlink" title="保存外键字段"></a>保存外键字段</h3><p>保存外键(ForeignKey)字段同正常的字段类似， 也是通过 save() 函数来实现。<br>假设， 数据库中已经存在对应的 Blog 和 Entry 对象， 现在要将这个两个对象关联起来， 可以进行如下操作：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> entry.models <span class="keyword">import</span> Entry</span><br><span class="line"></span><br><span class="line"><span class="comment"># 获取 id 为 1 的 entry 对象， 执行 SELECT 操作</span></span><br><span class="line">entry = Entry.objects.get(pk=<span class="number">1</span>)</span><br><span class="line"><span class="comment"># 获取 name 为 'Cheddar Talk' 的 blog 对象 </span></span><br><span class="line">cheese_blog = Blog.objects.get(name=<span class="string">'Cheddar Talk'</span>)</span><br><span class="line"><span class="comment"># 更新 entry 的 blog 属性 </span></span><br><span class="line">entry.blog = cheese_blog</span><br><span class="line"><span class="comment"># 写入更新</span></span><br><span class="line">entry.save()</span><br></pre></td></tr></table></figure></p>
+<h3 id="保存多对多字段"><a href="#保存多对多字段" class="headerlink" title="保存多对多字段"></a>保存多对多字段</h3><p>更新一个多对多字段， 同外键字段不同， 其使用一个专门的 add() 函数添加对应的关联， 如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> author.models <span class="keyword">import</span> Author</span><br><span class="line"></span><br><span class="line"><span class="comment"># 创建 author 对象</span></span><br><span class="line"><span class="comment"># 采用 create() 方法创建对象，会将 create 和 save () 同时进行，</span></span><br><span class="line"><span class="comment"># 不需要单独调用 save() 方法</span></span><br><span class="line">joe = Author.objects.create(name=<span class="string">'Joe'</span>)</span><br><span class="line"><span class="comment"># entry 为上例中实例的对象 </span></span><br><span class="line">entry.authors.add(joe)</span><br><span class="line"></span><br><span class="line"><span class="comment"># add() 方法可以添加对个参数</span></span><br><span class="line">john = Author.objects.create(name=<span class="string">'john'</span>)</span><br><span class="line">paul = Author.objects.create(name=<span class="string">'paul'</span>)</span><br><span class="line">ringo = Author.objects.create(name=<span class="string">'ringo'</span>)</span><br><span class="line">entry.authors.add(john, paul, ringo)</span><br></pre></td></tr></table></figure></p>
+<h3 id="对象检索"><a href="#对象检索" class="headerlink" title="对象检索"></a>对象检索</h3><p>对数据库中对象的检索， 是通过 model Manage 来构造一个 QuerySet 对象来实现。每个 model 类都有一个 <a href="https://docs.djangoproject.com/en/1.10/topics/db/managers/#django.db.models.Manager" target="_blank" rel="noopener">Manage</a>方法， Model 类通过 objects 来调用 Manage 方法。 model 对象中没有 objects 属性。QuerySet 对象是一个model 类对应的实例集合， 即数据库对应表的子集。<br>QuerySet 可以是 空(zero), 单个对象(one), 多个对象(many).<br>QuerySet 通过 Filters 方法来实现查询结果的过滤。 对于 SQL 来说， QuerySet 等同于 SELECT 声明， Filter 等同于 LIMIT, WHERE 声明。  </p>
+<h4 id="检索所有对象"><a href="#检索所有对象" class="headerlink" title="检索所有对象"></a>检索所有对象</h4><p>查找 model 类对应表中的所有对象 (数据)， 是通过 all() 方法来实现， 其返回一个 QuerySet 对象。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Entry model, </span></span><br><span class="line">all_entries = Entry.objects.all()</span><br></pre></td></tr></table></figure></p>
+<h4 id="通过-filters-检索特定对象"><a href="#通过-filters-检索特定对象" class="headerlink" title="通过 filters 检索特定对象"></a>通过 filters 检索特定对象</h4><p>通常查询数据库是，只是检索对应表中的一条或几条数据， 其主要通过一下两种方法来实现：</p>
+<blockquote>
+<p>1、filter(**kwargs)</p>
+<blockquote>
+<p>通过 filter 中的条件(kwargs) 进数据库查询特定的数据, 返回一个 QuerySet 对象。<br>2、exclude(**kwargs)<br>通过 exclude 中的条件， 排除特定的数据， 返回表中的剩余数据， 返回结果为 QuerySet 对象。</p>
+</blockquote>
+</blockquote>
+<p>例： 查询姓名为 paul 的作者：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"># 返回的 QuerySet 对象中只包含 name=&apos;paul&apos; 的 model 对象</span><br><span class="line">Author.objects.filter(name=&apos;paul&apos;)</span><br></pre></td></tr></table></figure></p>
+<p>例： 查询姓名不为 paul 的所有作者：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 返回的 QuerySet 对象中，不包含 name='pual' 的 model 对象</span></span><br><span class="line">Author.objects.exclude(name=<span class="string">'paul'</span>)</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>3、filter 级联  </p>
+<blockquote>
+<p>filter, exclude 等方法不仅仅可以单独使用， 也可以级联进行使用  </p>
+</blockquote>
+</blockquote>
+<p>例： 查找 entry 中 headline 由 What 开头， 不是有今天发布的， 发布日期大于 2017/03/10 的数据， 共三个条件。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(</span><br><span class="line">        <span class="comment">#条件1, 由 What 开头</span></span><br><span class="line">        headline__startswith=<span class="string">'What'</span></span><br><span class="line">    ).exclude(</span><br><span class="line">        <span class="comment">#条件2, 不由今天(2017-03-28)发布</span></span><br><span class="line">        pub_data__gte=datetime.date.today() </span><br><span class="line">    ).filter(</span><br><span class="line">        <span class="comment"># 条件3, 发布日期大于 2017/03/10</span></span><br><span class="line">        pub_data__gte=datetime(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">10</span>)</span><br><span class="line">    )</span><br></pre></td></tr></table></figure></p>
+<p>上面所列的三个条件最终会整合成一条 SQL 语句去执行：<br>SELECT * FROM entry(表名) WHERE headline LIKE ‘What%’ AND NOT pub_date = ‘2017-3-28’ AND pub_date &gt; ‘2017-3-10’</p>
+<blockquote>
+<p>4、每个 filter 返回的对象都是不相关的 </p>
+<blockquote>
+<p>每次查询生成的 QuerySet 对象都是相互独立的， 可以保存或重复使用<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">q1 = Entry.objects.filter(headline__startwith=<span class="string">'What'</span>)</span><br><span class="line"><span class="comment"># QuerySet 对象中有 filter, exclude 方法</span></span><br><span class="line">q2 = q1.exclude(pub_data__gte=datetime.date.today())</span><br><span class="line">q3 = q1.filter(pub_data__gte=datetime.date.today())</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+<p>上面的三个 QuerySet 对象 q1, q2, q3 中， 是相互独立的，拥有各自独立的内存空间。</p>
+<blockquote>
+<p>5、QuerySet 懒加载 (lazy) </p>
+<blockquote>
+<p>QuerySet are lazy - 暂且套用前端的懒加载名词称之为懒加载。其意思为，在 QuerySet 对象创建的时候，是不会进行数据库查询操作的。只有在使用这个对象的时候才会进行数据库查询操作。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">q = Entry.objects.filter(headline__startwith=<span class="string">'What'</span>)</span><br><span class="line">q = q.filter(pub_date__lte=datetime.date.today())</span><br><span class="line">q = q.exclude(body_text__icontains=<span class="string">'food'</span>)</span><br><span class="line">print(q)</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>上例中， 虽然在 print(q) 有三次 QuerySet 对象的 filter 操作。但是，他们都不会实际进行数据库查询操作, 知道在使用这个 QuerySet 对象的时候。即，在 print(q) 的时候执行真正的数据库查询操作。 </p>
+</blockquote>
+</blockquote>
+<h4 id="检索单个-model-对象"><a href="#检索单个-model-对象" class="headerlink" title="检索单个 model 对象"></a>检索单个 model 对象</h4><p>上面介绍的 filter() 等方法返回的结果是 QuerySet 对象。如果明确知道有且只有一个对象可以查询到时，可以使用 get() 方法进行查询， 其返回结果为一个 model 对象。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">one_entry = Entry.objects.get(pk=<span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<p>返回的 one_entry 为 model 对象， 而不是 QuerySet 对象。<br>采用这种方法查询是，如果查询结果为空，将抛出 DoesNotExist 异常。在一般情况下，不建议使用可以使用如下方式代替：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">one_entry = Entry.objects.filter(pk=<span class="number">1</span>)</span><br><span class="line"><span class="keyword">if</span> one_entry.exists():</span><br><span class="line">    one_entry = one_entry[<span class="number">0</span>]</span><br></pre></td></tr></table></figure></p>
+<h3 id="QuerySet-的其他方法"><a href="#QuerySet-的其他方法" class="headerlink" title="QuerySet 的其他方法"></a>QuerySet 的其他方法</h3><p>当进行数据库查询时，常用的也就是 all(), get(), filter() 和 exclude() 等方法。但是这些方法，无法完成一些复杂的查询方法。下面将介绍一些 QuerySet 的复杂的查询方法。</p>
+<h4 id="Limiting-查询"><a href="#Limiting-查询" class="headerlink" title="Limiting 查询"></a>Limiting 查询</h4><p>利用 Python Array 中的分片， 可以限制返回查询结果的数量。 其对应的 SQL 语法为 LIMIT 和 OFFSET。<br>返回结果为 QuerySet 对象</p>
+<p>例如：<br>限制返回查询结果集中的前5组数据 (LIMIT 5)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.all()[:<span class="number">5</span>]</span><br></pre></td></tr></table></figure></p>
+<p>返回查询结果集中5～9这5组数据 ( OFFSET 5 LIMIT 5)<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.all()[<span class="number">5</span>:<span class="number">10</span>]</span><br></pre></td></tr></table></figure></p>
+<p>在查询结果集中前10组数据中取5组数据， 取数据的 step 等于 2<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.all()[:<span class="number">10</span>:<span class="number">2</span>]</span><br></pre></td></tr></table></figure></p>
+<p>返回查询结果集中的第一个数据， 即 SELECT * FROM table1 LIMIT 1<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 返回长度为 1 的 QuerySet 对象</span></span><br><span class="line">Entry.objects.all()[<span class="number">0</span>:<span class="number">1</span>]</span><br><span class="line"><span class="comment"># 注意其返回的不是 QuerySet 对象， 而是 Entry 的 model 对象</span></span><br><span class="line"><span class="comment"># 如果查询结果不存在， 将会抛出 DoesNotExist 异常</span></span><br><span class="line">Entry.objects.all()[<span class="number">0</span>]</span><br><span class="line"><span class="comment"># Entry.objects.all()[0] 等同于如下：</span></span><br><span class="line">Entry.objects.all()[<span class="number">0</span>:<span class="number">1</span>].get()</span><br></pre></td></tr></table></figure></p>
+<h4 id="按字段查询"><a href="#按字段查询" class="headerlink" title="按字段查询"></a>按字段查询</h4><p>按字段查询， 在 SQL 中对应的 WHERE 条件。这些查询条件是以参数形式出入 QuerySet 方法 (filter, exclude, get) 中， 这个在前面例子中有涉及。<br>基本查询条件配置方式： field__lookuptype=value, field 为字段名称， lookuptype 为查询类型， value为类型值。 field 和 lookuptype 通过 __ 双下划线连接。<br>例如： 查询在今天之前发表的 Entry<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(pub_date__lte=datetime.date.today())</span><br><span class="line"><span class="comment"># 其对应如下 SQL 语句, 假设今天为 2017-03-30</span></span><br><span class="line"><span class="comment"># SELECT * FROM entry WHERE pub_date &lt;= '2017-03-30';</span></span><br></pre></td></tr></table></figure></p>
+<p>如果根据外键的查询时， 可以根据对应的字段名称加上 _id 后缀进行查询， 其实在 model migration 之后， 数据库中外键所在字段名称就是 model 中的属性名加上后缀 _id。<br>例如查询 id 为 4 的 blog 对象所关联的 Entry:<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(blog_id=<span class="number">4</span>)</span><br></pre></td></tr></table></figure></p>
+<p>如果传入的查询条件不对时， 其将会抛出 TypeError 异常。  </p>
+<h4 id="常见查询类型"><a href="#常见查询类型" class="headerlink" title="常见查询类型"></a>常见查询类型</h4><p><strong>1、exact 精确匹配</strong><br>根据对应字段值查询，大小写敏感<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(headline__excat=<span class="string">'cat bites dog'</span>)</span><br><span class="line"><span class="comment"># SQL: SELECT * from entry WHERE headline = 'cat bites dog'</span></span><br></pre></td></tr></table></figure></p>
+<p>如果不添加 __ 对应的查询类型， 则默认是 exact 匹配。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 以下两条查找语句等价</span></span><br><span class="line">Entry.objects.filter(id__excat=<span class="number">13</span>)</span><br><span class="line">Entry.objects.filter(id=<span class="number">13</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>2、 iexact 匹配</strong><br>根据对应字段值查询，但大小写不敏感<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(headline__iexact=<span class="string">'cat Bites Dog'</span>)</span><br><span class="line"><span class="comment"># 估计类型下列查询语句</span></span><br><span class="line"><span class="comment"># SQL: SELECT * FROM entry WHERE lower(headline) = lower('cat Bites Dog')</span></span><br><span class="line"><span class="comment"># 或者SQL: SELECT * FROM entry WHERE UPPER(headline) = UPPER('cat Bites Dog')</span></span><br></pre></td></tr></table></figure></p>
+<p>即： 表中 headline 字段值为 Cat Bites dog 或 Cat BITES dog 等都会命中返回  </p>
+<p><strong>3、contains 查询</strong><br>查询对应字段值包含某些字符的数据， 大小写敏感<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(headline__contains=<span class="string">'Lennon'</span>)</span><br><span class="line"><span class="comment"># SQL: SELECT * FROM entry WHERE headline LIKE '%Lennon%'</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>4、icontains 查询</strong><br>同 3、 contains 查询， 但大小写不敏感<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(headline__icontains=<span class="string">'Lennon'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>5、startswith 查询</strong><br>查询对应字段值中， 以特定某些字符开头的数据， 大小写敏感<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(headline__startswith=<span class="string">'cat'</span>)</span><br><span class="line"><span class="comment"># SQL: SELECT * FROM entry WHERE headline LIKE 'cat%'</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>6、istartswith 查询</strong><br>同 5、startswith 查询， 但大小写不敏感<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(headline__istartswith=<span class="string">'Cat'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>7、endswith 查询</strong><br>查询对应字段值中， 以特定某些字符结尾的数据， 大小写敏感<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(headline__startswith=<span class="string">'dog'</span>)</span><br><span class="line"><span class="comment"># SQL: SELECT * FROM entry WHERE headline LIKE '%dog'</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>8、iendswith 查询</strong><br>同 7、endswith 查询， 但大小写不敏感<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(headline__istartswith=<span class="string">'Cat'</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="跨表查询"><a href="#跨表查询" class="headerlink" title="跨表查询"></a>跨表查询</h3><p>Django 提供了强大的跨表查询方式(lookup span relationship), 完成 SQL 中的 JOINs 查询。<br>使用与外表关联的字段名(field name) 和 对应表中对应的字段名通过双下划线联接起来，即可完成两张表的 JOIN 查询<br>例如： 查询名为 beatles blog 的 blog 对应的 entry<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># blog 为 Entry mode 外键字段， name 为 Blog model 中的字段， __ 联接</span></span><br><span class="line"><span class="comment"># 分解成两步理解： 1、根据 blog 表中 name='beatles blog' 得到对应的数据，</span></span><br><span class="line"><span class="comment"># 再 1、中获得的结果，到 entry 表中查询出最终的结果</span></span><br><span class="line">Entry.objects.filter(blog__name=<span class="string">'beatles blog'</span>)</span><br><span class="line"><span class="comment"># SQL 估计为： SELECT a.id, a.blog, a.headline ... FROM entry a INNER JOIN blog b ON a.blog = b.id WHERE b.name = 'beatles blog'</span></span><br></pre></td></tr></table></figure></p>
+<p>上例中是根据 blog 查询对应的 entry, 从 entry 反推 blog 也是可以实现的，<br>例如： 查询 headline 中包含 Lennon 的 entry 对应的 blog<br>查询方式， 使用小写的 Model 名(即： entry) 关联对应的字段名(headline) 再添加相应的查询类型和其值： 如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Blog.objects.filter(entry__headline__contains=<span class="string">'Lennon'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>更进一步， 跨三张表的查询， 也很容易实现：<br>例如： 根据 auther 名查询对应的 blog, 这个过程中关系到三张表， entry, author, blog。简单分析：根据 author 表中的查询结果， 找出 entry 表中的符合条件的数据， 再根据从 entry 表中获得结果， 获取 blog 表中对应的数据。<br>查询方式， 小写的 Model 名(entry) 关联对应的字段名 authors(不是表 author) 关联对应 author 表中的字段名(name) 再添加相应的查询类型和其值：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># </span></span><br><span class="line">Blog.objects.filter(entry__authors__name=<span class="string">'Lennon'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>在跨表查询时， 在执行 filter 操作是，可以添加多个过滤参数，以达到更复杂的查询逻辑<br>例如：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查询 entry 中 headline 包含 Lennon 的 Blog 和 发表日期在 2013 年的 blog, 两个查询条件结果取并集</span></span><br><span class="line">Blog.objects.filter(entry__headline__contains=<span class="string">'Lennon'</span>, entry__pub_date__year=<span class="number">2013</span>)</span><br><span class="line"><span class="comment"># 查询 entry 中 headline 包含 Lennon 的 Blog 并且 发表日期是 2013 年的， 两个查询条件取交集</span></span><br><span class="line">Blog.objects.filter(entry__headline__contains=<span class="string">'Lennon'</span>).filter(entry__pub_date__year=<span class="number">2013</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="根据同一表-model-内字段查询"><a href="#根据同一表-model-内字段查询" class="headerlink" title="根据同一表(model)内字段查询"></a>根据同一表(model)内字段查询</h3><p>Django 提供了 F 表达式(expressions) 来实现， 同一个表内不同的两个字段的对比。F() 表现一次查询实例的引用。<br>例： 查询 entry 表中 n_comments 值大于 n_pingbacks 的数据：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db.models <span class="keyword">import</span> F</span><br><span class="line">Entry.objects.filter(n_comments__gt=F(<span class="string">'n_pingbacks'</span>))</span><br></pre></td></tr></table></figure></p>
+<p>F() 支持逻辑运算： 加，减，乘，除， 取模， 幂等。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(n_comments__gt=F(<span class="string">'n_pingbacks'</span>) * <span class="number">2</span>)</span><br><span class="line">Entry.objects.filter(rating__gt=F(<span class="string">'n_pingbacks'</span>) + F(<span class="string">'n_comments'</span>))</span><br></pre></td></tr></table></figure></p>
+<p>F() 也支持双下划线的表关联操作，<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查询： entry 表中 author name 等于 blog name 的数据</span></span><br><span class="line">Entry.objects.filter(authors__name=F(<span class="string">'blog__name'</span>))</span><br><span class="line"><span class="comment">#查询， entry 表中发表3天后还有修改的数据</span></span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> timedelta</span><br><span class="line">Entry.objects.filter(mod_date__gt=F(<span class="string">'pub_date'</span>) + timedelta(day=<span class="number">3</span>))</span><br></pre></td></tr></table></figure></p>
+<p>F() 可以通过方法 .bitand() 和 .bitor() 实现按位与运算和或运算。  </p>
+<h3 id="pk-缩写"><a href="#pk-缩写" class="headerlink" title="pk 缩写"></a>pk 缩写</h3><p>在 Django 中采用 pk 缩写来表示 ‘primary key’， 表中的 id (primary key) 字段，可以使用 pk 来表示<br>例如： 下面的查询语句等价<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Blog.objects.get(id__exact=<span class="number">13</span>)</span><br><span class="line">Blog.objects.get(id=<span class="number">13</span>)</span><br><span class="line">Blog.objects.get(pk=<span class="number">13</span>)</span><br></pre></td></tr></table></figure></p>
+<p>pk 除 exact 查询类型外，也可以使用其他的查询类型<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查找 id 为 1,2，3 的 blog 数据</span></span><br><span class="line">Blog.objects.filter(pk__in=[<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>])</span><br><span class="line"><span class="comment"># 查找 id 大于 13 的数据</span></span><br><span class="line">Blog.objects.filter(pk_gt=<span class="number">13</span>)</span><br></pre></td></tr></table></figure></p>
+<p>pk 可以使用在关联表的查询中<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#查找 entry 表中 blog id 为 13 的数据</span></span><br><span class="line">Entry.objects.filter(blog__id=<span class="number">13</span>)</span><br><span class="line">Entry.objects.filter(blog__pk=<span class="number">13</span>)</span><br></pre></td></tr></table></figure></p>
+<h3 id="QuerySet-缓存"><a href="#QuerySet-缓存" class="headerlink" title="QuerySet 缓存"></a>QuerySet 缓存</h3><p>由于 QuerySet 懒加载的原因，在一个新生成的 QuerySet 对象中是没有缓存的。 当其第一次使用的时候才会去请求数据库拉取数据。 此时 Django 会将查询到的结果缓存起来，当第二次使用该 QuerySet 对象时，就不需要重新请求数据库。<br>当然要获得缓存带来的便利，要保持正确的使用姿势才行， 例如：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">print([e.headline <span class="keyword">for</span> e <span class="keyword">in</span> Entry.objects.all()])</span><br><span class="line">print([e.pub_date <span class="keyword">for</span> e <span class="keyword">in</span> Entry.objects.all()])</span><br></pre></td></tr></table></figure></p>
+<p>上面两句代码中， QuerySet 对象将会查询两次数据库。因为，每使用一次 Entry.objects.all() 都会生成一个新的 QuerySet 对象。 其本质上， 第一 print 语句执行时使用的 是一个 QuerySet 对象， 第二个 print 语句执行的是另一个 QuerySet 对象， 虽然说前后两个 QuerySet 对象是拥有相同的值， 但他们不是共享一个内存空间，是相互独立的。<br>正确的使用姿势如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">queryset = Entry.objects.all()</span><br><span class="line"><span class="comment"># 请求数据库</span></span><br><span class="line">print([e.headline <span class="keyword">for</span> e <span class="keyword">in</span> queryset])</span><br><span class="line"><span class="comment"># 使用对象 queryset 对象的缓存</span></span><br><span class="line">print([e.pub_date <span class="keyword">for</span> e <span class="keyword">in</span> queryset])</span><br></pre></td></tr></table></figure></p>
+<p><strong>无法使用缓存的情况</strong><br>QuerySet 并不是所有情况都会设置缓存的， 当查询 QuerySet 对象中部分值时， 会先去检查下缓存， 如果缓存中没有， 将会请求数据拉取数据， 但是这部分数据将不会被缓存。因此，在第一次使用 QuerySet 对象时， 如果是通过 python slice 或 数组下标(index) 去限制所取请求结果的子集时， 这部分结果将不会加入缓存。<br>其原因大致是使用了 slice 或 index 时数据查询时的 SQL 语句会额外添加 LIMIT， OFFSET 条件， 而 queryset 不做部分数据的缓存。<br>例如：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">queryset = Entry.objects.all()</span><br><span class="line"><span class="comment"># 请求数据库拉取第5条数据， </span></span><br><span class="line"><span class="comment"># 通过数组下标(index)取数据， 其结果不缓存</span></span><br><span class="line">print(queryset[<span class="number">5</span>])</span><br><span class="line"><span class="comment"># 因为没有换成， 再一次拉取第5条数据时， 会重新请求数据库</span></span><br><span class="line">print(queryset[<span class="number">5</span>])</span><br></pre></td></tr></table></figure></p>
+<p>假如在使用 slice 或 index 取数据之前，已经对 QuerySet 对象求值(不是部分求值)， 即可使用 Queryset 对象的缓存<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">queryset = Entry.objects.all()</span><br><span class="line"><span class="comment"># 因为使用了整个 queryset 对象</span></span><br><span class="line">[entry <span class="keyword">for</span> entry <span class="keyword">in</span> Entry.objects.all()]</span><br><span class="line"><span class="comment"># 从缓存中取数据</span></span><br><span class="line">print(queryset[<span class="number">5</span>])</span><br><span class="line"><span class="comment"># 从缓存中取数据</span></span><br><span class="line">print(queryset[<span class="number">5</span>])</span><br></pre></td></tr></table></figure></p>
+<h3 id="使用-Q-对象进行复杂查找"><a href="#使用-Q-对象进行复杂查找" class="headerlink" title="使用 Q 对象进行复杂查找"></a>使用 Q 对象进行复杂查找</h3><p>在 QuerySet 对象的 filter() 方法中， 要用 AND 或者 OR 组合查询条件， 来执行更复杂的查询时， 可以使用 Q 对象。<br>Q 对象使用 &amp;， | 和 ～ 来分别表示 SQL 中的 AND， OR 和 NOT<br>例如： 查询 entry 表中 headline 以 ‘what’ 或 ‘who’ 开头的数据<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db.models <span class="keyword">import</span> Q</span><br><span class="line">entry = Entry.objects.filter(Q(headline__startswith=<span class="string">'what'</span>) | Q(headline__startswith=<span class="string">'who'</span>)) </span><br><span class="line"><span class="comment"># SQL: SELECT * FROM entry WHERE headline LIKE 'what%' OR headline LIKE 'who%'</span></span><br></pre></td></tr></table></figure></p>
+<p>如果在 filer() 方法中多个 Q 对象作为参数时， 则不同参数之间将会以 AND 形式组合， 例如：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(Q(headline__startswith=<span class="string">'what'</span>), Q(pub_date=date(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">29</span>)) | Q(pub_date=date(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">31</span>)))</span><br><span class="line"><span class="comment"># SQL SELECT * FROM entry WHERE headline LIKE 'what%' AND (pub_date='2017-3-29' OR pub_date='2017-3-31')</span></span><br></pre></td></tr></table></figure></p>
+<p>Q 对象和普通的查询条件可以混合使用， 但是在 filter 中普通的查询条件，要放在 Q 对象之后传入， 否则将会是无效查询<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 有效查询</span></span><br><span class="line">Entry.objects.filter(Q(pub_date=date(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">29</span>)) | Q(pub_date=date(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">31</span>)), headline__startswith=<span class="string">'what'</span>)</span><br><span class="line"><span class="comment"># 无效查询， 因为普通查询条件在 Q 对象之前</span></span><br><span class="line">Entry.objects.filter(headline__startswith=<span class="string">'what'</span>， Q(pub_date=date(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">29</span>)) | Q(pub_date=date(<span class="number">2017</span>, <span class="number">3</span>, <span class="number">31</span>)))</span><br></pre></td></tr></table></figure></p>
+<h3 id="对象删除"><a href="#对象删除" class="headerlink" title="对象删除"></a>对象删除</h3><p><strong>1、通过 model 对象删除</strong><br>一个 model 对象拥有 delete() 方法， 当要删除某一条数据时， 可以直接执行 delete 方法<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">entry = Entry.objects.get(pk=<span class="number">1</span>)</span><br><span class="line">entry.delete()</span><br></pre></td></tr></table></figure></p>
+<p><strong>2、通过 QuerySet 对象删除</strong><br>QuerySet 对象也有 delete() 方法， 其将会删除所有包含的成员。<br>例如： 删除 entry 表中所有在 2016 年发布的数据<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(pub_date__year=<span class="number">2016</span>).delete()</span><br><span class="line"><span class="comment">#删除表中所有数据</span></span><br><span class="line">Entry.bojects.all().delete()</span><br></pre></td></tr></table></figure></p>
+<p>当 Django 删除一个数据时， 其默认或使用 SQL 的 CASCADE 删除模式， 即： 在父表上 delete 删除一条数据是，与之通过 ForeignKey 关联的子表中的数据也对应删除。</p>
+<h3 id="复制数据"><a href="#复制数据" class="headerlink" title="复制数据"></a>复制数据</h3><p>在 Django 中复制一条数据只需要将对应的 model 对象的 pk(id) 清除即可<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">blog = Blog(name=<span class="string">'My blog'</span>, tagline=<span class="string">'Blogging is easy'</span>)</span><br><span class="line">blog.save() <span class="comment"># blog.pk = 1</span></span><br><span class="line"><span class="comment"># 复制一条</span></span><br><span class="line">blog.pk = <span class="literal">None</span></span><br><span class="line">blog.save() <span class="comment"># blog.pk = 2</span></span><br></pre></td></tr></table></figure></p>
+<p>但是这种拷贝不会 many-to-many 的对应关系，因此在复制数据后，需要更新其多对多关系<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">entry = Entry.objects.all()[<span class="number">0</span>]</span><br><span class="line">auther_old = entry.authors.all() <span class="comment">#提取 authors</span></span><br><span class="line">entry.pk =<span class="literal">None</span></span><br><span class="line">entry.save()</span><br><span class="line">entry.authors.set(auther_old) <span class="comment"># 更新对应关系</span></span><br></pre></td></tr></table></figure></p>
+<p>对于 one-to-one 对应关系的数据， 在拷贝后要先更新一个新的对应关系后，开可以执行 save() 操作。</p>
+<h3 id="通过-QuerySet-执行更新操作"><a href="#通过-QuerySet-执行更新操作" class="headerlink" title="通过 QuerySet 执行更新操作"></a>通过 QuerySet 执行更新操作</h3><p>QuerySet 对象使用 update() 方法更新数据， 与 model 对象使用 save 不同。<br>update() 方法调用后会立即执行数据库 Update 操作<br><strong>1、更新不是外键的字段</strong><br>例： entry 表中在 2017 年发布数据的 headline 字段都更新为 ‘Everything is the same’<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Entry.objects.filter(pub_date__year=<span class="number">2017</span>).update(headline=<span class="string">'Everything is the same'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>2、更新外建字段</strong><br>例： 更新 entry 表中 blog 字段关联的外键<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">b = Blog.objects.get(pk=<span class="number">1</span>)</span><br><span class="line">Entry.objects.all().update(blog=b)</span><br></pre></td></tr></table></figure></p>
+<p>如果想要更新某一行数据， 可以使用 filter 来进行过滤<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">b = Blog.objects.get(pk=<span class="number">1</span>)</span><br><span class="line">Entry.objects.filter(blog=b).update(headline=<span class="string">'Everything is the same'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>注意： 执行 update() 方法时， 会执行生成相应的 SQL 语句。不会去执行 model 对象里面的 save() 方法， 也不会出发 pre_save 和 post_save 这两个钩子函数。添加了 auto_now 属性的字段也无法执行。如果需要执行这些方法的操作， 可以遍历 QuerySet 对象中的每一个 model 实例去执行 save() 方法。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> item <span class="keyword">in</span> my_queryset:</span><br><span class="line">    item.save()</span><br></pre></td></tr></table></figure></p>
+<p><strong>3、使用 F 表达式执行更新操作</strong><br>在根据字段现有值去执行更新操作的场景中， F 表达比较实用<br>例如： 对 entry 中 n_pingbacks 字段执行递增操作<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db.models <span class="keyword">import</span> F</span><br><span class="line">Entry.objects.all().update(n_pingbacks=F(<span class="string">'n_pingbacks'</span>) + <span class="number">1</span>)</span><br></pre></td></tr></table></figure></p>
+<p>但是通过 F 表达式无法执行， 有 join 操作的更新, 即通过双下划线 __ 关联的操作<br>例如： 将 entry 表中所有数据的 headline 字段更新为其对应 blog 表中的 name, 无法通过 F 表达式实现<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 下面语句执行后会抛出 FieldError 异常</span></span><br><span class="line">Entry.objects.update(headline=F(<span class="string">'blog__name'</span>))</span><br></pre></td></tr></table></figure></p>
+<h3 id="对象的对应关系"><a href="#对象的对应关系" class="headerlink" title="对象的对应关系"></a>对象的对应关系</h3><p>当在 model 定义是添加了 ForeignKey, OneToOneFiedl, ManyToMangField 的字段时， model 会自动生成相关 API 来获取相关数据。</p>
+<h4 id="One-To-Many-关系"><a href="#One-To-Many-关系" class="headerlink" title="One-To-Many 关系"></a>One-To-Many 关系</h4><p><strong>1、正向获取</strong> 父表 to 子表<br>如果一个 model 包含有 ForeignKey 字段， 这个 model 的对象可以方便的获取与之关联的另一个 model 的对象。<br>例如： 获取 Entry 对象对应的 Blog 对象<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">e = Entry.objects.get(id=<span class="number">2</span>)</span><br><span class="line">e.blog <span class="comment"># 返回通过外键关联的 blog 对象</span></span><br><span class="line"><span class="comment">#如果要更新 e 对象的 blog 属性</span></span><br><span class="line">b = Blog.objects.get(id=<span class="number">3</span>)</span><br><span class="line">e.blog = b</span><br><span class="line">e.save() <span class="comment"># 执行根系操作，</span></span><br></pre></td></tr></table></figure></p>
+<p>one-to-many 关系在第一次使用后将会被缓存<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">e = Entry.objects.get(id=<span class="number">2</span>)</span><br><span class="line">print(e.blog) <span class="comment"># 查询数据， 并将数据缓存</span></span><br><span class="line">print(e.blog) <span class="comment"># 不查询数据库， 之间中缓存中读取</span></span><br></pre></td></tr></table></figure></p>
+<p>使用 QuerySet 的 select_related() 方法时， 会将相应的 one-to-many 关系的对象都预先取出来并缓存, 在真正使用时就不会访问数据库<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">e = Entry.objects.select_related().get(id=<span class="number">2</span>)</span><br><span class="line">print(e.blog) <span class="comment"># 不查询数据库</span></span><br><span class="line">print(e.bong) <span class="comment"># 不查询数据库</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>2、反向获取</strong> 子表 to 父表<br>如果 model A 通过 ForeignKey字段 field 与 model B 想关联。 B 对象可以通过 model Manager 去访问与之对应的所有的 A 对象。 默认的， 这个 model Manage 名为 foo_set, 其中 foo 是拥有外键那个 model 名的小写， 即 a_set()<br>例： 通过 Blog 对象查询 Entry 对象：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查询与 Blog 对象 b 关联的所有 entry 对象</span></span><br><span class="line">b = Blog.objects.get(pk=<span class="number">2</span>)</span><br><span class="line">b.entry_set.all()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查询与 Blog 对象 b 关联的 entry 对象中 headline 包含 'Lennon' 的</span></span><br><span class="line">b.entry_set.filter(headline__contains=<span class="string">'Lennon'</span>)</span><br></pre></td></tr></table></figure></p>
+<p>如果在定义 ForeignKey 字段时 通过 related_name 可以更改这个默认的 foo_set() Manage 方法。<br>例如： 将最顶部的 Entry Model 中的 blog 字段修改成如下： blog = ForeignKey(Blog, related_name=’entries’), 上面的代码中的 entry_set 就可以都改成 entries。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查询与 Blog 对象 b 关联的所有 entry 对象</span></span><br><span class="line">b = Blog.objects.get(pk=<span class="number">2</span>)</span><br><span class="line">b.entries.all()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 查询与 Blog 对象 b 关联的 entry 对象中 headline 包含 'Lennon' 的</span></span><br><span class="line">b.entries.filter(headline__contains=<span class="string">'Lennon'</span>)</span><br></pre></td></tr></table></figure></p>
+<h4 id="Many-To-Many-关系"><a href="#Many-To-Many-关系" class="headerlink" title="Many-To-Many 关系"></a>Many-To-Many 关系</h4><p>对于 many-to-many 关系的 API 使用方法与上面的 one-to-many 关系的一致。区别在于， 在命名 ManyToMany 字段时， 字段名不要与其对应的 model 名的小写一致。例如 Entry 中， authors 字段名称不与其对应 Model(Author) 的小写名 author 相同。 这点与 blog 字段不同。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">e = Entry.objects.get(id=<span class="number">3</span>)</span><br><span class="line">e.authors.all() <span class="comment"># 返回 e 对象对应的所有 authors</span></span><br><span class="line">e.authors.count() <span class="comment"># authors 的数量</span></span><br><span class="line">e.authors.filter(name__contains=<span class="string">'John'</span>) <span class="comment"># 返回名字中包含 John 的作者</span></span><br><span class="line"></span><br><span class="line">a = Author.objects.get(id=<span class="number">5</span>)</span><br><span class="line"><span class="comment"># 返回所有与 a 对象对应的 Entry 对象</span></span><br><span class="line">a.entry_set.all()</span><br></pre></td></tr></table></figure></p>
+<h4 id="One-To-One-关系"><a href="#One-To-One-关系" class="headerlink" title="One-To-One 关系"></a>One-To-One 关系</h4><p>One-to-one 关系同 many-to-one 非常相似， API 用法与 many-to-one 的基本也基本一致<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">EntryDetail</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">   entry = models.OneToOneField(Entry, on_delete=models.CASCADE)</span><br><span class="line">   details = models.TextField()</span><br><span class="line"></span><br><span class="line">ed = EntryDetail.objects.get(pk=<span class="number">3</span>)</span><br><span class="line">en.entry <span class="comment"># 返回与之对应的 Entry 对象</span></span><br></pre></td></tr></table></figure></p>
+<p>与 many-to-one 不同的是其反向查找， 如下：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">e = Entry.objects.get(pk=<span class="number">3</span>)</span><br><span class="line"><span class="comment"># 取得与 Entry 对象对应的 EntryDetail 对象，</span></span><br><span class="line"><span class="comment"># 只需调用 EntryDetail 的小写 entrydetail 即可</span></span><br><span class="line">e.entrydetail</span><br><span class="line"></span><br><span class="line"><span class="comment">#更新</span></span><br><span class="line">e.entrydetail = ed2</span><br><span class="line">e.save()</span><br></pre></td></tr></table></figure></p>
+<h3 id="通过关联对象查询"><a href="#通过关联对象查询" class="headerlink" title="通过关联对象查询"></a>通过关联对象查询</h3><p>当查询过滤条件传入 filter 函数是，既可以使用整个对象，可以使用相应的对象值。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Blog 对象 b 的 id = 5</span></span><br><span class="line">Entry.objects.filter(blog=b) <span class="comment"># 通过整个对象进行查询</span></span><br><span class="line">Entry.objects.filter(blog=b.id) <span class="comment"># 通过 b 的 id 属性查询</span></span><br><span class="line">Entry.objects.filter(blog=<span class="number">5</span>) <span class="comment"># 直接用 id 值查询 hard code</span></span><br></pre></td></tr></table></figure></p>
+<p>做个标记： 下期整理 QuerySet 比较常用的 API </p>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/django/" rel="tag">#django</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/22/base-js-normal-skill/" rel="next" title="JavaScript 代码质量优化浅谈">
+                <i class="fa fa-chevron-left"></i> JavaScript 代码质量优化浅谈
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/10/python-django-querysetapi/" rel="prev" title="常用 Django QuerySet Api">
+                常用 Django QuerySet Api <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/03/28/python-django-queryset/" data-title="Django QuerySet 方法梳理" data-url="https://feifeiyum.github.io/2017/03/28/python-django-queryset/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#说明"><span class="nav-number">1.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Model-层对象"><span class="nav-number">2.</span> <span class="nav-text">Model 层对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建-model-对象"><span class="nav-number">3.</span> <span class="nav-text">创建 model 对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保存对象更新"><span class="nav-number">4.</span> <span class="nav-text">保存对象更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保存外键字段"><span class="nav-number">5.</span> <span class="nav-text">保存外键字段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#保存多对多字段"><span class="nav-number">6.</span> <span class="nav-text">保存多对多字段</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象检索"><span class="nav-number">7.</span> <span class="nav-text">对象检索</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#检索所有对象"><span class="nav-number">7.1.</span> <span class="nav-text">检索所有对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通过-filters-检索特定对象"><span class="nav-number">7.2.</span> <span class="nav-text">通过 filters 检索特定对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#检索单个-model-对象"><span class="nav-number">7.3.</span> <span class="nav-text">检索单个 model 对象</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QuerySet-的其他方法"><span class="nav-number">8.</span> <span class="nav-text">QuerySet 的其他方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Limiting-查询"><span class="nav-number">8.1.</span> <span class="nav-text">Limiting 查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#按字段查询"><span class="nav-number">8.2.</span> <span class="nav-text">按字段查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#常见查询类型"><span class="nav-number">8.3.</span> <span class="nav-text">常见查询类型</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#跨表查询"><span class="nav-number">9.</span> <span class="nav-text">跨表查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#根据同一表-model-内字段查询"><span class="nav-number">10.</span> <span class="nav-text">根据同一表(model)内字段查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pk-缩写"><span class="nav-number">11.</span> <span class="nav-text">pk 缩写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QuerySet-缓存"><span class="nav-number">12.</span> <span class="nav-text">QuerySet 缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用-Q-对象进行复杂查找"><span class="nav-number">13.</span> <span class="nav-text">使用 Q 对象进行复杂查找</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象删除"><span class="nav-number">14.</span> <span class="nav-text">对象删除</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#复制数据"><span class="nav-number">15.</span> <span class="nav-text">复制数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过-QuerySet-执行更新操作"><span class="nav-number">16.</span> <span class="nav-text">通过 QuerySet 执行更新操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#对象的对应关系"><span class="nav-number">17.</span> <span class="nav-text">对象的对应关系</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#One-To-Many-关系"><span class="nav-number">17.1.</span> <span class="nav-text">One-To-Many 关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Many-To-Many-关系"><span class="nav-number">17.2.</span> <span class="nav-text">Many-To-Many 关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#One-To-One-关系"><span class="nav-number">17.3.</span> <span class="nav-text">One-To-One 关系</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过关联对象查询"><span class="nav-number">18.</span> <span class="nav-text">通过关联对象查询</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number"></span> <span class="nav-text">END</span></a></li></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

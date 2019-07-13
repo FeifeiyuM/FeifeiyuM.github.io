@@ -1,0 +1,713 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="django,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="本文将介绍常用的 QuerySet Api, 同上一篇Django QuerySet 方法梳理类似， 是对 Django 文档 QuerySet API reference 中常用或比较重要 API 的翻译。">
+<meta name="keywords" content="django">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常用 Django QuerySet Api">
+<meta property="og:url" content="https://feifeiyum.github.io/2017/04/10/python-django-querysetapi/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="本文将介绍常用的 QuerySet Api, 同上一篇Django QuerySet 方法梳理类似， 是对 Django 文档 QuerySet API reference 中常用或比较重要 API 的翻译。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2019-07-13T01:36:10.296Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="常用 Django QuerySet Api">
+<meta name="twitter:description" content="本文将介绍常用的 QuerySet Api, 同上一篇Django QuerySet 方法梳理类似， 是对 Django 文档 QuerySet API reference 中常用或比较重要 API 的翻译。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 常用 Django QuerySet Api | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                常用 Django QuerySet Api
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-04-10T17:03:30+08:00" content="2017-04-10">
+              2017-04-10
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/python/" itemprop="url" rel="index">
+                    <span itemprop="name">python</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/04/10/python-django-querysetapi/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/04/10/python-django-querysetapi/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文将介绍常用的 QuerySet Api, 同上一篇<a href="https://feifeiyum.github.io/2017/03/28/python-django-queryset/">Django QuerySet 方法梳理</a>类似， 是对 Django 文档 <a href="https://docs.djangoproject.com/en/dev/ref/models/querysets/" target="_blank" rel="noopener">QuerySet API reference</a> 中常用或比较重要 API 的翻译。<br><a id="more"></a></p>
+<h2 id="Model-对象"><a href="#Model-对象" class="headerlink" title="Model 对象"></a>Model 对象</h2><p>本文使用的 model 对象， 与<a href="https://feifeiyum.github.io/2017/03/28/python-django-queryset/">Django QuerySet 方法梳理</a> 类似， 只是额外为 Author， Blog 添加了关联 Model Category, City, Tag<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db <span class="keyword">import</span> models</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Category</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.TextField(max_length=<span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Tag</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.TextField(max_length=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Blog</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">100</span>)</span><br><span class="line">    tagline = models.TextField()</span><br><span class="line">    cate = models.Foreignkey(Category)</span><br><span class="line">    tag = models.ManyToManyField(Tag)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">City</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">20</span>)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Author</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    name = models.CharField(max_length=<span class="number">200</span>)</span><br><span class="line">    email = models.EmailField()</span><br><span class="line">    hometown = models.Foreignkey(City, on_delete=models.SET_NULL)</span><br><span class="line">    visition = models.ManyToManyField(City)</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Entry</span><span class="params">(models.Model)</span>:</span></span><br><span class="line">    blog = models.ForeignKey(Blog)</span><br><span class="line">    headline = models.CharField(max_length=<span class="number">255</span>) //外键</span><br><span class="line">    body_text = models.TextField()</span><br><span class="line">    pub_date = models.DateField()</span><br><span class="line">    mod_date = models.DateField()</span><br><span class="line">    authors = models.ManyToManyField(Author)  // 多对多</span><br><span class="line">    n_comments = models.IntegerField()</span><br></pre></td></tr></table></figure></p>
+<h2 id="select-related"><a href="#select-related" class="headerlink" title="select_related()"></a>select_related()</h2><p>select_related 在执行数据库查询时， 会将外建字段关联的表一起查出来, 在 SQL 中通过 INNER JOIN 来实现。通过这种方式查询后，在使用外键字段时，就不会再执行一次数据库操作。例如：<br><strong>1、不使用 select_related</strong><br>下例中： 在使用 Entry 对象 e 的外键属性 blog 时， 会执行一次数据库操作，查询表 blog。 加上 entry 表的查找， 完成如下操作要进行两次的数据库检索。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">e = Entry.objects.filter(id=<span class="number">5</span>)</span><br><span class="line"><span class="keyword">if</span> e.exists(): <span class="comment"># 第一次检索： 查询表 entry</span></span><br><span class="line">   e = e[<span class="number">0</span>]</span><br><span class="line">   b = e.blog <span class="comment"># 第二次检索： 查询表 blog</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>2、使用 select_related</strong><br>使用 select_related 方法， 可以通过一次数据检索，完成上例中的操作。select_realted 可以将需要用到关联表通过 INNER JOIN 的方式将需要的数据一次性加载。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">e = Entry.objects.filter(id=<span class="number">5</span>).select_related(<span class="string">'blog'</span>)</span><br><span class="line"><span class="keyword">if</span> e.exists(): <span class="comment"># 第一次检索： 将 entry 和 blog 表中相关的数据都取出</span></span><br><span class="line">   e = e[<span class="number">0</span>]</span><br><span class="line">   b = e.blog <span class="comment"># 不再检索数据库</span></span><br></pre></td></tr></table></figure></p>
+<p>filter() 方法和 select_related() 两个方法串联时无所谓先后顺序， 即： e = Entry.objects.select_related(‘blog’).filter(id=5) 效果同 Entry.objects.filter(id=5).select_related(‘blog’) 是一样的。</p>
+<p><strong>3、select_related 同时查询多张表</strong><br>当一个 model 中同时包含多个外键字段时， 通过 select_related 一次性将他们都检索出来。假设 model Person 包含外键字段 city, school。<br>在查询 person 时 需要将其 city, school 信息一次性加载出来, 可以在 select_related 同时传入字段名， ‘city’, ‘school’, 以逗号隔开， 或者采用链式结构书写， 两种方法效果一致<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">p = Person.objects.filter(id=<span class="number">5</span>).select_related(<span class="string">'city'</span>, <span class="string">'school'</span>)</span><br><span class="line"><span class="comment"># 或者</span></span><br><span class="line">p = Person.objects.filter(id=<span class="number">5</span>).select_related(<span class="string">'city'</span>).select_related(<span class="string">'school'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>4、select_related 外键级联</strong><br>使用下例说明：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">e1 = Entry.objects.filter(id=<span class="number">5</span>).select_related(<span class="string">'blog__cate'</span>)</span><br><span class="line"><span class="keyword">if</span> e1.exists(): <span class="comment"># 检索数据库</span></span><br><span class="line">   e1 = e1[<span class="number">0</span>]</span><br><span class="line">   b1 = e1.blog  <span class="comment"># 不检索数据库</span></span><br><span class="line">   c1 = b1.cate  <span class="comment"># 不检索数据 </span></span><br><span class="line"></span><br><span class="line">e2 = Entry.objects.filter(id=<span class="number">5</span>)</span><br><span class="line"><span class="keyword">if</span> e2.exists(): <span class="comment"># 检索数据库</span></span><br><span class="line">   e2 = e2[<span class="number">0</span>]</span><br><span class="line">   b2 = e2.blog <span class="comment"># 检索数据库</span></span><br><span class="line">   c2 = b2.cate <span class="comment"># 检索数据库</span></span><br></pre></td></tr></table></figure></p>
+<p>select_related 可以进行多张表的级联查询， 从上例中看出， select_related(‘blog_cate’) 涉及了表 entry, 表 blog, 表 category 的查询， 通过一次检索将所有外键相关联的数据取出。 blog 同双下划线 __ 与其外键字段(cate)关联。</p>
+<p><strong>5、select_related 不带参数</strong><br>当需要查询许多个关联字段， 或不清楚待查询 Model 的关联关系时， 可以执行不带参数的 select_related() 方法。 其会将所有非空的 Foreignkey 字段对应表的相关数据一次性都检索出来。这样做会造成不必要的性能浪费。</p>
+<p><strong>6、清除 select_related 关联的外键数据</strong><br>如果需要清除 select_related 查询关联的其他表的数据， 可以给 select_related 传入参数 None 来实现<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">e1 = Entry.objects.filter(id=<span class="number">5</span>).select_related(<span class="string">'blog'</span>)</span><br><span class="line">e1 = e1.select_related(<span class="literal">None</span>)</span><br><span class="line"><span class="keyword">if</span> e1.exists(): <span class="comment"># 检索数据库</span></span><br><span class="line">   e1 = e1[<span class="number">0</span>]</span><br><span class="line">   b1 = e1.blog  <span class="comment"># 检索数据库</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>注意</strong>: 为了避免返回结果集过大， select_related 被限制于 ForeignKey 和 OneToOneField 这两种关联关系使用。<br><strong>深入理解</strong><br>请参考博客 <a href="http://blog.jobbole.com/74881/" target="_blank" rel="noopener">实例详解Django的 select_related 和 prefetch_related 函数对 QuerySet 查询的优化（一）</a></p>
+<h2 id="prefetch-related"><a href="#prefetch-related" class="headerlink" title="prefetch_related()"></a>prefetch_related()</h2><p>prefetch_related 方法返回一个 QuerySet 对象， 其作用与 select_related 方法类似，用来减少 ORM 层与数据库的交互的。与 select_related 不同 prefetch_related 不使用 JOIN 方式来查询数据库， 而是分别查找每个表， 最后在 python 实现 JOIN 操作。prefetch_related 方法适用于 many-to-many 和 one-to-many 的对应关系。 ForeignKey 是 many-to-one 的对应关系， 但是反过来， 被 ForeignKey 关联的字段就是 one-to-many 的关系了(子表回溯父表)。</p>
+<p><strong>1、使用 prefetch_related</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Many-To-Many 模式</span></span><br><span class="line">e = Entry.objects.prefetch_related(<span class="string">'authors'</span>).filter(id=<span class="number">5</span>)</span><br><span class="line"><span class="comment"># 在 e 求值的时候，会执行两次 SQL 查询：</span></span><br><span class="line"><span class="comment"># 第一次： 先查询 entry 表， 获得 Entry 对象 e，</span></span><br><span class="line"><span class="comment"># 第二次： 本次主要是 prefetch_related 执行的查询， 会在第一次查询结束后立刻执行。其根据第一次查询的结果， 生成相应的 SQL 查询 author 表， 获取 authors 属性值</span></span><br><span class="line"><span class="keyword">if</span> e.exists():</span><br><span class="line">   e = e[<span class="number">0</span>]</span><br><span class="line">   <span class="keyword">for</span> author <span class="keyword">in</span> e.authors.all():</span><br><span class="line">       print(<span class="string">'author %s'</span> % author.name) <span class="comment"># 不查询数据库， 直接从 caches 取出数据。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># One-To-Many 模式</span></span><br><span class="line"><span class="comment"># entry 通过 blog 外键字段与 blog 表相关联， </span></span><br><span class="line"><span class="comment"># 此时 blog 与 entry 表的对应关系是 One-To-Many </span></span><br><span class="line">b = Blog.objects.prefetch_related(<span class="string">'entry_set'</span>).filter(id=<span class="number">5</span>)</span><br><span class="line"><span class="comment"># 在 b 求值的时候， 同样会执行两次 SQL 查询</span></span><br><span class="line"><span class="comment"># 第一次： 先查询 blog 表， 获得 Blog 对象 b</span></span><br><span class="line"><span class="comment"># 第二次： 根据第一次查询的结果， 生成相应的 SQL 去查询 entry 表， 获取 entry_set 属性值</span></span><br><span class="line"><span class="keyword">if</span> b.exists():</span><br><span class="line">   b = b[<span class="number">0</span>]</span><br><span class="line">   <span class="keyword">for</span> entry <span class="keyword">in</span> b.entry_set.all():</span><br><span class="line">       print(<span class="string">'entry %s'</span> % entry.headline) <span class="comment"># 不查询数据库， 从 caches 取出数据</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>2、prefetch_related 级联</strong><br>跟 select_related 一样， prefetch_related 也可以通过双下划线(__)， 执行级联操作：<br>a、全是 many-to-many 的级联关系， 例如： entry 表中的 authors, 与 author 表中 visition<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">e = Entry.objects.prefetch_related(<span class="string">'authors_visition'</span>).filter(id=<span class="number">5</span>)</span><br><span class="line"><span class="comment"># 在 e 求值的时候，会执行三次 SQL 查询：</span></span><br><span class="line"><span class="comment"># 第一次： 先查询 entry 表， 获得 Entry 对象 e，</span></span><br><span class="line"><span class="comment"># 第二次： 其根据第一次查询的结果， 生成相应的 SQL 查询 author 表， 获取 authors 属性值</span></span><br><span class="line"><span class="comment"># 第三次： 根据第二次查询的结果， 生成相应的 SQL 语句 查询 city 表， 获取 visition 属性值</span></span><br><span class="line"><span class="keyword">if</span> e.exists():</span><br><span class="line">   e = e[<span class="number">0</span>]</span><br><span class="line">   <span class="keyword">for</span> author <span class="keyword">in</span> e.authors.all():</span><br><span class="line">       <span class="keyword">for</span> city <span class="keyword">in</span> author.visition.all():  <span class="comment"># 不查询数据库</span></span><br><span class="line">           print(<span class="string">'city %s'</span> % city.name) <span class="comment"># 不查询数据库</span></span><br><span class="line"><span class="comment"># 2、</span></span><br></pre></td></tr></table></figure></p>
+<p>b、ForeignKey 和 many-to-many 的级联关系， 例如： entry 表中的 blog, 与 blog 表中的 tag<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># e 求值时会顺序的生成三个 SQL 语句， 分别查询三张表， entry, blog, tag </span></span><br><span class="line">e = Entry.objects.prefetch_related(<span class="string">'blog__tag'</span>).filter(id=<span class="number">5</span>)</span><br><span class="line"><span class="comment"># 为了减少查询次数， 由于 entry 与 blog 是 ForeignKey 对关系， </span></span><br><span class="line"><span class="comment"># 可以使用 select_related 将查询次数减少为两次, entry, blog 两张表合在一起查询</span></span><br><span class="line">e2 = Entry.objects.filter(id=<span class="number">5</span>).select_related(<span class="string">'blog'</span>).prefetch_related(<span class="string">'blog__tag'</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>3、prefetch_related 注意</strong><br>在遍历 prefetch_related 获得结果时， 改变 QuerySet 的查询条件， 所有的 prefetch_related 的结果将全部失效， 这个在开发中需要注意。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">entries = Entry.objects.prefetch_related(<span class="string">'authors'</span>).all()</span><br><span class="line"><span class="keyword">if</span> entries.exists():</span><br><span class="line">   <span class="comment"># 由于改变了 authors 的查询条件， 因此，每一次循环都会查询一次数据库</span></span><br><span class="line">   <span class="comment"># 导致 prefetch_related 查询结果完全没有发挥作用</span></span><br><span class="line">   [e.authors.filter(name__contains=<span class="string">'john'</span>) <span class="keyword">for</span> e <span class="keyword">in</span> entries]</span><br></pre></td></tr></table></figure></p>
+<p><strong>4、清空 prefetch_related</strong><br>同 select_related 一样， 只需要传入 None 参数即可<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">e = Entry.objects.prefetch_related(<span class="string">'authors'</span>).all()</span><br><span class="line">e_clear = e.prefetch_related(<span class="literal">None</span>)</span><br></pre></td></tr></table></figure></p>
+<p><strong>5、使用 Prefetch 对象控制 prefetch_related 查询</strong><br>使用 Prefetch 对象可以进一步控制 prefetch_related 查询返回的结果， 而不仅仅是 all()<br>a、基本使用<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db.models <span class="keyword">import</span> Prefetch</span><br><span class="line">e = Entry.objects.prefetch_related(Prefetch(<span class="string">'authors'</span>))</span><br></pre></td></tr></table></figure></p>
+<p>b、添加查询参数 queryset<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.db.models <span class="keyword">import</span> Prefetch</span><br><span class="line">e = Entry.objects.prefetch_related(</span><br><span class="line">    Prefetch(<span class="string">'authors'</span>, queryset=Author.objects.filter(name__contains(<span class="string">'john'</span>).order_by(<span class="string">'name'</span>))</span><br><span class="line">    )</span><br></pre></td></tr></table></figure></p>
+<p>c、用to_attr 添加属性<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">e = Entry.objects.prefetch_related(</span><br><span class="line">    Prefetch(<span class="string">'authors'</span>, queryset=Author.objects.filter(name__contains(<span class="string">'john'</span>).order_by(<span class="string">'name'</span>))</span><br><span class="line">    to_attr=<span class="string">'john_author'</span>)</span><br><span class="line"><span class="comment"># 此时 queryset 对象 e 中包含的 每个 model 对象都包含有 john_author 属性</span></span><br><span class="line">john_author = e[<span class="number">0</span>].john_auhor</span><br></pre></td></tr></table></figure></p>
+<p><strong>深入理解</strong><br>请参考博客 <a href="http://blog.jobbole.com/74914/" target="_blank" rel="noopener">实例详解Django的 select_related 和 prefetch_related 函数对 QuerySet 查询的优化（二）</a></p>
+<h2 id="next-to-add"><a href="#next-to-add" class="headerlink" title="next to add"></a>next to add</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/django/" rel="tag">#django</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/03/28/python-django-queryset/" rel="next" title="Django QuerySet 方法梳理">
+                <i class="fa fa-chevron-left"></i> Django QuerySet 方法梳理
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/04/15/essay-chengdu/" rel="prev" title="成都之行">
+                成都之行 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/04/10/python-django-querysetapi/" data-title="常用 Django QuerySet Api" data-url="https://feifeiyum.github.io/2017/04/10/python-django-querysetapi/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">36</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Model-对象"><span class="nav-number">1.</span> <span class="nav-text">Model 对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#select-related"><span class="nav-number">2.</span> <span class="nav-text">select_related()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#prefetch-related"><span class="nav-number">3.</span> <span class="nav-text">prefetch_related()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#next-to-add"><span class="nav-number">4.</span> <span class="nav-text">next to add</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
