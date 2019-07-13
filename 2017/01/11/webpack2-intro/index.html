@@ -1,0 +1,770 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="node," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本篇将介绍 Webpack 2 的相关配置，以及使用 Webpack 2 进行前端开发的解决方案，或前端开发脚手架">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Webpack 2 打包解决方案">
+<meta property="og:url" content="https://feifeiyum.github.io/2017/01/11/webpack2-intro/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="本篇将介绍 Webpack 2 的相关配置，以及使用 Webpack 2 进行前端开发的解决方案，或前端开发脚手架">
+<meta property="og:updated_time" content="2017-03-22T03:45:48.030Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Webpack 2 打包解决方案">
+<meta name="twitter:description" content="本篇将介绍 Webpack 2 的相关配置，以及使用 Webpack 2 进行前端开发的解决方案，或前端开发脚手架">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Webpack 2 打包解决方案 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br />
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-font">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-html5"></i> <br />
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br />
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Webpack 2 打包解决方案
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-01-11T15:48:05+08:00" content="2017-01-11">
+              2017-01-11
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/front/" itemprop="url" rel="index">
+                    <span itemprop="name">front</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/11/webpack2-intro/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/11/webpack2-intro/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本篇将介绍 Webpack 2 的相关配置，以及使用 Webpack 2 进行前端开发的解决方案，或前端开发脚手架<br><a id="more"></a></p>
+<h2 id="Webpack"><a href="#Webpack" class="headerlink" title="Webpack"></a>Webpack</h2><p>Webpack 是一个前端资源加载/打包工具， 只需要相对简单的配置，就可以整合出一套前端开发解决方案<br>Webpack 一个主要的特性是可以实现前端开发的模块化， 它能分析整个前端工程的项目结构， 找到相关的 JavaScrit 模块以及他的一些样式文件，图片文件等， 并将他们整合成一个或多个文件输出，提供给浏览器执行。<br>Webpack 通过相应的配置可以实现 JS 代码的降级(ES6 to ES5), 方言的转译(TypeScript to Js, Less to CSS)等<br><strong>注:</strong> 模块化是指: 把前端程序开发像后端开发一样按功能切割成多个小文件(封装成接口)， 有利于实现前端的工程化开发，例如 WebApp(SPA)开发<br><strong>注意：</strong> 采用 webpack 打包之后， IE8 的兼容有很严重的问题<br><a href="https://webpack.js.org/concepts/" target="_blank" rel="external">Webpack 2.x 介绍&amp;文档</a><br><a href="https://blog.madewithenvy.com/getting-started-with-webpack-2-ed2b86c68783" target="_blank" rel="external">Webpack 2.x 入门博客</a></p>
+</blockquote>
+<h2 id="功能介绍"><a href="#功能介绍" class="headerlink" title="功能介绍"></a>功能介绍</h2><blockquote>
+<p>本文介绍的 Webpack 脚手架实现如下功能：</p>
+<ul>
+<li>js 文件整合打包, 输出 bundle.js（webpack 输出结果文件称为 bundle 文件)， babel转码(ES6 to SE5)  </li>
+<li>css/less 文件整合打包, 可以打入 bundle.js 文件中， 也可以提取为 bundle.css 文件  </li>
+<li>图片打包， 如果图片大小小于 0.5kb, 直接以 Base64 格式加入 bundle.js, 如果大于 0.5kb 直接输出到 bundle 文件所在目录的 image/ 路径下</li>
+<li>测试环境打包： 在 chrome 下可 debug。  </li>
+<li>生产环境打包： 代码压缩丑化， 自动添加 bundle 文件的版本， 自动更新 html 中对应的 bundle 文件路径 </li>
+<li>提供 webpack-dev-server 服务， 通过 localhost:3000 访问。</li>
+</ul>
+</blockquote>
+<h2 id="工程目录结构"><a href="#工程目录结构" class="headerlink" title="工程目录结构"></a>工程目录结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">package-tool  #工程目录</div><div class="line">   ├──src    #所有开发文件所在目录</div><div class="line">   |   └──test # 例：test 项目开发目录</div><div class="line">   ├──assets # 静态文件路径， 即打包结果文件存放路径</div><div class="line">   ├──build # 该路径下存放打包工具相关脚本</div><div class="line">   |   ├──bundle.to.html.js  # js 脚本， 修改 html 文件中引入 bundle 文件的路径</div><div class="line">   |   ├──webpack.config.js  # Webpack 打包配置文件 </div><div class="line">   |   └──postcss.config.js # CSS 样式处理配置文件</div><div class="line">   ├──.babelrc # babel 转码配置文件</div><div class="line">   ├──package.config.js # Webpack 打包参数配置文件 </div><div class="line">   └──package.json # node 工程的依赖管理，脚本命令配置文件</div></pre></td></tr></table></figure>
+<h2 id="使用脚手架"><a href="#使用脚手架" class="headerlink" title="使用脚手架"></a>使用脚手架</h2><h3 id="1、安装脚手架"><a href="#1、安装脚手架" class="headerlink" title="1、安装脚手架"></a>1、安装脚手架</h3><blockquote>
+<p>安装 nodeJs<br>下载： <a href="https://github.com/FeifeiyuM/package-tool/tree/webpack2" target="_blank" rel="external">https://github.com/FeifeiyuM/package-tool/tree/webpack2</a><br>命令行进入脚手架根目录， 执行 npm install </p>
+</blockquote>
+<h3 id="2、新建工程"><a href="#2、新建工程" class="headerlink" title="2、新建工程"></a>2、新建工程</h3><blockquote>
+<p>例如：<br>a、在 ./src/路径下新建文件夹 test<br>b、在 ./src/test 路径下 新建 index.js 作为打包的入口文件， 新建html文件 index.html, 新建样式文件 index.less<br>注意： <strong>入口文件名，与 html 文件名务必保持一致</strong>， 例如： 如果入口文件名为 main.js, 与其对应的 html 文件名为 main.html<br>c、编写入口文件 &amp; 样式文件   </p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//index.js</span></div><div class="line"><span class="keyword">import</span> <span class="string">'./index.less'</span></div><div class="line"><span class="keyword">let</span> name = <span class="string">'feifeiyu'</span></div><div class="line"><span class="keyword">let</span> printName = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'output'</span>).innerHTML = name</div><div class="line">&#125;</div><div class="line">printName()</div></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">p &#123;</div><div class="line">    color: blue;</div><div class="line">    span &#123;</div><div class="line">        color: yellow;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<blockquote>
+<p>c、在 html 文件中添加外联样式和脚本，<br>&lt;script src=”/assets/test/index.bundle.js”&gt;&lt;/script&gt;,<br>&lt;link rel=”stylesheet” href=”/assets/test2/index.bundle.css”&gt;<br>对于路径为 ./src/test/index.js 的入口文件， 输出 bundle 文件为 /assets/test/index.bundle.js, 其中 /assets/为 web 的静态文件路径, 本脚手架配置的静态文件路径为 /assets/<br>如果使能抽取 css, (下一节的 extractCss = true), 打包路径中会输出 /assets/test/index.bundle.css 文件  </p>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">head</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">meta</span> <span class="attr">charset</span>=<span class="string">"utf-8"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">title</span>&gt;</span>TEST<span class="tag">&lt;/<span class="name">title</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">link</span> <span class="attr">rel</span>=<span class="string">"stylesheet"</span> <span class="attr">href</span>=<span class="string">"/assets/test2/index.bundle.css"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">head</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">p</span>&gt;</span>输出：<span class="tag">&lt;<span class="name">span</span> <span class="attr">id</span>=<span class="string">"output"</span>&gt;</span><span class="tag">&lt;/<span class="name">span</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">script</span> <span class="attr">src</span>=<span class="string">"/assets/test2/index.bundle.js"</span>&gt;</span><span class="undefined"></span><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="3、打包参数配置"><a href="#3、打包参数配置" class="headerlink" title="3、打包参数配置"></a>3、打包参数配置</h3><blockquote>
+<p>进入工程根目录下的 package.config.js 文件， 配置打包参数(添加打包入口文件， 静态文件路径等)</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//是否允许分片打包</span></div><div class="line"><span class="comment">//如果允许分片打包，入口文件只能有一个</span></div><div class="line"><span class="comment">//只有 WebApp 才会用到分片打包</span></div><div class="line"><span class="keyword">let</span> codeSplit = <span class="literal">true</span></div><div class="line"></div><div class="line"><span class="comment">//打包路径配置</span></div><div class="line"><span class="keyword">let</span> dirs = &#123;</div><div class="line">    <span class="comment">//入口文件列表</span></div><div class="line">    <span class="comment">// 如果 codeSplit == true, enteryDir 的长度只能为 1</span></div><div class="line">    enteryDir: [ </div><div class="line">        <span class="string">'./src/test/index.js'</span>,  <span class="comment">//类型字符串， 将路径写全</span></div><div class="line">    ],</div><div class="line">    <span class="comment">//将打包结果输出到目标路径, 为空时，打包后文件输出到 assets 目录</span></div><div class="line">    outputDir: <span class="string">''</span> <span class="comment">//支持一个输出路径</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">//是否提取css为单独文件从</span></div><div class="line"><span class="keyword">let</span> extractCss = <span class="literal">false</span></div><div class="line"></div><div class="line"><span class="comment">//跨域调试 host， 一般不用</span></div><div class="line"><span class="keyword">let</span> hostName = <span class="string">''</span></div><div class="line"></div><div class="line"><span class="comment">//静态文件路径工程,以 / 开头和结尾</span></div><div class="line"><span class="comment">//例如： &lt;script src="/assets/test/index.bundle.js"&gt;&lt;/script&gt; 中， </span></div><div class="line"><span class="comment">// /assets/ 就是整个打包工程的静态文件路径</span></div><div class="line"><span class="keyword">let</span> hostPre = <span class="string">'/assets/'</span></div><div class="line"><span class="comment">//如果使能分片 codeSplit == true, 此时 hostPre = 静态文件路径 + 入口文件去掉./src 和文件名</span></div><div class="line"><span class="comment">//例如： 入口文件为 './src/vuestart/index.js'， 采用分片打包</span></div><div class="line"><span class="comment">// let hostPre = '/assets/vuestart/' </span></div><div class="line"></div><div class="line"><span class="keyword">let</span> config = &#123;</div><div class="line">    dirs: dirs,</div><div class="line">    extractCss: extractCss,</div><div class="line">    codeSplit: codeSplit,</div><div class="line">    hostName: hostName,</div><div class="line">    hostPre: hostPre</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = config</div></pre></td></tr></table></figure>
+<h3 id="2、打包命令"><a href="#2、打包命令" class="headerlink" title="2、打包命令"></a>2、打包命令</h3><blockquote>
+<p>命令行 console 进入当前工程根目录<br>1、开发环境打包，且使用 webpack-dev-server 服务，</p>
+<ul>
+<li>执行 npm start， 采用这种打包模式， 在静态文件路径中不会输出打包结果，  </li>
+<li>在浏览器输入 localhost:3000, 进入对应的 html 文件打开，即可进行调试  </li>
+</ul>
+<p>2、开发环境打包， 不使用 webpack-dev-server 服务  </p>
+<ul>
+<li>执行 npm run dev, 打包结束后会在静态文件路径输出打包结果  </li>
+<li>例如： 入口文件为 ‘./src/test/index.js’, 打包输出结果为， ./assets/test/index.bundle.js,  中间路径 web/test 主要用于区分不同的打包工程  </li>
+</ul>
+<p>3、生产环境打包，  </p>
+<ul>
+<li>执行 npm run build, 打包结束后会在静态文件路径输出打包结果, 打包输出文件名中有一段随机数， 用于版本区分。  </li>
+<li>打包结束后会在 bundle 输出路径中生成一个 manifest.json 文件，里面记录了打包的结果   </li>
+<li>同时对应 html 文件中的静态文件配置会作出相应的修改， 无需手动修改  </li>
+</ul>
+</blockquote>
+<h2 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h2><h3 id="Webpack-config-js"><a href="#Webpack-config-js" class="headerlink" title="Webpack.config.js"></a>Webpack.config.js</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</div><div class="line"><span class="keyword">const</span> ExtractTextPlugin = <span class="built_in">require</span>(<span class="string">'extract-text-webpack-plugin'</span>)</div><div class="line"><span class="keyword">const</span> ManifestPlugin = <span class="built_in">require</span>(<span class="string">'webpack-manifest-plugin'</span>)</div><div class="line"><span class="keyword">const</span> CleanWebpackPlugin = <span class="built_in">require</span>(<span class="string">'clean-webpack-plugin'</span>)</div><div class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">'../package.config'</span>)</div><div class="line"><span class="comment">//判断开发环境还是生产环境</span></div><div class="line"><span class="keyword">let</span> isProduction  = process.env.NODE_ENV === <span class="string">'production'</span> ? <span class="literal">true</span> : <span class="literal">false</span>  </div><div class="line"><span class="built_in">console</span>.log(<span class="string">'isProduction'</span>, isProduction)</div><div class="line"><span class="keyword">let</span> getEnteryFiles = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">let</span> enteryObj = &#123;&#125;</div><div class="line">    <span class="keyword">if</span>(config.dirs.enteryDir.length === <span class="number">0</span> || config.dirs.enteryDir === <span class="literal">undefined</span>) &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'[webpack]'</span>, <span class="string">'entry path need to configurated '</span>)</div><div class="line">        <span class="keyword">return</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">if</span>(config.codeSplit &amp;&amp; config.dirs.enteryDir.length &gt; <span class="number">1</span>) &#123;</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'here'</span>)</div><div class="line">            <span class="keyword">throw</span> (<span class="string">'[error]: only one entry file need when use code splitting!!'</span>)</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// 路径分析</span></div><div class="line">        <span class="keyword">if</span>(config.codeSplit) &#123; <span class="comment">//如果是分片打包， 为了分片文件的输出路径</span></div><div class="line">            <span class="keyword">let</span> enteryName = <span class="regexp">/\w+\.(js|ts)$/</span>.exec(config.dirs.enteryDir[<span class="number">0</span>])[<span class="number">0</span>].replace(<span class="regexp">/\.(js|ts(x?))$/</span>, <span class="string">''</span>)</div><div class="line">            <span class="built_in">console</span>.log(<span class="string">'[wepbapck] code split file'</span>, enteryName)</div><div class="line">            enteryObj[enteryName] = config.dirs.enteryDir[<span class="number">0</span>]</div><div class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">//正常打包</span></div><div class="line">            config.dirs.enteryDir.map((item, index) =&gt; &#123;</div><div class="line">                fs.stat(item, <span class="function"><span class="keyword">function</span>(<span class="params">err, state</span>) </span>&#123;</div><div class="line">                    <span class="keyword">if</span>(err) &#123;</div><div class="line">                        <span class="keyword">throw</span> (<span class="string">'path'</span> + item + <span class="string">'is not a correct path!'</span>) </div><div class="line">                    &#125;</div><div class="line">                &#125;)</div><div class="line">                <span class="comment">//打包文件</span></div><div class="line">                <span class="keyword">let</span> enteryName = item.replace(<span class="regexp">/\.\/src\//</span>, <span class="string">''</span>).replace(<span class="regexp">/\.(js|ts(x?))$/</span>, <span class="string">''</span>)</div><div class="line">                <span class="built_in">console</span>.log(<span class="string">'[webpack] file item: '</span>, enteryName)</div><div class="line">                enteryObj[enteryName] = item</div><div class="line">            &#125;)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> enteryObj</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> enteryFiles = getEnteryFiles()</div><div class="line"><span class="keyword">let</span> outputDir = () =&gt; &#123;</div><div class="line">    <span class="keyword">if</span>(config.codeSplit) &#123; </div><div class="line">        <span class="comment">//如果是分片打包，要让分片文件输出到与主文件一致的目录</span></div><div class="line">        <span class="comment">//需要通过 output.path 来控制分片文件输出路径</span></div><div class="line">        <span class="keyword">let</span> outPath = config.dirs.enteryDir[<span class="number">0</span>].replace(<span class="regexp">/\.\/src\//</span>, <span class="string">''</span>).replace(<span class="regexp">/\/\w+\.(js|ts(x?))$/</span>, <span class="string">''</span>)</div><div class="line">        <span class="keyword">return</span> path.resolve(__dirname, <span class="string">'..'</span>, <span class="string">'assets'</span>, outPath)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">if</span>(config.dirs.outputDir) &#123;</div><div class="line">            <span class="keyword">return</span> path.resolve(__dirname, <span class="string">'..'</span>, config.dirs.outputDir)</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> path.resolve(__dirname, <span class="string">'..'</span>, <span class="string">'assets'</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> staticPath = () =&gt; &#123;</div><div class="line">    <span class="keyword">if</span>(config.codeSplit) &#123;</div><div class="line">        <span class="comment">//如果是分片打包，要让分片文件输出到与主文件一致的目录</span></div><div class="line">        <span class="comment">//需要通过 output.publicPath 来控制分片静态文件路径</span></div><div class="line">        <span class="keyword">let</span> outPath = config.dirs.enteryDir[<span class="number">0</span>].replace(<span class="regexp">/\.\/src\//</span>, <span class="string">''</span>).replace(<span class="regexp">/\w+\.(js|ts(x?))$/</span>, <span class="string">''</span>)</div><div class="line">        <span class="keyword">return</span> path.join(<span class="string">'/assets'</span>, outPath)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="string">'/assets'</span></div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//css extract</span></div><div class="line"><span class="keyword">let</span> getPlugins = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">let</span> plugins = []</div><div class="line">    <span class="comment">//抽取 css 文件插件</span></div><div class="line">    plugins.push(<span class="keyword">new</span> ExtractTextPlugin(&#123;</div><div class="line">        filename: isProduction ? <span class="string">'[name].[chunkhash].bundle.css'</span> : <span class="string">'[name].bundle.css'</span>,  <span class="comment">//抽取 CSS 文件名称</span></div><div class="line">        disable: !config.extractCss, <span class="comment">//是否使能 CSS 抽取</span></div><div class="line">        allChunks: <span class="literal">true</span></div><div class="line">    &#125;))</div><div class="line">    <span class="keyword">if</span>(isProduction) &#123;</div><div class="line">        <span class="keyword">let</span> staticFilePath = []</div><div class="line">        <span class="keyword">if</span>(config.codeSplit) &#123;</div><div class="line">            <span class="comment">//分片打包模式下， 打包结果输出 manifest.json</span></div><div class="line">            <span class="keyword">let</span> outPath = config.dirs.enteryDir[<span class="number">0</span>].replace(<span class="regexp">/\.\/src\//</span>, <span class="string">''</span>).replace(<span class="regexp">/\w+\.(js|ts(x?))$/</span>, <span class="string">''</span>)</div><div class="line">            plugins.push(<span class="keyword">new</span> ManifestPlugin(&#123;filename: <span class="string">'manifest.json'</span>, publicPath: config.hostPre + outPath&#125;))</div><div class="line">            <span class="comment">//配置需要清空的打包路径</span></div><div class="line">            staticFilePath.push(<span class="string">'assets/'</span> + outPath)</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">//正常打包模式下， 打包结果输出 manifest.json</span></div><div class="line">            plugins.push(<span class="keyword">new</span> ManifestPlugin(&#123;filename: <span class="string">'manifest.json'</span>, publicPath: config.hostPre&#125;))</div><div class="line">            <span class="comment">//配置需要清空的打包路径</span></div><div class="line">            <span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> enteryFiles) &#123;</div><div class="line">                staticFilePath.push(<span class="string">'assets/'</span> + key.replace(<span class="regexp">/\w+$/</span>, <span class="string">''</span>))</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//清空的打包路径</span></div><div class="line">        plugins.push(</div><div class="line">            <span class="keyword">new</span> CleanWebpackPlugin(staticFilePath)</div><div class="line">        )</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> plugins</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> moduleConfig = &#123;</div><div class="line">    rules: [</div><div class="line">        &#123;</div><div class="line">            test: <span class="regexp">/\.vue$/</span>,</div><div class="line">            loader: <span class="string">'vue-loader'</span>,</div><div class="line">            exclude: <span class="regexp">/node_modules/</span></div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            test: <span class="regexp">/\.ts(x?)$/</span>,</div><div class="line">            use: [</div><div class="line">                &#123;</div><div class="line">                    loader: <span class="string">'babel-loader'</span></div><div class="line">                &#125;,</div><div class="line">                &#123;</div><div class="line">                    loader: <span class="string">'ts-loader'</span></div><div class="line">                &#125;</div><div class="line">            ]</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            test: <span class="regexp">/\.js$/</span>,</div><div class="line">            loader: <span class="string">'babel-loader'</span>,</div><div class="line">            exclude: <span class="regexp">/node_modules/</span></div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            test: <span class="regexp">/\.css$/</span>,</div><div class="line">            exclude: <span class="regexp">/node_modules/</span>,</div><div class="line">            use: ExtractTextPlugin.extract([</div><div class="line">                &#123;</div><div class="line">                    loader: <span class="string">'css-loader'</span>,</div><div class="line">                    options: &#123;</div><div class="line">                        importLoaders: <span class="number">1</span></div><div class="line">                    &#125;</div><div class="line">                &#125;,</div><div class="line">                &#123;</div><div class="line">                    loader: <span class="string">'postcss-loader'</span></div><div class="line">                &#125;</div><div class="line">            ])</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            test: <span class="regexp">/\.less$/</span>,</div><div class="line">            exclude: <span class="regexp">/node_modules/</span>,</div><div class="line">            use: ExtractTextPlugin.extract([</div><div class="line">                &#123;</div><div class="line">                    loader: <span class="string">'css-loader'</span>,</div><div class="line">                    options: &#123;</div><div class="line">                        importLoaders: <span class="number">1</span></div><div class="line">                    &#125;</div><div class="line">                &#125;,</div><div class="line">                &#123;</div><div class="line">                    loader: <span class="string">'less-loader'</span></div><div class="line">                &#125;,</div><div class="line">                &#123;</div><div class="line">                    loader: <span class="string">'postcss-loader'</span></div><div class="line">                &#125;</div><div class="line">            ])</div><div class="line">        &#125;,</div><div class="line">        &#123;</div><div class="line">            test: <span class="regexp">/\.(jpe?g|png|gif|svg)$/i</span>, </div><div class="line">            loader: <span class="string">'url-loader'</span>,</div><div class="line">            options: &#123;</div><div class="line">                limit: <span class="number">500</span>, <span class="comment">//图片大小超过0.5kb, 不压缩入 bundle </span></div><div class="line">                name: <span class="string">'images/[name].[ext]'</span>  <span class="comment">//图片输出路径</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    ]</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">    devtool: isProduction ? <span class="string">''</span> : <span class="string">'cheap-eval-source-map'</span>,</div><div class="line">    entry: enteryFiles,</div><div class="line">    output: &#123;</div><div class="line">        filename: isProduction ? <span class="string">'[name].[chunkhash].bundle.js'</span> : <span class="string">'[name].bundle.js'</span>,</div><div class="line">        path: outputDir(),</div><div class="line">        publicPath: staticPath()</div><div class="line">    &#125;,</div><div class="line">    <span class="built_in">module</span>: moduleConfig,</div><div class="line">    plugins: getPlugins(),</div><div class="line">    performance: &#123;  <span class="comment">//开发环境下不显示包过大警告</span></div><div class="line">        hints: <span class="literal">false</span></div><div class="line">    &#125;,</div><div class="line">    devServer: &#123;</div><div class="line">        host: <span class="string">'0.0.0.0'</span>,</div><div class="line">        port: <span class="number">3000</span>,</div><div class="line">        open: <span class="literal">false</span>,</div><div class="line">        publicPath: staticPath()</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="Babel-配置文件-babelrc"><a href="#Babel-配置文件-babelrc" class="headerlink" title="Babel 配置文件 .babelrc"></a>Babel 配置文件 .babelrc</h3><blockquote>
+<p>与webpack1.x 的 配置略有改变， 支持 tree-shaking, 剔除无用代码<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"presets"</span>: [</div><div class="line">        [</div><div class="line">            <span class="string">"es2015"</span>,</div><div class="line">            &#123;</div><div class="line">                <span class="attr">"modules"</span>: <span class="literal">false</span></div><div class="line">            &#125;</div><div class="line">        ],</div><div class="line">        <span class="string">"stage-2"</span>,</div><div class="line">        <span class="string">"es2016"</span></div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="postcss-config-js"><a href="#postcss-config-js" class="headerlink" title="postcss.config.js"></a>postcss.config.js</h3><blockquote>
+<p>本文件是 wepback postcss-loader 的相关配置， 详情见，<a href="https://github.com/postcss/postcss-loader" target="_blank" rel="external">postcss-loader 文档</a></p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">    plugins: [</div><div class="line">        <span class="built_in">require</span>(<span class="string">'precss'</span>),</div><div class="line">        <span class="built_in">require</span>(<span class="string">'autoprefixer'</span>)(&#123;browserslist: [<span class="string">'ie 9'</span>, <span class="string">'last 2 version'</span>]&#125;)</div><div class="line">    ]</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="bundle-to-html-js"><a href="#bundle-to-html-js" class="headerlink" title="bundle.to.html.js"></a>bundle.to.html.js</h3><blockquote>
+<p>本文件脚本主要是实现 html 文件的外联脚本文件样式文件路径的自动修改</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">'../package.config'</span>)</div><div class="line"><span class="comment">//加载 打包结果文件 manifest.json 内容</span></div><div class="line"><span class="keyword">let</span> getManifest = () =&gt; &#123;</div><div class="line">    <span class="keyword">let</span> mfPath = <span class="string">''</span></div><div class="line">    <span class="keyword">if</span>(config.codeSplit) &#123; </div><div class="line">        <span class="comment">//采用 codeSplit 模式的 manifest.json 路径</span></div><div class="line">        <span class="keyword">if</span>(config.dirs.outputDir) &#123;</div><div class="line">            <span class="keyword">let</span> outputDir = config.dirs.outputDir.replace(<span class="regexp">/\/$/</span>, <span class="string">''</span>)</div><div class="line">            mfPath = config.dirs.enteryDir[<span class="number">0</span>].replace(<span class="regexp">/^\./</span>, outputDir).replace(<span class="regexp">/\w+\.(js|ts(x?))$/</span>, <span class="string">'manifest.json'</span>)</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            mfPath = config.dirs.enteryDir[<span class="number">0</span>].replace(<span class="regexp">/^\./</span>, <span class="string">'./assets'</span>).replace(<span class="regexp">/\w+\.(js|ts(x?))$/</span>, <span class="string">'manifest.json'</span>)</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="comment">//采用正常模式的 manifest.json 路径</span></div><div class="line">        <span class="keyword">if</span>(config.dirs.outputDir) &#123;</div><div class="line">            <span class="keyword">let</span> outputDir = config.dirs.outputDir.replace(<span class="regexp">/\/$/</span>, <span class="string">''</span>)</div><div class="line">            mfPath = outputDir + <span class="string">'/manifest.json'</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            mfPath = <span class="string">'./assets/manifest.json'</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//读取文件，并返回</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject) =&gt; &#123;</div><div class="line">        fs.readFile(mfPath, (err, data) =&gt; &#123;</div><div class="line">            <span class="keyword">if</span>(err) &#123;</div><div class="line">                reject(err)</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                resolve(<span class="built_in">JSON</span>.parse(data))</div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"><span class="comment">//生产环境下更新静态文件路径</span></div><div class="line"><span class="comment">//一个页面中只能有一个 bundle.js 或只能一个 bundle.css</span></div><div class="line"><span class="keyword">let</span> modifyHtmlStrProd = (data, bundle) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span>(bundle.js) &#123;</div><div class="line">        <span class="keyword">if</span>(<span class="regexp">/&lt;script.*\.bundle\.js\??.*"&gt;&lt;\/script&gt;/i</span>.test(data)) &#123;</div><div class="line">            data = data.replace(<span class="regexp">/&lt;script.*\.bundle\.js\??.*"&gt;&lt;\/script&gt;/i</span>, <span class="string">'&lt;script src="'</span> + bundle.js + <span class="string">'"&gt;&lt;/script&gt;'</span>)</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            data = data.replace(<span class="regexp">/&lt;\/body&gt;/i</span>, <span class="string">'&lt;script src="'</span> + bundle.js + <span class="string">'"&gt;&lt;/script&gt;\r\n&lt;/body&gt;'</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(bundle.css) &#123;</div><div class="line">        <span class="keyword">if</span>(bundle.css &amp;&amp; <span class="regexp">/&lt;link rel="stylesheet".*\.bundle\.css\??.*"\/?&gt;/i</span>.test(data)) &#123;</div><div class="line">            data = data.replace(<span class="regexp">/&lt;link rel="stylesheet".*\.bundle\.css"\/?&gt;/i</span>, <span class="string">'&lt;link rel="stylesheet" href="'</span> + bundle.css + <span class="string">'"&gt;'</span>)</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            data = data.replace(<span class="regexp">/&lt;\/head&gt;/i</span>, <span class="string">'&lt;link rel="stylesheet" href="'</span> + bundle.css + <span class="string">'"&gt;\r\n&lt;/head&gt;'</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> data</div><div class="line">&#125;</div><div class="line"><span class="comment">//开发环境下更新静态文件路径， 去掉版本号</span></div><div class="line"><span class="comment">//一个页面中只能有一个 bundle.js 或只能一个 bundle.css</span></div><div class="line"><span class="keyword">let</span> modifyHtmlStrDev = (data, bundle) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span>(<span class="regexp">/&lt;script.*\.bundle\.js\??.*"&gt;&lt;\/script&gt;/i</span>.test(data)) &#123;</div><div class="line">        data = data.replace(<span class="regexp">/&lt;script.*\.bundle\.js\??.*"&gt;&lt;\/script&gt;/i</span>, <span class="string">'&lt;script src="'</span> + bundle.js + <span class="string">'"&gt;&lt;/script&gt;'</span>)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">throw</span> <span class="string">'path of script bundle.js need to be added to html file'</span></div><div class="line">    &#125;</div><div class="line">    <span class="keyword">if</span>(config.extractCss) &#123;</div><div class="line">        <span class="keyword">if</span>(<span class="regexp">/&lt;link rel="stylesheet".*\.bundle\.css\??.*"\/?&gt;/i</span>.test(data)) &#123;</div><div class="line">            data = data.replace(<span class="regexp">/&lt;link rel="stylesheet".*\.bundle\.css\??.*"\/?&gt;/i</span>, <span class="string">'&lt;link rel="stylesheet" href="'</span> + bundle.css + <span class="string">'"&gt;'</span>)</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">if</span>(!config.codeSplit) &#123;</div><div class="line">                <span class="built_in">console</span>.log(<span class="string">'path of stylesheet bundle.css need to be added to html file'</span>)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> data</div><div class="line">&#125;</div><div class="line"><span class="comment">//检查文件函数</span></div><div class="line"><span class="keyword">let</span> checkFile = (filePath) =&gt; &#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">if</span>(fs.statSync(filePath).isFile()) &#123;  <span class="comment">//是否存在文件</span></div><div class="line">            <span class="keyword">return</span> filePath</div><div class="line">        &#125; <span class="keyword">else</span> &#123; <span class="comment">//如果不是文件，抛出错误</span></div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: target html file not exist'</span></div><div class="line">        &#125;</div><div class="line">    &#125; <span class="keyword">catch</span>(err) &#123; <span class="comment">//如果无法读取</span></div><div class="line">        <span class="comment">//换成 index.html 文件</span></div><div class="line">        filePath = filePath.replace(<span class="regexp">/\w+\.html/</span>, <span class="string">'index.html'</span>) </div><div class="line">        <span class="keyword">if</span>(fs.statSync(filePath).isFile()) &#123;</div><div class="line">            <span class="keyword">return</span> filePath  <span class="comment">//返回更新后的路径</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: target html file not exist'</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> updateProdHTMLPages = () =&gt; &#123;</div><div class="line">    getManifest().then(data =&gt; &#123;</div><div class="line">        <span class="keyword">let</span> bundleMap = &#123;&#125;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> data) &#123;</div><div class="line">            <span class="comment">//提取有效的输出 bundle 文件</span></div><div class="line">            <span class="keyword">if</span>(key.indexOf(<span class="string">'bundle'</span>) &gt; <span class="number">-1</span>) &#123;</div><div class="line">                <span class="keyword">continue</span></div><div class="line">            &#125;</div><div class="line">           <span class="comment">//提取有效的 css bundle </span></div><div class="line">            <span class="keyword">if</span>(<span class="regexp">/\.css/</span>.test(key)) &#123;</div><div class="line">                <span class="keyword">let</span> bundleKey = key.replace(<span class="string">'.css'</span>, <span class="string">''</span>)</div><div class="line">                <span class="keyword">if</span>(bundleMap[bundleKey]) &#123;</div><div class="line">                    bundleMap[bundleKey].css = data[key]</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    bundleMap[bundleKey] = &#123;</div><div class="line">                        css: data[key]</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="regexp">/\.(js|ts(x?))$/</span>.test(key)) &#123;</div><div class="line">                <span class="comment">//提取有效的 js bundle </span></div><div class="line">                <span class="keyword">let</span> bundleKey = key.replace(<span class="regexp">/\.(js|ts(x?))$/</span>, <span class="string">''</span>)</div><div class="line">                <span class="keyword">if</span>(bundleMap[bundleKey]) &#123;</div><div class="line">                    bundleMap[bundleKey].js = data[key]</div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    bundleMap[bundleKey] = &#123;</div><div class="line">                        js: data[key]</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> key <span class="keyword">in</span> bundleMap) &#123;</div><div class="line">            <span class="keyword">let</span> filePath = <span class="string">''</span></div><div class="line">            <span class="comment">//根据入口文件寻找 对应的 html 文件， 要保证 入口文件名 和 html 文件名一致, </span></div><div class="line">            <span class="keyword">if</span>(config.codeSplit) &#123;</div><div class="line">                filePath = config.dirs.enteryDir[<span class="number">0</span>].replace(<span class="regexp">/\.(js|ts(x?))$/</span>, <span class="string">'.html'</span>)</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                filePath = <span class="string">'./'</span> + key + <span class="string">'.html'</span></div><div class="line">            &#125;</div><div class="line">            <span class="comment">//检查文件是否存在</span></div><div class="line">            filePath = checkFile(filePath)</div><div class="line">            </div><div class="line">            fs.readFile(filePath, (err, data) =&gt; &#123;</div><div class="line">                <span class="keyword">if</span>(err) &#123;</div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'[error]: failed to read '</span>, filePath, err)</div><div class="line">                    <span class="keyword">return</span></div><div class="line">                &#125;</div><div class="line">                <span class="comment">//修改 html 内容</span></div><div class="line">                data = modifyHtmlStrProd(data.toString(), bundleMap[key])</div><div class="line">                <span class="comment">//重新写入 html 修改后的内容</span></div><div class="line">                fs.writeFile(filePath, data, (err, data) =&gt; &#123;</div><div class="line">                    <span class="keyword">if</span>(err) &#123;</div><div class="line">                        <span class="built_in">console</span>.log(<span class="string">'[error]: failed to update '</span> + filePath)</div><div class="line">                        <span class="keyword">return</span></div><div class="line">                    &#125;</div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'[success]: '</span> + filePath + <span class="string">' updated successfully'</span>)</div><div class="line">                &#125;)</div><div class="line">            &#125;)</div><div class="line">        &#125;</div><div class="line">    &#125;).catch((err) =&gt; &#123;</div><div class="line">        <span class="comment">//do nothing</span></div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'[error]: manifest.json read error'</span>, err)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> setDevHTMLPages = () =&gt; &#123;</div><div class="line">    <span class="keyword">let</span> enterys = config.dirs.enteryDir</div><div class="line">    <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; enterys.length; i++) &#123;</div><div class="line">        <span class="comment">//根据入口文件确定输出 bundle 文件， 此时 bundle 文件名中没有版本号</span></div><div class="line">        <span class="keyword">let</span> staticName = enterys[i].replace(<span class="regexp">/^\.\//</span>, <span class="string">''</span>).replace(<span class="regexp">/\.(js|ts(x?))$/</span>, <span class="string">''</span>)</div><div class="line">        <span class="keyword">let</span> bundleMap = &#123;</div><div class="line">            js: config.hostPre + staticName + <span class="string">'.bundle.js'</span>,</div><div class="line">            css: config.hostPre + staticName + <span class="string">'.bundle.css'</span></div><div class="line">        &#125;</div><div class="line">        <span class="comment">//根据入口文件，确定对应的 html 文件</span></div><div class="line">        <span class="keyword">let</span> filePath = enterys[i].replace(<span class="regexp">/\.(js|ts(x?))$/</span>, <span class="string">'.html'</span>)</div><div class="line">        <span class="comment">//检查文件是否存在</span></div><div class="line">        filePath = checkFile(filePath)</div><div class="line">        fs.readFile(filePath, (err, data) =&gt; &#123;</div><div class="line">            <span class="keyword">if</span>(err) &#123;</div><div class="line">                <span class="built_in">console</span>.log(<span class="string">'[error]: failed to read '</span> + filePath)</div><div class="line">                <span class="keyword">return</span></div><div class="line">            &#125;</div><div class="line">            <span class="comment">//更新静态文件路径</span></div><div class="line">            data = modifyHtmlStrDev(data.toString(), bundleMap)</div><div class="line">            <span class="comment">//重新写入数据</span></div><div class="line">            fs.writeFile(filePath, data, (err, data) =&gt; &#123;</div><div class="line">                <span class="keyword">if</span>(err) &#123;</div><div class="line">                    <span class="built_in">console</span>.log(<span class="string">'[error]: failed to update '</span> + filePath)</div><div class="line">                    <span class="keyword">return</span></div><div class="line">                &#125;</div><div class="line">                <span class="built_in">console</span>.log(<span class="string">'[success]: '</span> + filePath + <span class="string">' updated successfully'</span>)</div><div class="line">            &#125;)</div><div class="line">        &#125;)</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//开发环境判断</span></div><div class="line"><span class="keyword">let</span> isProduction = process.env.NODE_ENV === <span class="string">'production'</span> </div><div class="line"><span class="keyword">if</span>(isProduction) &#123;</div><div class="line">    updateProdHTMLPages()</div><div class="line">&#125; <span class="keyword">else</span> &#123;</div><div class="line">    setDevHTMLPages()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="package-json"><a href="#package-json" class="headerlink" title="package.json"></a>package.json</h3><blockquote>
+<p>该文件是 node 依赖管理文件， 同时打包启动命令也在该文件中配置</p>
+</blockquote>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"name"</span>: <span class="string">"package-tool"</span>,</div><div class="line">  <span class="attr">"version"</span>: <span class="string">"1.0.0"</span>,</div><div class="line">  <span class="attr">"description"</span>: <span class="string">"for package compile base on webpack"</span>,</div><div class="line">  <span class="attr">"main"</span>: <span class="string">"server.js"</span>,</div><div class="line">  <span class="attr">"scripts"</span>: &#123;</div><div class="line">    <span class="attr">"start"</span>: <span class="string">"export NODE_ENV='development' &amp;&amp; node build/bundle.to.html.js &amp;&amp; webpack-dev-server --config build/webpack.config.js --watch "</span>,</div><div class="line">    <span class="attr">"dev"</span>: <span class="string">"export NODE_ENV='development' &amp;&amp; node build/bundle.to.html.js &amp;&amp; webpack --config build/webpack.config.js --progress --watch"</span>,</div><div class="line">    <span class="attr">"ver"</span>: <span class="string">"node build/bundle.to.html.js"</span>,</div><div class="line">    <span class="attr">"build"</span>: <span class="string">"export NODE_ENV='production' &amp;&amp; webpack --config build/webpack.config.js -p &amp;&amp; node build/bundle.to.html.js"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"keywords"</span>: [</div><div class="line">    <span class="string">"package"</span>,</div><div class="line">    <span class="string">"compile"</span>,</div><div class="line">    <span class="string">"webpack"</span></div><div class="line">  ],</div><div class="line">  <span class="attr">"author"</span>: <span class="string">"feifeiyu"</span>,</div><div class="line">  <span class="attr">"license"</span>: <span class="string">"MIT"</span>,</div><div class="line">  <span class="attr">"devDependencies"</span>: &#123;</div><div class="line">    <span class="attr">"autoprefixer"</span>: <span class="string">"^6.6.1"</span>,</div><div class="line">    <span class="attr">"babel"</span>: <span class="string">"^6.5.2"</span>,</div><div class="line">    <span class="attr">"babel-core"</span>: <span class="string">"^6.21.0"</span>,</div><div class="line">    <span class="attr">"babel-loader"</span>: <span class="string">"^6.2.10"</span>,</div><div class="line">    <span class="attr">"babel-preset-es2015"</span>: <span class="string">"^6.18.0"</span>,</div><div class="line">    <span class="attr">"babel-preset-es2016"</span>: <span class="string">"^6.16.0"</span>,</div><div class="line">    <span class="attr">"babel-preset-stage-2"</span>: <span class="string">"^6.18.0"</span>,</div><div class="line">    <span class="attr">"clean-webpack-plugin"</span>: <span class="string">"^0.1.15"</span>,</div><div class="line">    <span class="attr">"css-loader"</span>: <span class="string">"^0.26.1"</span>,</div><div class="line">    <span class="attr">"extract-text-webpack-plugin"</span>: <span class="string">"^2.0.0-beta.4"</span>,</div><div class="line">    <span class="attr">"file-loader"</span>: <span class="string">"^0.9.0"</span>,</div><div class="line">    <span class="attr">"less"</span>: <span class="string">"^2.7.2"</span>,</div><div class="line">    <span class="attr">"less-loader"</span>: <span class="string">"^2.2.3"</span>,</div><div class="line">    <span class="attr">"postcss-loader"</span>: <span class="string">"^1.2.1"</span>,</div><div class="line">    <span class="attr">"precss"</span>: <span class="string">"^1.4.0"</span>,</div><div class="line">    <span class="attr">"style-loader"</span>: <span class="string">"^0.13.1"</span>,</div><div class="line">    <span class="attr">"ts-loader"</span>: <span class="string">"^1.3.3"</span>,</div><div class="line">    <span class="attr">"typescript"</span>: <span class="string">"^2.1.5"</span>,</div><div class="line">    <span class="attr">"url-loader"</span>: <span class="string">"^0.5.7"</span>,</div><div class="line">    <span class="attr">"vue-loader"</span>: <span class="string">"^10.0.2"</span>,</div><div class="line">    <span class="attr">"vue-style-loader"</span>: <span class="string">"^1.0.0"</span>,</div><div class="line">    <span class="attr">"vue-template-compiler"</span>: <span class="string">"^2.1.8"</span>,</div><div class="line">    <span class="attr">"webpack"</span>: <span class="string">"^2.2.0-rc.8"</span>,</div><div class="line">    <span class="attr">"webpack-dev-server"</span>: <span class="string">"^2.2.0-rc.0"</span>,</div><div class="line">    <span class="attr">"webpack-manifest-plugin"</span>: <span class="string">"^1.1.0"</span></div><div class="line">  &#125;,</div><div class="line">  <span class="attr">"dependencies"</span>: &#123;</div><div class="line">    <span class="attr">"vue"</span>: <span class="string">"^2.1.8"</span>,</div><div class="line">    <span class="attr">"vue-router"</span>: <span class="string">"^2.1.1"</span>,</div><div class="line">    <span class="attr">"vuex"</span>: <span class="string">"^2.1.1"</span>,</div><div class="line">    <span class="attr">"vuex-router-sync"</span>: <span class="string">"^4.1.0"</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/node/" rel="tag">#node</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/01/04/verify-code/" rel="next" title="验证码组件 Yverifycode">
+                <i class="fa fa-chevron-left"></i> 验证码组件 Yverifycode
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/23/vimusage/" rel="prev" title="VIM 入门手册， (VS Code)">
+                VIM 入门手册， (VS Code) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/01/11/webpack2-intro/"
+     data-title="Webpack 2 打包解决方案"
+     data-content=""
+     data-url="https://feifeiyum.github.io/2017/01/11/webpack2-intro/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/11/webpack2-intro/"
+           data-title="Webpack 2 打包解决方案" data-url="https://feifeiyum.github.io/2017/01/11/webpack2-intro/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/portrait/me2.jpg"
+               alt="Feifeiyu" />
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Webpack"><span class="nav-number">1.</span> <span class="nav-text">Webpack</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#功能介绍"><span class="nav-number">2.</span> <span class="nav-text">功能介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程目录结构"><span class="nav-number">3.</span> <span class="nav-text">工程目录结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用脚手架"><span class="nav-number">4.</span> <span class="nav-text">使用脚手架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、安装脚手架"><span class="nav-number">4.1.</span> <span class="nav-text">1、安装脚手架</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、新建工程"><span class="nav-number">4.2.</span> <span class="nav-text">2、新建工程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、打包参数配置"><span class="nav-number">4.3.</span> <span class="nav-text">3、打包参数配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、打包命令"><span class="nav-number">4.4.</span> <span class="nav-text">2、打包命令</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码解析"><span class="nav-number">5.</span> <span class="nav-text">源码解析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Webpack-config-js"><span class="nav-number">5.1.</span> <span class="nav-text">Webpack.config.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Babel-配置文件-babelrc"><span class="nav-number">5.2.</span> <span class="nav-text">Babel 配置文件 .babelrc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#postcss-config-js"><span class="nav-number">5.3.</span> <span class="nav-text">postcss.config.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bundle-to-html-js"><span class="nav-number">5.4.</span> <span class="nav-text">bundle.to.html.js</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#package-json"><span class="nav-number">5.5.</span> <span class="nav-text">package.json</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number">6.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

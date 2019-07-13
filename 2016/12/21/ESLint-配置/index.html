@@ -1,0 +1,715 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="js," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="ESLint 配置参考博客地址ESLint
+使用
+配合 vscode ESlint 扩展组件使用，.eslintrc.json 文件 放在工程根目录vscode user setting 里面加入指定配置文件路径的配置 “eslint.options”: { “configFile”: “.eslintrc.json” }表现形式： 警告 会在相应代码出加绿色下滑波浪线， 错误为红色。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ESLint 配置">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/12/21/ESLint-配置/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="ESLint 配置参考博客地址ESLint
+使用
+配合 vscode ESlint 扩展组件使用，.eslintrc.json 文件 放在工程根目录vscode user setting 里面加入指定配置文件路径的配置 “eslint.options”: { “configFile”: “.eslintrc.json” }表现形式： 警告 会在相应代码出加绿色下滑波浪线， 错误为红色。">
+<meta property="og:updated_time" content="2016-12-25T08:46:12.548Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ESLint 配置">
+<meta name="twitter:description" content="ESLint 配置参考博客地址ESLint
+使用
+配合 vscode ESlint 扩展组件使用，.eslintrc.json 文件 放在工程根目录vscode user setting 里面加入指定配置文件路径的配置 “eslint.options”: { “configFile”: “.eslintrc.json” }表现形式： 警告 会在相应代码出加绿色下滑波浪线， 错误为红色。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> ESLint 配置 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br />
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-font">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-html5"></i> <br />
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br />
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ESLint 配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-12-21T21:28:34+08:00" content="2016-12-21">
+              2016-12-21
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/base/" itemprop="url" rel="index">
+                    <span itemprop="name">base</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/21/ESLint-配置/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/21/ESLint-配置/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="ESLint-配置"><a href="#ESLint-配置" class="headerlink" title="ESLint 配置"></a>ESLint 配置</h1><h2 id="参考博客地址"><a href="#参考博客地址" class="headerlink" title="参考博客地址"></a>参考博客地址</h2><p><a href="http://guowenfh.github.io/2016/08/07/ESLint-Rules/" target="_blank" rel="external">ESLint</a></p>
+<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><blockquote>
+<p>配合 vscode ESlint 扩展组件使用，<br>.eslintrc.json 文件 放在工程根目录<br>vscode user setting 里面加入指定配置文件路径的配置 “eslint.options”: { “configFile”: “.eslintrc.json” }<br>表现形式： 警告 会在相应代码出加绿色下滑波浪线， 错误为红色。<br><a id="more"></a></p>
+<h2 id="配置1-未包含-vue"><a href="#配置1-未包含-vue" class="headerlink" title="配置1(未包含 vue)"></a>配置1(未包含 vue)</h2><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"name"</span>: <span class="string">"feifeiyu eslint"</span>,</div><div class="line">    <span class="attr">"version"</span>: <span class="string">"1.0"</span>,</div><div class="line">    <span class="attr">"env"</span>: &#123;</div><div class="line">        <span class="attr">"browser"</span>: <span class="literal">true</span>,</div><div class="line">        <span class="attr">"commonjs"</span>: <span class="literal">true</span>,</div><div class="line">        <span class="attr">"jquery"</span>: <span class="literal">true</span>,</div><div class="line">        <span class="attr">"node"</span>: <span class="literal">true</span>,</div><div class="line">        <span class="attr">"mocha"</span>: <span class="literal">true</span></div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"parserOptions"</span>: &#123;</div><div class="line">        <span class="attr">"ecmaVersion"</span>: <span class="number">6</span>,</div><div class="line">        <span class="attr">"sourceType"</span>: <span class="string">"module"</span>,</div><div class="line">        <span class="attr">"ecmaFeatures"</span>: &#123;</div><div class="line">            <span class="attr">"jsx"</span>: <span class="literal">true</span>,</div><div class="line">            <span class="attr">"globalReturn"</span>: <span class="literal">true</span>,</div><div class="line">            <span class="attr">"impliedStrict"</span>: <span class="literal">true</span></div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    <span class="attr">"rules"</span>: &#123;</div><div class="line">        <span class="attr">"no-cond-assign"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-console"</span>: <span class="number">1</span>,</div><div class="line">        <span class="attr">"no-constant-condition"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-control-regex"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"comma-dangle"</span>: [<span class="number">1</span>, <span class="string">"always-multiline"</span>],</div><div class="line">        <span class="attr">"no-debugger"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-dupe-args"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-dupe-keys"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-duplicate-case"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-empty"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-empty-character-class"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-ex-assign"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-extra-boolean-cast"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-extra-parens"</span>: <span class="number">0</span>,</div><div class="line">        <span class="attr">"no-extra-semi"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-func-assign"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-inner-declarations"</span>: [<span class="number">2</span>, <span class="string">"functions"</span>],</div><div class="line">        <span class="attr">"no-invalid-regexp"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-irregular-whitespace"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-negated-in-lhs"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-obj-calls"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-prototype-builtins"</span>:<span class="number">0</span>,</div><div class="line">        <span class="attr">"no-regex-spaces"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-unexpected-multiline"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-unreachable"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"use-isnan"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"valid-jsdoc"</span>: <span class="number">1</span>,</div><div class="line">        <span class="attr">"valid-typeof"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"accessor-pairs"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"array-callback-return"</span>:<span class="number">0</span>,</div><div class="line">        <span class="attr">"block-scoped-var"</span>: <span class="number">0</span>,</div><div class="line">        <span class="attr">"complexity"</span>: [<span class="number">2</span>, <span class="number">50</span>],</div><div class="line">        <span class="attr">"consistent-return"</span>: <span class="number">0</span>,</div><div class="line">        <span class="attr">"curly"</span>: [<span class="number">2</span>, <span class="string">"all"</span>],</div><div class="line">        <span class="attr">"default-case"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"dot-location"</span>: [<span class="number">2</span>, <span class="string">"property"</span>],</div><div class="line">        <span class="attr">"no-empty-function"</span>:<span class="number">2</span>,</div><div class="line">        <span class="attr">"no-empty-pattern"</span>:<span class="number">2</span>,</div><div class="line">        <span class="attr">"no-eq-null"</span>: <span class="number">1</span>,</div><div class="line">        <span class="attr">"no-eval"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-extra-bind"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-extra-label:"</span>:<span class="number">0</span>,</div><div class="line">        <span class="attr">"no-fallthrough"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-implicit-coercion"</span>:<span class="number">0</span>,</div><div class="line">        <span class="attr">"no-implicit-globals"</span>:<span class="number">1</span>,</div><div class="line">        <span class="attr">"no-implied-eval"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-labels"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-loop-func"</span>:<span class="number">1</span>,</div><div class="line">        <span class="attr">"no-multi-str"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-native-reassign"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-new"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-proto"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-redeclare"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-self-compare"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-unused-expressions"</span>: <span class="number">0</span>,</div><div class="line">        <span class="attr">"no-unused-labels"</span>:<span class="number">2</span>,</div><div class="line">        <span class="attr">"no-warning-comments"</span>: <span class="number">0</span>,</div><div class="line">        <span class="attr">"no-with"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"wrap-iife"</span>: [<span class="number">2</span>, <span class="string">"any"</span>],</div><div class="line">        <span class="attr">"no-delete-var"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-label-var"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-restricted-globals"</span>:<span class="number">0</span>,</div><div class="line">        <span class="attr">"no-shadow-restricted-names"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-undef"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-undef-init"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-unused-vars"</span>: [<span class="number">2</span>, &#123; <span class="attr">"vars"</span>: <span class="string">"all"</span>, <span class="attr">"args"</span>: <span class="string">"none"</span> &#125;],</div><div class="line">        <span class="attr">"callback-return"</span>:<span class="number">0</span>,</div><div class="line">        <span class="attr">"global-require"</span>: <span class="number">1</span>,</div><div class="line">        <span class="attr">"handle-callback-err"</span>: [<span class="number">2</span>, <span class="string">"^(err|error)$"</span>],</div><div class="line">        <span class="attr">"no-new-require"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-path-concat"</span>: <span class="number">0</span>,</div><div class="line">        <span class="attr">"array-bracket-spacing"</span>: [<span class="number">2</span>, <span class="string">"never"</span>],</div><div class="line">        <span class="attr">"block-spacing"</span>:[<span class="number">1</span>,<span class="string">"never"</span>],</div><div class="line">        <span class="attr">"brace-style"</span>: [<span class="number">2</span>, <span class="string">"1tbs"</span>, &#123; <span class="attr">"allowSingleLine"</span>: <span class="literal">true</span> &#125;],</div><div class="line">        <span class="attr">"camelcase"</span>: [<span class="number">1</span>, &#123;<span class="attr">"properties"</span>: <span class="string">"never"</span>&#125;],</div><div class="line">        <span class="attr">"no-underscore-dangle"</span>: <span class="number">0</span>,</div><div class="line">        <span class="attr">"comma-spacing"</span>: [<span class="number">2</span>, &#123; <span class="attr">"before"</span>: <span class="literal">false</span>, <span class="attr">"after"</span>: <span class="literal">true</span> &#125;],</div><div class="line">        <span class="attr">"comma-style"</span>: [<span class="number">2</span>, <span class="string">"last"</span>],</div><div class="line">        <span class="attr">"computed-property-spacing"</span>: [<span class="number">2</span>, <span class="string">"never"</span>],</div><div class="line">        <span class="attr">"indent"</span>: [<span class="number">2</span>, <span class="number">4</span>, &#123; <span class="attr">"SwitchCase"</span>: <span class="number">1</span> &#125;],</div><div class="line">        <span class="attr">"key-spacing"</span>: [<span class="number">2</span>, &#123; <span class="attr">"beforeColon"</span>: <span class="literal">false</span>, <span class="attr">"afterColon"</span>: <span class="literal">true</span> &#125;],</div><div class="line">        <span class="attr">"linebreak-style"</span>: [<span class="number">1</span>,<span class="string">"unix"</span>],</div><div class="line">        <span class="attr">"max-len"</span>:[<span class="number">1</span>,<span class="number">200</span>],</div><div class="line">        <span class="attr">"max-statements"</span>:[<span class="number">1</span>,<span class="number">200</span>],</div><div class="line">        <span class="attr">"new-cap"</span>: [<span class="number">2</span>, &#123; <span class="attr">"newIsCap"</span>: <span class="literal">true</span>, <span class="attr">"capIsNew"</span>: <span class="literal">false</span> &#125;],</div><div class="line">        <span class="attr">"no-array-constructor"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-mixed-spaces-and-tabs"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-multiple-empty-lines"</span>: [<span class="number">2</span>, &#123; <span class="attr">"max"</span>: <span class="number">2</span> &#125;],</div><div class="line">        <span class="attr">"no-spaced-func"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-unneeded-ternary"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"one-var"</span>: [<span class="number">2</span>, &#123; <span class="attr">"initialized"</span>: <span class="string">"never"</span> &#125;],</div><div class="line">        <span class="attr">"require-jsdoc"</span>:<span class="number">1</span>,</div><div class="line">        <span class="attr">"space-before-blocks"</span>: [<span class="number">2</span>, <span class="string">"always"</span>],</div><div class="line">        <span class="attr">"space-in-parens"</span>: [<span class="number">2</span>, <span class="string">"never"</span>],</div><div class="line">        <span class="attr">"space-infix-ops"</span>: <span class="number">1</span>,</div><div class="line">        <span class="attr">"space-unary-ops"</span>: [<span class="number">2</span>, &#123; <span class="attr">"words"</span>: <span class="literal">true</span>, <span class="attr">"nonwords"</span>: <span class="literal">false</span> &#125;],</div><div class="line">        <span class="attr">"arrow-body-style"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"arrow-spacing"</span>:[<span class="number">2</span>,&#123; <span class="attr">"before"</span>: <span class="literal">true</span>, <span class="attr">"after"</span>: <span class="literal">true</span> &#125;],</div><div class="line">        <span class="attr">"generator-star-spacing"</span>: [<span class="number">2</span>, &#123; <span class="attr">"before"</span>: <span class="literal">true</span>, <span class="attr">"after"</span>: <span class="literal">true</span> &#125;],</div><div class="line">        <span class="attr">"no-class-assign"</span>:<span class="number">2</span>,</div><div class="line">        <span class="attr">"no-const-assign"</span>:<span class="number">2</span>,</div><div class="line">        <span class="attr">"no-dupe-class-members"</span>:<span class="number">2</span>,</div><div class="line">        <span class="attr">"no-this-before-super"</span>: <span class="number">2</span>,</div><div class="line">        <span class="attr">"no-var"</span>: <span class="number">1</span>,</div><div class="line">        <span class="attr">"template-curly-spacing"</span>:<span class="number">1</span>,</div><div class="line">        <span class="attr">"yield-star-spacing"</span>:<span class="number">2</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag">#js</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/02/css-选择器/" rel="next" title="css-选择器">
+                <i class="fa fa-chevron-left"></i> css-选择器
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/24/yupload/" rel="prev" title="图片上传组件 Yupload">
+                图片上传组件 Yupload <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/12/21/ESLint-配置/"
+     data-title="ESLint 配置"
+     data-content=""
+     data-url="https://feifeiyum.github.io/2016/12/21/ESLint-配置/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/21/ESLint-配置/"
+           data-title="ESLint 配置" data-url="https://feifeiyum.github.io/2016/12/21/ESLint-配置/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/portrait/me2.jpg"
+               alt="Feifeiyu" />
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ESLint-配置"><span class="nav-number">1.</span> <span class="nav-text">ESLint 配置</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#参考博客地址"><span class="nav-number">1.1.</span> <span class="nav-text">参考博客地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#使用"><span class="nav-number">1.2.</span> <span class="nav-text">使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置1-未包含-vue"><span class="nav-number">1.3.</span> <span class="nav-text">配置1(未包含 vue)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number">1.4.</span> <span class="nav-text">END</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

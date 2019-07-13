@@ -1,0 +1,726 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="koa," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本篇主要介绍如何提高koa web系统的稳定性，能够尽量多得捕捉&amp;amp;处理系统异常，减少系统崩溃的几率。本篇将从一下几个角度介绍如何捕获/处理系统异常">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第五篇：koa2-web应用进阶—系统稳定性">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/09/18/koa2-web应用进阶—系统稳定性/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="本篇主要介绍如何提高koa web系统的稳定性，能够尽量多得捕捉&amp;amp;处理系统异常，减少系统崩溃的几率。本篇将从一下几个角度介绍如何捕获/处理系统异常">
+<meta property="og:updated_time" content="2016-09-18T11:27:11.554Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第五篇：koa2-web应用进阶—系统稳定性">
+<meta name="twitter:description" content="本篇主要介绍如何提高koa web系统的稳定性，能够尽量多得捕捉&amp;amp;处理系统异常，减少系统崩溃的几率。本篇将从一下几个角度介绍如何捕获/处理系统异常">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 第五篇：koa2-web应用进阶—系统稳定性 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br />
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-font">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-html5"></i> <br />
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br />
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                第五篇：koa2-web应用进阶—系统稳定性
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-18T19:19:49+08:00" content="2016-09-18">
+              2016-09-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/node/" itemprop="url" rel="index">
+                    <span itemprop="name">node</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/18/koa2-web应用进阶—系统稳定性/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/18/koa2-web应用进阶—系统稳定性/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本篇主要介绍如何提高koa web系统的稳定性，能够尽量多得捕捉&amp;处理系统异常，减少系统崩溃的几率。<br>本篇将从一下几个角度介绍如何捕获/处理系统异常<br><a id="more"></a></p>
+<h2 id="一、回调函数，-返回异常"><a href="#一、回调函数，-返回异常" class="headerlink" title="一、回调函数， 返回异常"></a>一、回调函数， 返回异常</h2><p>异步调用中回调函数里的异常无法被外部捕获，因此在一个函数 /API 内部发送异常是，将异常作为地一个参数传递给回调函数，例如： readFile这个函数：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">fs.readFile(filePath,</div><div class="line">  (err, data) =&gt; &#123; <span class="comment">//回调函数(第一个参数为异常， 第二个为输出值)</span></div><div class="line">     <span class="keyword">if</span>(err) <span class="built_in">console</span>.log(<span class="string">'failed to read file'</span>)</div><div class="line">     <span class="keyword">else</span> <span class="built_in">console</span>.log(<span class="string">'success to read file'</span>)   </div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>如何编写如readFile这样的API， 下面以 建立 <a href="https://github.com/luin/ioredis" target="_blank" rel="external">redis</a> 链接为例：<br>a、 在 ioredis 中， 在 node 与 redis 建立连接的时候，ioredis会输出一个 node 事件 ‘connect’, 此时回调函数返回 连接对象；<br>b、如果在链接过程中出现异常，则 ioredis 输出事件 ‘error’，此时回调函数返回异常:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> clientCreate = (config, callback_) =&gt; &#123;</div><div class="line">   <span class="keyword">let</span> redis = <span class="keyword">new</span> ioredis(config) <span class="comment">//链接请求</span></div><div class="line">   redis.on(<span class="string">'connect'</span>, () =&gt; &#123;  </div><div class="line">       callback_(<span class="literal">null</span>, redis) <span class="comment">//链接成功</span></div><div class="line">   &#125;)</div><div class="line">   redis.on(<span class="string">'error'</span>, (err) =&gt; &#123;</div><div class="line">       callback_(err, <span class="literal">null</span>)  <span class="comment">//捕捉异常</span></div><div class="line">   &#125;)</div><div class="line">&#125;</div><div class="line">clientCreate(config, (err, conn) =&gt; &#123;</div><div class="line">    <span class="keyword">if</span>(err) <span class="built_in">console</span>.log(<span class="string">'connect failed'</span>)  </div><div class="line">    <span class="keyword">else</span> <span class="built_in">console</span>.log(<span class="string">'connect successfuly'</span>)</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>通过回调返回异常的方法，可以把相关异常锁在一个函数中， 而不是放在两个函数（node 事件）中，这样函数使用时，可以有序处理异常。</p>
+</blockquote>
+<h2 id="二、-try-catch-异常捕获"><a href="#二、-try-catch-异常捕获" class="headerlink" title="二、 try/catch 异常捕获"></a>二、 try/catch 异常捕获</h2><blockquote>
+<p><strong>1、</strong>try/catch 这个是最容易想到的，但是这个方法在回调/异步函数的满天飞的 nodejs 这边几乎无用武之地， 例如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">try</span> &#123;</div><div class="line">  setTimeout(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">throw</span> <span class="keyword">new</span> <span class="built_in">Error</span>(<span class="string">'test error'</span>)</div><div class="line">  &#125;, <span class="number">5</span>)</div><div class="line">&#125;<span class="keyword">catch</span>(err) &#123;</div><div class="line">  alert(<span class="string">'err'</span>, err)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>上面这个例子抛出的一场，就无法被 catch捕获。 如何捕获回调/异步函数产生的异常？<br><strong>2、</strong>co+Generator函数中使用try/catch，这个在之前的篇幅中已经有所涉及例如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">route.get(<span class="string">'/api/user'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx, next</span>) </span>&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">let</span> users = <span class="built_in">JSON</span>.parse(<span class="keyword">yield</span> readFromFile())  <span class="comment">//readFromFile为异步Promise函数</span></div><div class="line">        logger.debug(<span class="string">'users'</span>, users)</div><div class="line">        ctx.body = <span class="built_in">JSON</span>.stringify(&#123;status: <span class="string">'success'</span>, data: users&#125;)</div><div class="line">    &#125; <span class="keyword">catch</span>(err) &#123;</div><div class="line">        logger.error(<span class="string">'err'</span>, err)</div><div class="line">        ctx.status = <span class="number">500</span></div><div class="line">        ctx.body =  <span class="built_in">JSON</span>.stringify(&#123;status: <span class="string">'failed'</span>&#125;)</div><div class="line">    &#125;</div><div class="line">&#125;))</div></pre></td></tr></table></figure></p>
+<p>在 co 包裹的 generator 函数中， 由于 需要执行完 yield 那一步才会继续执行下一部，因此，抛出的异常可以被 try/catch 捕获。</p>
+<h2 id="三、使用Promise对象"><a href="#三、使用Promise对象" class="headerlink" title="三、使用Promise对象"></a>三、使用Promise对象</h2><p>co+Generator 其实使用的也是Promise对象, 原理是将异步函数封装成 Promise 对象， <a href="https://github.com/tj/co/blob/master/index.js" target="_blank" rel="external">co 源码</a>。Promie 对象使用方式如下所示:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//用promise 封装异步函数</span></div><div class="line"><span class="keyword">let</span> readFromFile = (filePath) =&gt; &#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject) =&gt; &#123;</div><div class="line">        fs.readFile(filePath, (err, data) =&gt; &#123;</div><div class="line">            <span class="keyword">if</span>(err) &#123;</div><div class="line">                reject(err)  <span class="comment">//抛出异常</span></div><div class="line">            &#125;</div><div class="line">            resolve(data)  <span class="comment">//输出结果</span></div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"><span class="comment">//执行promise函数</span></div><div class="line">readFromFile(<span class="string">'./user.json'</span>).then(result =&gt; &#123;<span class="built_in">console</span>.log(<span class="string">'result'</span>, result)&#125;)</div><div class="line">  .catch(err =&gt; &#123; <span class="built_in">console</span>.log(<span class="string">'err'</span>, err)&#125;)</div></pre></td></tr></table></figure></p>
+<p>在 promise  对象中出现异常，可以使用 reject 函数把 Promise 对象变为失败，在 Promise 对象执行时，能够通过 catch() 方法捕获异常</p>
+<h2 id="四、gracefu-cluster方案"><a href="#四、gracefu-cluster方案" class="headerlink" title="四、gracefu+cluster方案"></a>四、gracefu+cluster方案</h2><p>引入依赖 graceful， npm install –save graceful<br>原理： </p>
+<blockquote>
+<p>graceful: 如果系统有uncaughtException（即未被捕获的异常）， 延迟一段时间后退出进程<br>cluster: 实现多进程，如果有进程退出，自动重启</p>
+</blockquote>
+<p><strong>1、</strong> cluster部分实现： 新建文件 dispatch.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> cluster = <span class="built_in">require</span>(<span class="string">'cluster'</span>)</div><div class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">'path'</span>)</div><div class="line">cluster.setupMaster(&#123;  <span class="comment">//设置线程参数</span></div><div class="line">    exec: path.join(__dirname, <span class="string">'worker.js'</span>)  <span class="comment">// ./worker.js 为 graceful 部分</span></div><div class="line">&#125;)</div><div class="line">cluster.fork()  <span class="comment">//创建一个进程</span></div><div class="line">cluster.on(<span class="string">'disconnect'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">worker</span>) </span>&#123;  <span class="comment">//如果线程断开</span></div><div class="line">    <span class="keyword">let</span> w = cluster.fork()  <span class="comment">//重新新起一个线程，这里是gracefu+cluster方案核心之一</span></div><div class="line">    <span class="built_in">console</span>.error(<span class="string">'[%s] [master:%s] wroker:%s disconnect! new worker:%s fork'</span>, <span class="keyword">new</span> <span class="built_in">Date</span>(), process.pid, worker.process.pid, w.process.pid)</div><div class="line">&#125;)</div><div class="line">cluster.on(<span class="string">'exit'</span>, <span class="function"><span class="keyword">function</span>(<span class="params">worker</span>) </span>&#123;  <span class="comment">//线程退出事件</span></div><div class="line">    <span class="built_in">console</span>.error(<span class="string">'[%s] [master:%s] wroker:%s exit!'</span>, </div><div class="line">    <span class="keyword">new</span> <span class="built_in">Date</span>(), process.pid, worker.process.pid)</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p><strong>2、</strong> graceful部分实现： 新建文件 worker.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> graceful = <span class="built_in">require</span>(<span class="string">'graceful'</span>)  <span class="comment">//引入 graceful</span></div><div class="line"><span class="keyword">const</span> app = <span class="built_in">require</span>(<span class="string">'./app.js'</span>)  <span class="comment">// koa web 应用</span></div><div class="line">graceful(&#123;</div><div class="line">    server: [app], <span class="comment">//监听 koa web运行状态</span></div><div class="line">    killTimeout: <span class="number">3000</span>,  <span class="comment">//延时 3000ms</span></div><div class="line">    error: <span class="function"><span class="keyword">function</span> (<span class="params">err, throwErrorCount</span>) </span>&#123;  <span class="comment">//异常</span></div><div class="line">        <span class="keyword">if</span>(err.message) &#123;</div><div class="line">            err.message += <span class="string">' (uncaughtException throw '</span> + throwErrorCount +</div><div class="line">                <span class="string">' times on pid:'</span> + process.pid + <span class="string">')'</span></div><div class="line">            <span class="built_in">console</span>.log(err.message)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p><strong>3、</strong> 启动时通过 dispatch.js ==&gt; node –harmony dispatch.js, 如果系统有未捕获的异常，3秒后会自动重启</p>
+<h2 id="五、PM2"><a href="#五、PM2" class="headerlink" title="五、PM2"></a>五、PM2</h2><p>gracefu+cluster 这套方案在配置层面相对复杂， 可以使用更简单的 PM2 模块启动监控 node 服务，他可以自动利用 多核cpu， 监控线程等，功能非常强大。<br><a href="https://github.com/Unitech/pm2" target="_blank" rel="external">PM2 github</a><br>PM2 全局安装：  npm install pm2 -g<br>PM2 启动服务： pm2 start app.js<br>PM2 管理的进程： pm2 list<br>更多的命令可以参看： pm2 github。</p>
+<h2 id="more"><a href="#more" class="headerlink" title="more"></a>more</h2><p>对于node 来说还有一个 domain 模块可以捕获（uncaughtException）异常， 但是这个模块相对不怎么好用，使用 gracefu+cluster 或 PM2 可以解决相应的问题。</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/koa/" rel="tag">#koa</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/18/koa2-web应用进阶—REST接口/" rel="next" title="第四篇：koa2-web应用进阶—REST接口">
+                <i class="fa fa-chevron-left"></i> 第四篇：koa2-web应用进阶—REST接口
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/18/koa2-web应用进阶-系统配置/" rel="prev" title="第六篇：koa2-web应用进阶—系统配置">
+                第六篇：koa2-web应用进阶—系统配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/09/18/koa2-web应用进阶—系统稳定性/"
+     data-title="第五篇：koa2-web应用进阶—系统稳定性"
+     data-content=""
+     data-url="https://feifeiyum.github.io/2016/09/18/koa2-web应用进阶—系统稳定性/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/18/koa2-web应用进阶—系统稳定性/"
+           data-title="第五篇：koa2-web应用进阶—系统稳定性" data-url="https://feifeiyum.github.io/2016/09/18/koa2-web应用进阶—系统稳定性/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/portrait/me2.jpg"
+               alt="Feifeiyu" />
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、回调函数，-返回异常"><span class="nav-number">1.</span> <span class="nav-text">一、回调函数， 返回异常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、-try-catch-异常捕获"><span class="nav-number">2.</span> <span class="nav-text">二、 try/catch 异常捕获</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、使用Promise对象"><span class="nav-number">3.</span> <span class="nav-text">三、使用Promise对象</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、gracefu-cluster方案"><span class="nav-number">4.</span> <span class="nav-text">四、gracefu+cluster方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、PM2"><span class="nav-number">5.</span> <span class="nav-text">五、PM2</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#more"><span class="nav-number">6.</span> <span class="nav-text">more</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

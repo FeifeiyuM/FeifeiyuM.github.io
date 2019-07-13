@@ -1,0 +1,744 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="js," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本文介绍一款图片上传组件，基于原生 javascript 编写， 不依赖于其他框架  
+
+Yupload 特点
+基于表单提交， 原生 javascript 实现，兼容性好支持多个图片上传请求同时发出，将按照提交请求的先后顺序依次上传API接口返回结果必须为 JSON 格式字符串问题： 1、如果为 input[type=”file”] 元素绑定了事件， 在图片上传后需要重新为该元素注册事件2、如果">
+<meta property="og:type" content="article">
+<meta property="og:title" content="图片上传组件 Yupload">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/12/24/yupload/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="本文介绍一款图片上传组件，基于原生 javascript 编写， 不依赖于其他框架  
+
+Yupload 特点
+基于表单提交， 原生 javascript 实现，兼容性好支持多个图片上传请求同时发出，将按照提交请求的先后顺序依次上传API接口返回结果必须为 JSON 格式字符串问题： 1、如果为 input[type=”file”] 元素绑定了事件， 在图片上传后需要重新为该元素注册事件2、如果">
+<meta property="og:updated_time" content="2017-01-20T08:33:27.850Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="图片上传组件 Yupload">
+<meta name="twitter:description" content="本文介绍一款图片上传组件，基于原生 javascript 编写， 不依赖于其他框架  
+
+Yupload 特点
+基于表单提交， 原生 javascript 实现，兼容性好支持多个图片上传请求同时发出，将按照提交请求的先后顺序依次上传API接口返回结果必须为 JSON 格式字符串问题： 1、如果为 input[type=”file”] 元素绑定了事件， 在图片上传后需要重新为该元素注册事件2、如果">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 图片上传组件 Yupload | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br />
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-font">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-html5"></i> <br />
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br />
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                图片上传组件 Yupload
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-12-24T18:13:33+08:00" content="2016-12-24">
+              2016-12-24
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/front/" itemprop="url" rel="index">
+                    <span itemprop="name">front</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/24/yupload/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/24/yupload/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文介绍一款图片上传组件，基于原生 javascript 编写， 不依赖于其他框架  </p>
+</blockquote>
+<h2 id="Yupload-特点"><a href="#Yupload-特点" class="headerlink" title="Yupload 特点"></a>Yupload 特点</h2><blockquote>
+<p>基于表单提交， 原生 javascript 实现，兼容性好<br>支持多个图片上传请求同时发出，将按照提交请求的先后顺序依次上传<br>API接口返回结果必须为 JSON 格式字符串<br>问题： 1、如果为 input[type=”file”] 元素绑定了事件， 在图片上传后需要重新为该元素注册事件<br>2、如果图片上传失败，即返回状态不是 200, 且返回结果为JSON格式的字符串， 该组件无法区分出错误类型，需要开发人员自己判断</p>
+</blockquote>
+<a id="more"></a>
+<h2 id="Yupload-使用"><a href="#Yupload-使用" class="headerlink" title="Yupload 使用"></a>Yupload 使用</h2><blockquote>
+<p>1、图片上传元素编写<br>**注意 input[type=”file] 标签中的 name 标签不能漏， 就是上传图片时对应的字段<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"upload"</span> <span class="attr">id</span>=<span class="string">"upload"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">class</span>=<span class="string">"upfile"</span> <span class="attr">name</span>=<span class="string">"file"</span> <span class="attr">id</span>=<span class="string">"upfile1"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">id</span>=<span class="string">"to-upload1"</span> <span class="attr">value</span>=<span class="string">"上传1"</span>&gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">class</span>=<span class="string">"upfile"</span> <span class="attr">name</span>=<span class="string">"file"</span> <span class="attr">id</span>=<span class="string">"upfile2"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">id</span>=<span class="string">"to-upload2"</span> <span class="attr">value</span>=<span class="string">"上传2"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>2、初始化</p>
+<ul>
+<li>参数1: url, 图片提交地址, 类型 string, 不能为空</li>
+<li>参数2： csrftoken, 表单提交时需要提供的 csrftoken, 类型object, 包含属性 name: csrftoken 字段名称， value: csrftoken 值, 非必填，根据接口需要配置  </li>
+<li>参数3： hideField, 上传图片时需要携带的其他字段， 类型 Array, 数组元素由对象构成， 对象属性包括： name 字段名， value 字段值。  </li>
+</ul>
+<p><strong>例：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> options = &#123;</div><div class="line">    url: <span class="string">'/common/api/upload/image/'</span>,  <span class="comment">//图片提交地址</span></div><div class="line">    csrftoken: &#123; name: <span class="string">'csrfmiddlewaretoken'</span>, value: csrftoken &#125;,  <span class="comment">//django 框架的 csrftoken </span></div><div class="line">    hideField: [&#123;name: <span class="string">'tag'</span>, value: <span class="number">123</span>&#125;]  <span class="comment">//添加的其他字段  </span></div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> yUpload = <span class="keyword">new</span> Yupload(options)  <span class="comment">// 初始化</span></div></pre></td></tr></table></figure></p>
+<p>初始化后会在 &lt;body&gt;中生成如下元素<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"yupload-wrap"</span> <span class="attr">style</span>=<span class="string">"display: none;"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">iframe</span> <span class="attr">id</span>=<span class="string">"yupload-iframe"</span> <span class="attr">name</span>=<span class="string">"yupload-iframe"</span> <span class="attr">style</span>=<span class="string">"display: none;"</span>&gt;</span><span class="tag">&lt;/<span class="name">iframe</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">form</span> <span class="attr">target</span>=<span class="string">"yupload-iframe"</span> <span class="attr">id</span>=<span class="string">"yupload-form"</span> <span class="attr">method</span>=<span class="string">"POST"</span> <span class="attr">enctype</span>=<span class="string">"multipart/form-data"</span> <span class="attr">action</span>=<span class="string">"/common/api/upload/material/"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"csrfmiddlewaretoken"</span> <span class="attr">value</span>=<span class="string">"bbX3XLXGOPrF4EbGMtP2eG5VYgGUVHyPYgL7zw9pNUgW6ABCoMQLhWWFzX7DIZ4U"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"yupload-fields"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"hidden"</span> <span class="attr">name</span>=<span class="string">"tag"</span> <span class="attr">value</span>=<span class="string">"1233"</span>&gt;</span></div><div class="line">            <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"file"</span> <span class="attr">class</span>=<span class="string">"upfile"</span> <span class="attr">name</span>=<span class="string">"file"</span> <span class="attr">id</span>=<span class="string">"uploading-file"</span>&gt;</span></div><div class="line">        <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">form</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure></p>
+<p>3、触发图片上传<br>调用 Yupload 的方法 trigger 来触发图片上传， 在 trigger 方法中可以传递的参数如下：  </p>
+<ul>
+<li>url: 修改图片上传地址， 类型 string, 非必填  </li>
+<li>hideField: 修改随图片一起上传的参数， 数据格式和初始化时一样， 注意：使用此参数时会清空 初始化时 hideField 传入的所有参数  </li>
+<li>target: 需要上传的内容的 input[type=”file”] 标签， 必填， target 接受以下两类数据   <ul>
+<li>input 标签的 id 属性， 类型 string, </li>
+<li>input 标签的 dom 对象， 类型 HTMLInputElement， </li>
+</ul>
+</li>
+<li>callback 函数， 函数的第一参数为 error, 如果 error 不为空则说明图片上传出错， 第二个参数为接口返回的结果，类型 object    </li>
+</ul>
+<p><strong>例：</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">$(<span class="string">'#to-upload1'</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">let</span> options = &#123;</div><div class="line">        target: $(<span class="string">'#upfile1'</span>)[<span class="number">0</span>],</div><div class="line">        hideField: [&#123;name: <span class="string">'tag'</span>, value: <span class="number">1</span>&#125;],</div><div class="line">    &#125;</div><div class="line">    yUpload.trigger(options, (err, resp) =&gt; &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'img1'</span>, resp)</div><div class="line">    &#125;)</div><div class="line">&#125;)</div><div class="line">$(<span class="string">'#to-upload2'</span>).click(<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">let</span> options = &#123;</div><div class="line">        url: <span class="string">'/common/api/upload/pdf/'</span>,</div><div class="line">        target: $(<span class="string">'#upfile2'</span>)[<span class="number">0</span>],</div><div class="line">        hideField: [&#123;name: <span class="string">'tag'</span>, value: <span class="number">2</span>&#125;],</div><div class="line">    &#125;</div><div class="line">    yUpload.trigger(options, (err, resp) =&gt; &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'img2'</span>, resp)</div><div class="line">    &#125;)</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="Yupload-源码"><a href="#Yupload-源码" class="headerlink" title="Yupload 源码"></a>Yupload 源码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * author: feifeiyu</div><div class="line"> * verion: 1.5</div><div class="line"> * Yupload is a image upload component base on form submit</div><div class="line"> * @param url //image upload address</div><div class="line"> * @param csrftoken  // csrftoken for POST Request </div><div class="line"> * @param hideField // params submit with image </div><div class="line"> * Yupload blog: https://feifeiyum.github.io/2016/12/24/yupload/</div><div class="line"> */</div><div class="line"></div><div class="line"><span class="keyword">var</span> Yupload = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> YU = <span class="function"><span class="keyword">function</span>(<span class="params">opt, cb</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span>(opt.url === <span class="literal">undefined</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'upload url can not be null'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.hideField &amp;&amp; opt.hideField.constructor.toString().indexOf(<span class="string">'Array'</span>) === <span class="number">-1</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'type of hide field is array'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.csrftoken &amp;&amp; <span class="keyword">typeof</span> opt.csrftoken !== <span class="string">'object'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'type of csrftoken is object'</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></div><div class="line">        cb &amp;&amp; (self.cb = cb)</div><div class="line">        self.queue = []</div><div class="line">        <span class="comment">//生产 DOM </span></div><div class="line">        <span class="keyword">let</span> fakeIframe = self.genDom(opt)</div><div class="line">        <span class="comment">//注册事件</span></div><div class="line">        self.fetchData(fakeIframe)</div><div class="line">    &#125; </div><div class="line"></div><div class="line">    YU.prototype.fetchData = <span class="function"><span class="keyword">function</span>(<span class="params">fakeIframe</span>) </span>&#123;</div><div class="line">        <span class="keyword">let</span> self = <span class="keyword">this</span></div><div class="line">        <span class="keyword">var</span> fetchResp = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                <span class="keyword">var</span> data = <span class="built_in">JSON</span>.parse(<span class="keyword">this</span>.contentDocument.activeElement.childNodes[<span class="number">0</span>].innerText)</div><div class="line">                self.cb &amp;&amp; self.cb(<span class="literal">null</span>, data)</div><div class="line">            &#125; <span class="keyword">catch</span>(err) &#123;</div><div class="line">                self.cb &amp;&amp; self.cb(err, <span class="literal">null</span>)</div><div class="line">            &#125;</div><div class="line">            <span class="comment">//clean queue</span></div><div class="line">            self.queue.splice(<span class="number">0</span>, <span class="number">1</span>)</div><div class="line">            <span class="keyword">if</span>(self.queue.length &gt; <span class="number">0</span>) &#123;</div><div class="line">                self.upload()</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">//get result</span></div><div class="line">        <span class="keyword">if</span>(fakeIframe.addEventListener) &#123;</div><div class="line">            fakeIframe.addEventListener(<span class="string">'load'</span>, fetchResp)</div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(fakeIframe.attachEvent) &#123;</div><div class="line">            fakeIframe.attachEvent(<span class="string">'load'</span>, fetchResp)</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            alert(<span class="string">'current browser do not support Yupload'</span>)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    YU.prototype.genDom = <span class="function"><span class="keyword">function</span>(<span class="params">opt</span>) </span>&#123;</div><div class="line">        <span class="keyword">let</span> self = <span class="keyword">this</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span>(<span class="built_in">document</span>.getElementById(<span class="string">'yupload-wrap'</span>)) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'Yupload do not need to init multi-times'</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">var</span> uploadWrap = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>)</div><div class="line">        uploadWrap.id = <span class="string">'yupload-wrap'</span></div><div class="line">        uploadWrap.style.display = <span class="string">'none'</span></div><div class="line">        <span class="comment">//fake iframe for form</span></div><div class="line">        <span class="keyword">var</span> fakeIframe = <span class="built_in">document</span>.createElement(<span class="string">'iframe'</span>)</div><div class="line">        fakeIframe.id = <span class="string">'yupload-iframe'</span></div><div class="line">        fakeIframe.name = <span class="string">'yupload-iframe'</span></div><div class="line">        fakeIframe.style.display = <span class="string">'none'</span></div><div class="line">        uploadWrap.appendChild(fakeIframe)</div><div class="line"></div><div class="line">        <span class="comment">//form element</span></div><div class="line">        self.form = <span class="built_in">document</span>.createElement(<span class="string">'form'</span>)</div><div class="line">        self.form.target = <span class="string">'yupload-iframe'</span></div><div class="line">        self.form.id = <span class="string">'yupload-form'</span></div><div class="line">        self.form.method = <span class="string">'POST'</span></div><div class="line">        self.form.enctype = <span class="string">'multipart/form-data'</span></div><div class="line">        self.form.action = opt.url</div><div class="line">        <span class="comment">//insert csrftoken </span></div><div class="line">        <span class="keyword">if</span>(opt.csrftoken) &#123;</div><div class="line">            <span class="keyword">var</span> csrfElem =  <span class="string">'&lt;input type="hidden" name="'</span> + opt.csrftoken.name + <span class="string">'" value="'</span> + opt.csrftoken.value + <span class="string">'"&gt;'</span></div><div class="line">            self.form.innerHTML = csrfElem</div><div class="line">        &#125;</div><div class="line">        <span class="comment">// hidden fields to submit</span></div><div class="line">        self.fields = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>)</div><div class="line">        self.fields.id = <span class="string">'yupload-fields'</span></div><div class="line">        <span class="comment">//render fields</span></div><div class="line">        <span class="keyword">if</span>(opt.hideField) &#123;</div><div class="line">            <span class="keyword">var</span> hideElem = <span class="string">''</span></div><div class="line">            <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; opt.hideField.length; i++) &#123;</div><div class="line">                hideElem += <span class="string">'&lt;input type="hidden" name="'</span> + opt.hideField[i].name + <span class="string">'" value="'</span> + opt.hideField[i].value + <span class="string">'" id=""&gt;'</span></div><div class="line">            &#125;</div><div class="line">            self.fields.innerHTML = hideElem</div><div class="line">        &#125;</div><div class="line">        self.form.appendChild(self.fields)</div><div class="line">        uploadWrap.appendChild(self.form)</div><div class="line">        <span class="built_in">document</span>.body.appendChild(uploadWrap)</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> fakeIframe</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">//add request to queue</span></div><div class="line">    YU.prototype.trigger = <span class="function"><span class="keyword">function</span>(<span class="params">opt, cb</span>) </span>&#123;</div><div class="line">        <span class="keyword">let</span> self = <span class="keyword">this</span></div><div class="line">        opt.cb = cb</div><div class="line">        <span class="comment">//push queue</span></div><div class="line">        </div><div class="line">        <span class="keyword">if</span>(self.queue.length === <span class="number">0</span>) &#123;</div><div class="line">            <span class="comment">// if it is not busy</span></div><div class="line">            self.queue.push(opt)</div><div class="line">            self.upload()</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            self.queue.push(opt)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//operate upload</span></div><div class="line">    YU.prototype.upload = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></div><div class="line">        <span class="keyword">var</span> opt = self.queue[<span class="number">0</span>]</div><div class="line">        <span class="keyword">if</span>(opt.url) &#123;  <span class="comment">//change post url</span></div><div class="line">            self.form.action = opt.url</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.hideField &amp;&amp; opt.hideField.constructor.toString().indexOf(<span class="string">'Array'</span>) === <span class="number">-1</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'type of hide field is array'</span></div><div class="line">        &#125;</div><div class="line">        opt.cb &amp;&amp; (self.cb = opt.cb)</div><div class="line">        <span class="comment">//rerender fields</span></div><div class="line">        <span class="keyword">if</span>(opt.hideField) &#123; </div><div class="line">            <span class="keyword">var</span> hideElem = <span class="string">''</span></div><div class="line">            <span class="keyword">for</span>(<span class="keyword">let</span> i = <span class="number">0</span>; i &lt; opt.hideField.length; i++) &#123;</div><div class="line">                hideElem += <span class="string">'&lt;input type="hidden" name="'</span> + opt.hideField[i].name + <span class="string">'" value="'</span> + opt.hideField[i].value + <span class="string">'"&gt;'</span></div><div class="line">            &#125;</div><div class="line">            self.fields.innerHTML = hideElem</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span>(opt.target) &#123;</div><div class="line">            <span class="keyword">var</span> inputFile = <span class="string">''</span></div><div class="line">            <span class="keyword">var</span> cloneNode = <span class="string">''</span></div><div class="line">            <span class="comment">//get input file element</span></div><div class="line">            <span class="keyword">if</span>(<span class="keyword">typeof</span> opt.target === <span class="string">'string'</span>) &#123;</div><div class="line">                inputFile = <span class="built_in">document</span>.getElementById(opt.target)</div><div class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span>(opt.target.constructor.toString().indexOf(<span class="string">'HTMLInputElement'</span>) &gt; <span class="number">-1</span>) &#123;</div><div class="line">                inputFile = opt.target</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">throw</span> <span class="string">'type of file option is DOM(input) or input element\'s id and can not be null'</span></div><div class="line">            &#125;</div><div class="line">            <span class="comment">// clone and restore input element</span></div><div class="line">            cloneNode = inputFile.cloneNode(<span class="literal">true</span>)</div><div class="line">            inputFile.parentNode.replaceChild(cloneNode, inputFile)</div><div class="line">            <span class="comment">//append input with selected file to form </span></div><div class="line">            inputFile.id = <span class="string">'uploading-file'</span></div><div class="line">            self.fields.appendChild(inputFile)</div><div class="line">            <span class="comment">//submit</span></div><div class="line">            self.form.submit()</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> YU</div><div class="line">&#125;())</div><div class="line"></div><div class="line"><span class="comment">//采用 commonJs 模块导入时添加这句</span></div><div class="line"><span class="comment">//module.exports = Yupload</span></div></pre></td></tr></table></figure>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag">#js</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/21/ESLint-配置/" rel="next" title="ESLint 配置">
+                <i class="fa fa-chevron-left"></i> ESLint 配置
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/12/25/html5-介绍/" rel="prev" title="html5-基础介绍">
+                html5-基础介绍 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/12/24/yupload/"
+     data-title="图片上传组件 Yupload"
+     data-content=""
+     data-url="https://feifeiyum.github.io/2016/12/24/yupload/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/12/24/yupload/"
+           data-title="图片上传组件 Yupload" data-url="https://feifeiyum.github.io/2016/12/24/yupload/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/portrait/me2.jpg"
+               alt="Feifeiyu" />
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Yupload-特点"><span class="nav-number">1.</span> <span class="nav-text">Yupload 特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yupload-使用"><span class="nav-number">2.</span> <span class="nav-text">Yupload 使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yupload-源码"><span class="nav-number">3.</span> <span class="nav-text">Yupload 源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number">4.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

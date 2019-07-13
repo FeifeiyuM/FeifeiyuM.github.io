@@ -1,0 +1,723 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="koa," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="数据持久化 – 通俗地说就是将系统内存中的数据存储到数据库等数据管理工具中， 以及将数据从数据库中取出转换成内存中数据本篇主要介绍 mysql， redis 两种数据管理工具在node中的使用。本篇及以后的介绍都将基于第六篇建立的系统结构。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第七篇：koa2 web应用进阶—数据持久化">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/09/18/koa2-web应用进阶—数据持久化/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="数据持久化 – 通俗地说就是将系统内存中的数据存储到数据库等数据管理工具中， 以及将数据从数据库中取出转换成内存中数据本篇主要介绍 mysql， redis 两种数据管理工具在node中的使用。本篇及以后的介绍都将基于第六篇建立的系统结构。">
+<meta property="og:image" content="https://feifeiyum.github.io/images/dao1.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/dao2.png">
+<meta property="og:updated_time" content="2016-09-18T11:47:04.190Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第七篇：koa2 web应用进阶—数据持久化">
+<meta name="twitter:description" content="数据持久化 – 通俗地说就是将系统内存中的数据存储到数据库等数据管理工具中， 以及将数据从数据库中取出转换成内存中数据本篇主要介绍 mysql， redis 两种数据管理工具在node中的使用。本篇及以后的介绍都将基于第六篇建立的系统结构。">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/dao1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 第七篇：koa2 web应用进阶—数据持久化 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br />
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-font">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-html5"></i> <br />
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br />
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                第七篇：koa2 web应用进阶—数据持久化
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-18T19:35:19+08:00" content="2016-09-18">
+              2016-09-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/node/" itemprop="url" rel="index">
+                    <span itemprop="name">node</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/18/koa2-web应用进阶—数据持久化/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/18/koa2-web应用进阶—数据持久化/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>数据持久化 – 通俗地说就是将系统内存中的数据存储到数据库等数据管理工具中， 以及将数据从数据库中取出转换成内存中数据<br>本篇主要介绍 mysql， redis 两种数据管理工具在node中的使用。<br>本篇及以后的介绍都将基于第六篇建立的系统结构。<br> <a id="more"></a></p>
+<h2 id="一、redis操作"><a href="#一、redis操作" class="headerlink" title="一、redis操作"></a>一、redis操作</h2><p>redis的使用在第二篇 session 一节中有介绍过，本篇在此简单介绍下， 推荐使用node访问redis的中间件： <a href="https://github.com/luin/ioredis" target="_blank" rel="external">ioredis</a>,  ioredis 的使用细节都可以在文档 (REDADME) 中找到。<br><strong>1、</strong>redis连接: 为了避免每次使用redis都去写一段连接的代码，因此有必要 redis 建立链接的过程封装成一个公共 api， 方便使用。<br> a、首先在配置路径 /config 下的三套环境配置文件中添加 redis 配置数据：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"> <span class="keyword">let</span> redisConfig = &#123;</div><div class="line">   port: <span class="number">6379</span>,  <span class="comment">//端口</span></div><div class="line">   host: <span class="string">'192.168.1.100'</span>,  <span class="comment">//地址</span></div><div class="line">   <span class="comment">//password: 'auth',  //访问密码</span></div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = &#123; redisConfig: redisConfig &#125;  <span class="comment">//导出</span></div></pre></td></tr></table></figure></p>
+<p> b、连接 redis API, 用于建立 node 与 redisd 的网络连接, 路径 ./src/lib/, 新建文件：redis-connection.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"><span class="keyword">const</span> ioredis = <span class="built_in">require</span>(<span class="string">'ioredis'</span>)  <span class="comment">//引入 ioredis</span></div><div class="line"><span class="comment">//根据环境变量选择导入的配置文件</span></div><div class="line"><span class="keyword">let</span> redisConfig = <span class="built_in">require</span>(<span class="string">'../../config/dev.env.config'</span>).redisConfig</div><div class="line"><span class="keyword">if</span>( process.env.NODE_ENV === <span class="string">'test'</span> ) &#123;</div><div class="line">   <span class="keyword">const</span> redisConfig = <span class="built_in">require</span>(<span class="string">'../../config/test.env.config'</span>).redisConfig</div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>( process.env.NODE_ENV === <span class="string">'production'</span> ) &#123;</div><div class="line">    <span class="keyword">const</span> redisConfig = <span class="built_in">require</span>(<span class="string">'../../config/prod.env.config'</span>).redisConfig</div><div class="line">&#125;</div><div class="line"><span class="comment">//连接redis </span></div><div class="line"><span class="keyword">let</span> clientCreate = (config, callback_) =&gt; &#123;</div><div class="line">    <span class="keyword">let</span> redis = <span class="keyword">new</span> ioredis(config)</div><div class="line">    redis.on(<span class="string">'connect'</span>, () =&gt; &#123;  <span class="comment">//根据 connect 事件判断连接成功</span></div><div class="line">        callback_(<span class="literal">null</span>, redis) <span class="comment">//链接成功， 返回 redis 连接对象</span></div><div class="line">    &#125;)</div><div class="line">    redis.on(<span class="string">'error'</span>, (err) =&gt; &#123; <span class="comment">//根据 error 事件判断连接失败</span></div><div class="line">        callback_(err, <span class="literal">null</span>)  <span class="comment">//捕捉异常， 返回 error</span></div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> redisConn = (options) =&gt; &#123;   </div><div class="line">    <span class="keyword">let</span> config = options || redisConfig </div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject) =&gt; &#123;  <span class="comment">//返回API调用方 一个 promise 对象</span></div><div class="line">        clientCreate(config, (err, conn) =&gt; &#123;</div><div class="line">            <span class="keyword">if</span>(err) &#123;</div><div class="line">                reject(err)  <span class="comment">//返回 err</span></div><div class="line">            &#125;</div><div class="line">            resolve(conn) <span class="comment">//返回连接对象</span></div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = redisConn</div></pre></td></tr></table></figure></p>
+<p><strong>2、</strong> 使用上面写的API， 实现redis的增/删/改/查 路径 ./src/app/, 新建文件： redis/redis-test.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"><span class="keyword">const</span> redisConn = <span class="built_in">require</span>(<span class="string">'../../lib/redis-connection.js'</span>)</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">RedisTest</span> </span>&#123;</div><div class="line">   <span class="keyword">constructor</span>() &#123;</div><div class="line">       <span class="keyword">this</span>.redis = <span class="literal">null</span></div><div class="line">   &#125;</div><div class="line">   connToredis() &#123;  <span class="comment">//创建连接对象</span></div><div class="line">       <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject) =&gt; &#123;  </div><div class="line">           <span class="keyword">if</span>(<span class="keyword">this</span>.redis) &#123;</div><div class="line">               resolve(<span class="literal">true</span>) <span class="comment">//已创建</span></div><div class="line">           &#125; <span class="keyword">else</span> &#123;</div><div class="line">               redisConn().then(resp =&gt;  &#123; </div><div class="line">                   <span class="keyword">this</span>.redis = resp</div><div class="line">                   resolve(<span class="literal">true</span>) &#125;</div><div class="line">               ).catch(err =&gt; &#123; reject(err) &#125;)</div><div class="line">           &#125;</div><div class="line">       &#125;)</div><div class="line">   &#125;</div><div class="line">   setCommand(id, data) &#123;  <span class="comment">//增/改</span></div><div class="line">       <span class="keyword">if</span>(expire === <span class="literal">null</span> || expire === <span class="literal">undefined</span>) &#123;</div><div class="line">           <span class="keyword">this</span>.redis.set(<span class="string">`test-<span class="subst">$&#123;id&#125;</span>`</span>, <span class="built_in">JSON</span>.stringify(data)).then(resp =&gt; &#123;</div><div class="line">               <span class="built_in">console</span>.log(<span class="string">'set'</span>, resp)</div><div class="line">               &#125;).catch(err =&gt; &#123;</div><div class="line">                   <span class="built_in">console</span>.log(<span class="string">'err'</span>, err)</div><div class="line">           &#125;)</div><div class="line">       &#125; <span class="keyword">else</span> &#123;</div><div class="line">           <span class="keyword">this</span>.redis.set(<span class="string">`test-<span class="subst">$&#123;id&#125;</span>`</span>, <span class="built_in">JSON</span>.stringify(data), <span class="string">'ex'</span>, expire).then(resp =&gt; &#123;  <span class="comment">//ex 为过期时间，单位为 秒</span></div><div class="line">               <span class="built_in">console</span>.log(<span class="string">'set'</span>, resp)</div><div class="line">               &#125;).catch(err =&gt; &#123;</div><div class="line">                   <span class="built_in">console</span>.log(<span class="string">'err'</span>, err)</div><div class="line">           &#125;)</div><div class="line">       &#125;</div><div class="line">   &#125;</div><div class="line">   getCommand(id) &#123;  <span class="comment">//查</span></div><div class="line">       <span class="keyword">this</span>.redis.get(<span class="string">`test-<span class="subst">$&#123;id&#125;</span>`</span>).then(resp =&gt; &#123;</div><div class="line">           <span class="built_in">console</span>.log(<span class="string">'get'</span>, resp) </div><div class="line">       &#125;).catch(err =&gt; &#123;</div><div class="line">           <span class="built_in">console</span>.log(<span class="string">'err'</span>, err)</div><div class="line">       &#125;)</div><div class="line">   &#125;</div><div class="line">   delCommand(id) &#123;</div><div class="line">       <span class="keyword">this</span>.redis.del(<span class="string">`test-<span class="subst">$&#123;id&#125;</span>`</span>).then(resp =&gt; &#123;</div><div class="line">           <span class="built_in">console</span>.log(<span class="string">'resp'</span>, resp)</div><div class="line">       &#125;)</div><div class="line">   &#125;</div><div class="line">   multiCommand(id, data) &#123;</div><div class="line">       <span class="keyword">this</span>.redis.multi().set(<span class="string">`test-<span class="subst">$&#123;id&#125;</span>`</span>, <span class="built_in">JSON</span>.stringify(data))</div><div class="line">           .get(<span class="string">`test-<span class="subst">$&#123;id&#125;</span>`</span>).exec((err, resp) =&gt; &#123;</div><div class="line">               <span class="keyword">if</span>(err) &#123;</div><div class="line">                   <span class="built_in">console</span>.log(<span class="string">'err'</span>, err)</div><div class="line">               &#125; <span class="keyword">else</span> &#123;</div><div class="line">                   <span class="built_in">console</span>.log(<span class="string">'resp'</span>, resp)</div><div class="line">               &#125;</div><div class="line">           &#125;)</div><div class="line">   &#125;</div><div class="line">&#125;</div><div class="line"><span class="comment">//调用上面的对象，实现redis操作</span></div><div class="line"><span class="keyword">let</span> redisTest = <span class="keyword">new</span> RedisTest()  <span class="comment">//实例对象</span></div><div class="line">redisTest.connToredis().then(resp =&gt; &#123;  <span class="comment">//连接成功后，进行redis操作</span></div><div class="line">   <span class="keyword">if</span>(resp) &#123;</div><div class="line">       redisTest.setCommand(<span class="number">123456</span>, &#123;name: <span class="string">'feifeiyu'</span>&#125;)  <span class="comment">//增</span></div><div class="line">       redisTest.getCommand(<span class="number">123456</span>) <span class="comment">//查</span></div><div class="line">       redisTest.setCommand(<span class="number">123456</span>, &#123;name: <span class="string">'feifeiyu3'</span>&#125;) <span class="comment">//改</span></div><div class="line">       redisTest.getCommand(<span class="number">123456</span>)<span class="comment">//查</span></div><div class="line">       redisTest.delCommand(<span class="number">123456</span>) <span class="comment">//删</span></div><div class="line">       redisTest.getCommand(<span class="number">123456</span>) <span class="comment">//差</span></div><div class="line">       redisTest.multiCommand(<span class="number">123457</span>, &#123;name: <span class="string">'feifeiyu2'</span>&#125;)</div><div class="line">   &#125;</div><div class="line">&#125;).catch(err =&gt; &#123;</div><div class="line">   <span class="built_in">console</span>.log(<span class="string">'err'</span>, err)</div><div class="line">&#125;)</div><div class="line">setTimeout(() =&gt; &#123; <span class="comment">//再进行一次redis操作</span></div><div class="line">   redisTest.connToredis().then(resp =&gt; &#123;</div><div class="line">       redisTest.setCommand(<span class="number">123458</span>, &#123;name: <span class="string">'feifeiyu'</span>&#125;, <span class="number">1</span>)  <span class="comment">//过期时间 1秒</span></div><div class="line">       setTimeout(() =&gt; &#123;  <span class="comment">//等待过期</span></div><div class="line">           redisTest.getCommand(<span class="number">123458</span>) <span class="comment">//过期返回结果为null</span></div><div class="line">       &#125;, <span class="number">2000</span>)</div><div class="line">   &#125;)</div><div class="line">&#125;, <span class="number">2000</span>)</div></pre></td></tr></table></figure></p>
+<p>返回结果<br><img src="/images/dao1.png" alt="dao"><br>redis 其他功能 订阅， pipeline等功能参见 文档 <a href="https://github.com/luin/ioredis" target="_blank" rel="external">ioredis</a></p>
+<h2 id="二、mysql操作"><a href="#二、mysql操作" class="headerlink" title="二、mysql操作"></a>二、mysql操作</h2><p><a href="https://github.com/mongodb/node-mongodb-native" target="_blank" rel="external">MonogoDB</a> 是node最常用的 noSQL 数据库，但是，目前来说 mysql 也是互联网公司使用最广泛的数据库之一。node 通过驱动 <a href="https://github.com/mysqljs/mysql" target="_blank" rel="external">mysql</a> 可以实现对mysql数据库的增、删、改、查操作。<br>安装： npm install –save mysql<br>注意： 以下内容之介绍node对mysql数据的基本操作，不涉及数据库建库建表等操作<br><strong>1、</strong> 建立mysql连接， 一下只介绍myslq 的 连接池连接（pooling connection)<br><strong>a、</strong>mysql 配置, 路径 ./config/*.env.config.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//mysql连接池连接</span></div><div class="line"><span class="keyword">let</span> poolConfig = &#123;</div><div class="line">   host: <span class="string">'localhost'</span>,</div><div class="line">   port: <span class="string">'3306'</span>,</div><div class="line">   user: <span class="string">'root'</span>,</div><div class="line">   password: <span class="string">'mysql123'</span>,</div><div class="line">   database: <span class="string">'fei'</span>,</div><div class="line">   <span class="comment">// connectionLimit: 10,</span></div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = &#123; poolConfig: poolConfig &#125;</div></pre></td></tr></table></figure></p>
+<p><strong>b、</strong>mysql 连接, 路径 ./src/lib/, 新建文件： mysql-connection.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"><span class="keyword">const</span> mysql = <span class="built_in">require</span>(<span class="string">'mysql'</span>)</div><div class="line"><span class="keyword">let</span> mysqlConf = <span class="built_in">require</span>(<span class="string">'../../config/dev.env.config'</span>).poolConfig</div><div class="line"><span class="keyword">if</span>( process.env.NODE_ENV === <span class="string">'test'</span> ) &#123;</div><div class="line">    <span class="keyword">const</span> mysqlConf = <span class="built_in">require</span>(<span class="string">'../../config/test.env.config'</span>).poolConfig</div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>( process.env.NODE_ENV === <span class="string">'production'</span> ) &#123;</div><div class="line">    <span class="keyword">const</span> mysqlConf = <span class="built_in">require</span>(<span class="string">'../../config/prod.env.config'</span>).poolConfig</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> poolCreate = (config, callback_) =&gt; &#123;</div><div class="line">   <span class="keyword">const</span> pool = mysql.createPool(config) <span class="comment">//创建连接</span></div><div class="line">   pool.getConnection((err, conn) =&gt; &#123;</div><div class="line">       <span class="keyword">if</span>(err) &#123;</div><div class="line">           callback_(err, <span class="literal">null</span>) <span class="comment">//有错误 回调</span></div><div class="line">       &#125; <span class="keyword">else</span> &#123;</div><div class="line">           <span class="built_in">console</span>.log(<span class="string">'get connected'</span>)</div><div class="line">           callback_(<span class="literal">null</span>, conn) <span class="comment">//连接成功回调</span></div><div class="line">       &#125;</div><div class="line">   &#125;)</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> mysqlPool = (options) =&gt; &#123;</div><div class="line">   <span class="keyword">let</span> config = options || mysqlConf  </div><div class="line">   <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject) =&gt; &#123;</div><div class="line">       poolCreate(config, (err, conn) =&gt; &#123;</div><div class="line">           <span class="keyword">if</span>(err) &#123;</div><div class="line">               reject(err) <span class="comment">//出错</span></div><div class="line">           &#125;</div><div class="line">           resolve(conn) <span class="comment">//成功</span></div><div class="line">       &#125;)</div><div class="line">   &#125;)</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = mysqlPool</div></pre></td></tr></table></figure></p>
+<p><strong>c、</strong>创建数据表 user<br><img src="/images/dao2.png" alt="dao"></p>
+<p><strong>d、</strong>dao层创建，即(实现 sql 语句操作), 路径 ./src/dao, 新建文件： mysql-dao.js<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div></pre></td><td class="code"><pre><div class="line"><span class="meta">  'use strict'</span></div><div class="line"><span class="keyword">const</span> mysqlPool = <span class="built_in">require</span>(<span class="string">'../lib/mysql-connection'</span>)</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MysqlTestDao</span> </span>&#123;</div><div class="line">    <span class="keyword">constructor</span>() &#123;</div><div class="line">        <span class="keyword">this</span>.fieldType = &#123; <span class="comment">//数据库中各个字段数据类型</span></div><div class="line">            id: <span class="string">'INT'</span>,</div><div class="line">            nick: <span class="string">'VARCHAR'</span>,</div><div class="line">            mobile: <span class="string">'VARCHAR'</span>,</div><div class="line">            family_name: <span class="string">'VARCHAR'</span>,</div><div class="line">            last_name: <span class="string">'VARCHAR'</span>,</div><div class="line">            address: <span class="string">'VARCHAR'</span>,</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    fieldTypeConfig(param) &#123;</div><div class="line">        <span class="keyword">let</span> keys = <span class="built_in">Object</span>.keys(param)</div><div class="line">        keys.map(item =&gt; &#123; <span class="comment">//数据类型配置</span></div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                <span class="keyword">if</span>(<span class="keyword">this</span>.fieldType[item] == <span class="string">'INT'</span>) &#123;</div><div class="line">                    param[item] = <span class="built_in">Number</span>(param[item])</div><div class="line">                &#125; <span class="keyword">else</span> &#123; <span class="comment">//主要目的是为字符串数据加上引号</span></div><div class="line">                    param[item] = <span class="string">'\''</span> + param[item] + <span class="string">'\''</span></div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">catch</span> (err) &#123;</div><div class="line">                <span class="keyword">return</span> <span class="string">'type error'</span> + err</div><div class="line">            &#125;</div><div class="line">        &#125;)</div><div class="line">        <span class="keyword">return</span> param</div><div class="line">    &#125;</div><div class="line">   queryAll() &#123;  <span class="comment">//查询所有数据</span></div><div class="line">       <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject) =&gt; &#123;</div><div class="line">           mysqlPool().then( conn =&gt; &#123;</div><div class="line">               <span class="keyword">let</span> sql = <span class="string">'select * from user;'</span></div><div class="line">               conn.query(sql, (err, result) =&gt; &#123;</div><div class="line">                   conn.release() <span class="comment">//查询结束后释放链接池</span></div><div class="line">                   <span class="keyword">if</span>(err) reject(err)</div><div class="line">                   resolve(result)</div><div class="line">               &#125;)</div><div class="line">           &#125;).catch(err =&gt; &#123;</div><div class="line">               reject(err)</div><div class="line">           &#125;)</div><div class="line">       &#125;)</div><div class="line">   &#125;</div><div class="line">   queryById(param) &#123; <span class="comment">//根据id查询</span></div><div class="line">       <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject) =&gt; &#123;</div><div class="line">           mysqlPool().then( conn =&gt; &#123;</div><div class="line">               <span class="keyword">let</span> sql = <span class="string">'select * from user where id='</span> + param.id + <span class="string">';'</span></div><div class="line">               conn.query(sql, (err, result) =&gt; &#123;</div><div class="line">                   conn.release()</div><div class="line">                   <span class="keyword">if</span>(err) reject(err)</div><div class="line">                   resolve(result)</div><div class="line">               &#125;)</div><div class="line">           &#125;).catch(err =&gt; &#123;</div><div class="line">               reject(err)</div><div class="line">           &#125;)</div><div class="line">       &#125;)</div><div class="line">   &#125;</div><div class="line">   insert(param) &#123;  <span class="comment">//插入数据</span></div><div class="line">       <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject) =&gt; &#123;</div><div class="line">           mysqlPool().then( conn =&gt; &#123;</div><div class="line">               param = <span class="keyword">this</span>.fieldTypeConfig(param)</div><div class="line">               <span class="keyword">if</span>(<span class="keyword">typeof</span> param === <span class="string">'string'</span>) &#123;</div><div class="line">                   reject(param)</div><div class="line">               &#125;</div><div class="line">               <span class="keyword">let</span> keys = <span class="built_in">Object</span>.keys(param)</div><div class="line">               <span class="keyword">let</span> sql = <span class="string">'insert into user '</span></div><div class="line">                    + <span class="string">'(nick, mobile, family_name, last_name, address) '</span></div><div class="line">                    + <span class="string">'values '</span></div><div class="line">                    + <span class="string">'('</span> </div><div class="line">               keys.map((item, index) =&gt; &#123;</div><div class="line">                   <span class="keyword">if</span>(index === <span class="number">0</span>) &#123;</div><div class="line">                       sql += param[item]</div><div class="line">                   &#125; <span class="keyword">else</span> &#123;</div><div class="line">                       sql += <span class="string">', '</span> + param[item]</div><div class="line">                   &#125;</div><div class="line">               &#125;)</div><div class="line">               sql += <span class="string">');'</span></div><div class="line">               conn.query(sql, (err, result) =&gt; &#123;</div><div class="line">                   conn.release()</div><div class="line">                   <span class="keyword">if</span>(err) reject(err)</div><div class="line">                   resolve(result)</div><div class="line">               &#125;)</div><div class="line">           &#125;).catch(err =&gt; &#123;</div><div class="line">               reject(err)</div><div class="line">           &#125;)</div><div class="line">       &#125;)</div><div class="line">   &#125;</div><div class="line">   updateById(param, id) &#123;  <span class="comment">//更新数据</span></div><div class="line">       <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject) =&gt; &#123;</div><div class="line">           mysqlPool().then( conn =&gt; &#123;</div><div class="line">               param = <span class="keyword">this</span>.fieldTypeConfig(param)</div><div class="line">               <span class="keyword">if</span>(<span class="keyword">typeof</span> param === <span class="string">'string'</span>) &#123;</div><div class="line">                   reject(param)</div><div class="line">               &#125;</div><div class="line">               <span class="keyword">let</span> keys = <span class="built_in">Object</span>.keys(param)</div><div class="line">               <span class="keyword">let</span> sql = <span class="string">'update user set\ '</span></div><div class="line">               keys.map((item, index) =&gt; &#123;</div><div class="line">                   <span class="keyword">if</span>(index === <span class="number">0</span>) &#123;</div><div class="line">                       sql += item + <span class="string">'='</span> + param[item]</div><div class="line">                   &#125; <span class="keyword">else</span> &#123;</div><div class="line">                       sql += <span class="string">', '</span> + item + <span class="string">'='</span> + param[item]</div><div class="line">                   &#125;</div><div class="line">               &#125;)</div><div class="line">               sql += <span class="string">'where id='</span> + id + <span class="string">';'</span></div><div class="line">               <span class="built_in">console</span>.log(<span class="string">'sql'</span>, sql)</div><div class="line">               conn.query(sql, (err, result) =&gt; &#123;</div><div class="line">                   conn.release()</div><div class="line">                   <span class="keyword">if</span>(err) reject(err)</div><div class="line">                   resolve(result)</div><div class="line">               &#125;)</div><div class="line">           &#125;)</div><div class="line">       &#125;)</div><div class="line">   &#125;</div><div class="line">   deleteById(id) &#123;  <span class="comment">//删除数据</span></div><div class="line">       <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject) =&gt; &#123;</div><div class="line">           mysqlPool().then( conn =&gt; &#123;</div><div class="line">               <span class="keyword">let</span> sql = <span class="string">'delete from user where id='</span> + id + <span class="string">';'</span></div><div class="line">               <span class="built_in">console</span>.log(<span class="string">'sql'</span>, sql)</div><div class="line">               conn.query(sql, (err, result) =&gt; &#123;</div><div class="line">                   conn.release()</div><div class="line">                   <span class="keyword">if</span>(err) reject(err)</div><div class="line">                   resolve(result)</div><div class="line">               &#125;)</div><div class="line">           &#125;)</div><div class="line">       &#125;)</div><div class="line">   &#125;</div><div class="line">&#125;</div><div class="line"><span class="built_in">module</span>.exports = MysqlTestDao</div></pre></td></tr></table></figure></p>
+<p><strong>e、</strong> 数据库使用（dao层调用），在业务逻辑目录 ./src/app/ 新建目录 mysqltest, 在 mysql 下新建 mysql-test.js, 加入一下代码。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"><span class="keyword">const</span> MysqlTestDao = <span class="built_in">require</span>(<span class="string">'../../dao/mysql-dao'</span>)</div><div class="line"><span class="keyword">let</span> mysqlTest = <span class="keyword">new</span> MysqlTestDao()</div><div class="line"><span class="keyword">var</span> newItem = &#123;</div><div class="line">    nick: <span class="string">'feifeiyu3'</span>,</div><div class="line">    mobile: <span class="string">'13245654313'</span>,</div><div class="line">    family_name: <span class="string">'xu'</span>,</div><div class="line">    last_name: <span class="string">'lu'</span>,</div><div class="line">    address: <span class="string">'hangzhou'</span>,</div><div class="line">&#125;</div><div class="line"><span class="comment">//查询 by id</span></div><div class="line">mysqlTest.queryById(&#123;id: <span class="number">1</span>&#125;).then(resp =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'query by id'</span>, resp)</div><div class="line">&#125;).catch(err =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'err'</span>, err)</div><div class="line">&#125;)</div><div class="line"><span class="comment">//插入新数据</span></div><div class="line">mysqlTest.insert(newItem).then(resp =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'inert'</span>, resp)</div><div class="line">&#125;).catch(err =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'err'</span>, err)</div><div class="line">&#125;)</div><div class="line"><span class="comment">//查询所有</span></div><div class="line">mysqlTest.queryAll().then(resp =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'queryAll'</span>, resp)</div><div class="line">&#125;).catch(err =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'err'</span>, err)</div><div class="line">&#125;)</div><div class="line"><span class="comment">//数据更新</span></div><div class="line">mysqlTest.updateById(&#123;nick: <span class="string">'feifieyu5'</span>, mobile: <span class="number">13256788765</span>&#125;, <span class="number">2</span>).then(resp =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'update by id'</span>, resp)</div><div class="line">&#125;).catch(err =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'err'</span>, err)</div><div class="line">&#125;)</div><div class="line"><span class="comment">//数据删除</span></div><div class="line">mysqlTest.deleteById(<span class="number">3</span>).then(resp =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'delete by id'</span>, resp)</div><div class="line">&#125;).catch(err =&gt; &#123;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'err'</span>, err)</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p><strong>e</strong> 运行脚本，console 进入 mysql-test.js 所在目录， 运行命令 node –harmony mysql-test.js，即可看到相应的操作结果。</p>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><blockquote>
+<p>本篇主要介绍了 redis 和 myslq 的 连接 API 封装， 数据的增、删、改、查。如果配合上 rest 接口(如 <a href="/2016/09/18/koa2-web应用进阶—REST接口/">第四篇：koa2-web应用进阶—RESTful api</a>)，即可实现我们常用的 http 应用。如站点常见的，用户注册，注销，修改等。</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/koa/" rel="tag">#koa</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/18/koa2-web应用进阶-系统配置/" rel="next" title="第六篇：koa2-web应用进阶—系统配置">
+                <i class="fa fa-chevron-left"></i> 第六篇：koa2-web应用进阶—系统配置
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/26/yscroll-for-h5/" rel="prev" title="H5 端分页组件 Yscroll">
+                H5 端分页组件 Yscroll <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/09/18/koa2-web应用进阶—数据持久化/"
+     data-title="第七篇：koa2 web应用进阶—数据持久化"
+     data-content=""
+     data-url="https://feifeiyum.github.io/2016/09/18/koa2-web应用进阶—数据持久化/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/18/koa2-web应用进阶—数据持久化/"
+           data-title="第七篇：koa2 web应用进阶—数据持久化" data-url="https://feifeiyum.github.io/2016/09/18/koa2-web应用进阶—数据持久化/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/portrait/me2.jpg"
+               alt="Feifeiyu" />
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、redis操作"><span class="nav-number">1.</span> <span class="nav-text">一、redis操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、mysql操作"><span class="nav-number">2.</span> <span class="nav-text">二、mysql操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">3.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

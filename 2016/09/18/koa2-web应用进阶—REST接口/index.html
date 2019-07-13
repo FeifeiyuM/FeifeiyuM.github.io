@@ -1,0 +1,727 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="koa," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本篇主要介绍如何在koa web应用上编写 RESTful 风格的api接口">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第四篇：koa2-web应用进阶—REST接口">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/09/18/koa2-web应用进阶—REST接口/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="本篇主要介绍如何在koa web应用上编写 RESTful 风格的api接口">
+<meta property="og:image" content="https://feifeiyum.github.io/images/restful1.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/restful2.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/restful3.png">
+<meta property="og:updated_time" content="2016-09-18T11:22:24.781Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第四篇：koa2-web应用进阶—REST接口">
+<meta name="twitter:description" content="本篇主要介绍如何在koa web应用上编写 RESTful 风格的api接口">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/restful1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 第四篇：koa2-web应用进阶—REST接口 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br />
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-font">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-html5"></i> <br />
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br />
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                第四篇：koa2-web应用进阶—REST接口
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-18T16:58:39+08:00" content="2016-09-18">
+              2016-09-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/node/" itemprop="url" rel="index">
+                    <span itemprop="name">node</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/18/koa2-web应用进阶—REST接口/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/18/koa2-web应用进阶—REST接口/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本篇主要介绍如何在koa web应用上编写 RESTful 风格的api接口</p>
+<a id="more"></a>
+</blockquote>
+<h2 id="一、REST-方法"><a href="#一、REST-方法" class="headerlink" title="一、REST 方法"></a>一、REST 方法</h2><blockquote>
+<p>GET - 用于获取方法<br>POST - 添加或更新数据<br>PATCH - 更新数据<br>DELETE - 删除数据</p>
+</blockquote>
+<h2 id="二、依赖引入"><a href="#二、依赖引入" class="headerlink" title="二、依赖引入"></a>二、依赖引入</h2><blockquote>
+<p><strong> 1、</strong>REST 接口的实现主要是依靠 koa-router 来实现 <a href="https://github.com/alexmingoia/koa-router/tree/master/#module_koa-router--Router+get%7Cput%7Cpost%7Cpatch%7Cdelete" target="_blank" rel="external">koa-router</a><br><strong> 2、 </strong>koa-bodyparser: 解析 http请求body的中间件 安装： npm install koa-bodyparser@next –save  (@next 表支持 koa2 的版本 )</p>
+<h2 id="三、实现"><a href="#三、实现" class="headerlink" title="三、实现"></a>三、实现</h2><p><strong> 实现方案： </strong> 使用一个json文件作为数据资源文件（代替数据库）， 实现数据的增、删、改、查功能<br><strong> 1、 </strong>新建一个json文件， user.json<br><figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">[</div><div class="line"> &#123;<span class="attr">"name"</span>:<span class="string">"xiaoming"</span>,<span class="attr">"age"</span>:<span class="number">20</span>&#125;,</div><div class="line"> &#123;<span class="attr">"name"</span>:<span class="string">"hang"</span>,<span class="attr">"age"</span>:<span class="string">"26"</span>&#125;</div><div class="line">]</div></pre></td></tr></table></figure></p>
+<p><strong> 2、</strong>路由文件编写,为了优化代码结构，将路由代码写在一个单独的文件 router.js 中<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>)</div><div class="line"><span class="keyword">const</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</div><div class="line"><span class="keyword">const</span> router = <span class="built_in">require</span>(<span class="string">'koa-router'</span>)</div><div class="line"><span class="keyword">const</span> log4js = <span class="built_in">require</span>(<span class="string">'koa-log4'</span>)</div><div class="line"><span class="keyword">const</span> route = <span class="keyword">new</span> router()</div><div class="line"><span class="keyword">const</span> logger = log4js.getLogger(<span class="string">'router'</span>)</div><div class="line"><span class="keyword">let</span> filePath = <span class="string">'./user.json'</span> <span class="comment">//json文件路径</span></div><div class="line"><span class="keyword">let</span> readFromFile = () =&gt; &#123;  <span class="comment">//读文件函数</span></div><div class="line">   <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject) =&gt; &#123; <span class="comment">//封装成Promise对象</span></div><div class="line">        fs.readFile(filePath, (err, data) =&gt; &#123;</div><div class="line">            <span class="keyword">if</span>(err) &#123;</div><div class="line">                reject(err)</div><div class="line">            &#125;</div><div class="line">            resolve(data)</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line"><span class="keyword">let</span> writeToFile = (content) =&gt; &#123;  <span class="comment">//写入文件</span></div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>((resolve, reject) =&gt; &#123;</div><div class="line">        fs.writeFile(filePath, content, err =&gt; &#123;</div><div class="line">            <span class="keyword">if</span>(err) &#123;</div><div class="line">                reject(err)</div><div class="line">            &#125;</div><div class="line">            resolve(&#123;state: <span class="string">'ok'</span>&#125;)</div><div class="line">        &#125;)</div><div class="line">    &#125;)</div><div class="line">&#125;</div><div class="line">route.get(<span class="string">'/'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx</span>) </span>&#123; <span class="comment">//访问根目录</span></div><div class="line">    logger.debug(<span class="string">' this is test log'</span>)  </div><div class="line">    <span class="keyword">if</span>(ctx.session.view === <span class="literal">undefined</span>) &#123;</div><div class="line">        ctx.session.view = <span class="number">0</span></div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        ctx.session.view += <span class="number">1</span>   </div><div class="line">    &#125;</div><div class="line">    <span class="built_in">console</span>.log(<span class="string">'viewNum'</span>, ctx.session.view)</div><div class="line">    <span class="keyword">yield</span> ctx.render(<span class="string">'index'</span>, &#123;title: <span class="string">'Nunjucks'</span>&#125;)  <span class="comment">//渲染模板views/index.html, 后面RESTful接口使用要用到该html文件</span></div><div class="line">&#125;))</div><div class="line"><span class="comment">// API GET, 查询数据</span></div><div class="line">route.get(<span class="string">'/api/user'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx, next</span>) </span>&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">let</span> users = <span class="built_in">JSON</span>.parse(<span class="keyword">yield</span> readFromFile()) <span class="comment">//读取所有数据</span></div><div class="line">        ctx.body = <span class="built_in">JSON</span>.stringify(&#123;status: <span class="string">'success'</span>, data: users&#125;) <span class="comment">//返回json格式数据</span></div><div class="line">    &#125; <span class="keyword">catch</span>(err) &#123;  <span class="comment">//异常</span></div><div class="line">        logger.error(<span class="string">'err'</span>, err) </div><div class="line">        ctx.status = <span class="number">500</span>  <span class="comment">//状态 500</span></div><div class="line">        ctx.body =  <span class="built_in">JSON</span>.stringify(&#123;status: <span class="string">'failed'</span>&#125;) <span class="comment">//返回错误状态</span></div><div class="line">    &#125;</div><div class="line">&#125;))</div><div class="line"><span class="comment">//API POST， 添加数据</span></div><div class="line">route.post(<span class="string">'/api/user'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx, next</span>) </span>&#123;</div><div class="line">    <span class="keyword">let</span> newUser = &#123;&#125;</div><div class="line">    <span class="comment">//能够 通过request.body这种方式获取数据，归功于 koa-bodyparser 这个中间件</span></div><div class="line">    newUser.name = ctx.request.body.name  <span class="comment">//获取post请求参数</span></div><div class="line">    newUser.age = ctx.request.body.age  </div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">let</span> users = <span class="built_in">JSON</span>.parse(<span class="keyword">yield</span> readFromFile()) <span class="comment">//读取所有数据</span></div><div class="line">        users.push(newUser) <span class="comment">//加入新数据</span></div><div class="line">        <span class="keyword">yield</span> writeToFile(<span class="built_in">JSON</span>.stringify(users)) <span class="comment">//重新写回json文件</span></div><div class="line">        ctx.body = <span class="built_in">JSON</span>.stringify(&#123;status: <span class="string">'success'</span>&#125;) <span class="comment">//请求成功</span></div><div class="line">    &#125; <span class="keyword">catch</span>(err) &#123;</div><div class="line">        logger.error(<span class="string">'err'</span>, err)</div><div class="line">        ctx.status = <span class="number">500</span></div><div class="line">        ctx.body =  <span class="built_in">JSON</span>.stringify(&#123;status: <span class="string">'failed'</span>&#125;)</div><div class="line">    &#125;</div><div class="line">&#125;))</div><div class="line"><span class="comment">//API PATCH， 修改数据</span></div><div class="line">route.patch(<span class="string">'/api/user/:name'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx, next</span>) </span>&#123;</div><div class="line">    <span class="keyword">let</span> name = ctx.params.name <span class="comment">//获取url中携带的参数</span></div><div class="line">    <span class="keyword">let</span> age = ctx.request.body.age <span class="comment">//获取请求body中的参数</span></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">let</span> users = <span class="built_in">JSON</span>.parse(<span class="keyword">yield</span> readFromFile())</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span>; i&lt;users.length; i++) &#123; <span class="comment">//更新数据</span></div><div class="line">            <span class="keyword">if</span>(users[i].name === name) &#123;</div><div class="line">                users[i].age = age</div><div class="line">                <span class="keyword">break</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">yield</span> writeToFile(<span class="built_in">JSON</span>.stringify(users))</div><div class="line">        ctx.body = <span class="built_in">JSON</span>.stringify(&#123;status: <span class="string">'success'</span>&#125;)</div><div class="line">    &#125; <span class="keyword">catch</span>(err) &#123;</div><div class="line">        logger.error(<span class="string">'err'</span>, err)</div><div class="line">        ctx.status = <span class="number">500</span></div><div class="line">        ctx.body = <span class="built_in">JSON</span>.stringify(&#123;status: <span class="string">'failed'</span>&#125;)</div><div class="line">    &#125;</div><div class="line">&#125;))</div><div class="line"><span class="comment">//API DELETE, 删除数据</span></div><div class="line">route.del(<span class="string">'/api/user/:name'</span>, co.wrap(<span class="function"><span class="keyword">function</span>* (<span class="params">ctx, next</span>) </span>&#123;</div><div class="line">    <span class="keyword">let</span> name = ctx.params.name  <span class="comment">//获取url参数</span></div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">        <span class="keyword">let</span> users = <span class="built_in">JSON</span>.parse(<span class="keyword">yield</span> readFromFile())</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">let</span> i=<span class="number">0</span>; i&lt;users.length; i++) &#123;  <span class="comment">//删除name所指数据</span></div><div class="line">            <span class="keyword">if</span>(users[i].name === name) &#123;</div><div class="line">                users.splice(i, <span class="number">1</span>)</div><div class="line">                <span class="keyword">break</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">yield</span> writeToFile(<span class="built_in">JSON</span>.stringify(users))</div><div class="line">        ctx.body = <span class="built_in">JSON</span>.stringify(&#123;status: <span class="string">'success'</span>&#125;)</div><div class="line">    &#125; <span class="keyword">catch</span>(err) &#123;</div><div class="line">        logger.error(<span class="string">'err'</span>, err)</div><div class="line">        ctx.status = <span class="number">500</span></div><div class="line">        ctx.body = <span class="built_in">JSON</span>.stringify(&#123;status: <span class="string">'failed'</span>&#125;)</div><div class="line">    &#125;</div><div class="line">&#125;))</div><div class="line"><span class="built_in">module</span>.exports = route  <span class="comment">//导出模块</span></div></pre></td></tr></table></figure></p>
+<p><strong> 3、 </strong> app.js文件修改<br>在 app.js 中加入 koa-bodyparser, 抽离 router相关代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> Koa = <span class="built_in">require</span>(<span class="string">'koa'</span>)</div><div class="line"><span class="keyword">const</span> co = <span class="built_in">require</span>(<span class="string">'co'</span>)</div><div class="line"><span class="keyword">const</span> nunjucksViews = <span class="built_in">require</span>(<span class="string">'koa-nunjucks-promise'</span>)</div><div class="line"><span class="keyword">const</span> mount = <span class="built_in">require</span>(<span class="string">'koa-mount'</span>)</div><div class="line"><span class="keyword">const</span> server = <span class="built_in">require</span>(<span class="string">'koa-static'</span>)</div><div class="line"><span class="keyword">const</span> session = <span class="built_in">require</span>(<span class="string">"koa-session2"</span>)</div><div class="line"><span class="comment">//--------------------</span></div><div class="line"><span class="keyword">const</span> bodyParser = <span class="built_in">require</span>(<span class="string">'koa-bodyparser'</span>) <span class="comment">// 引入koa-bodyparser</span></div><div class="line"><span class="comment">//--------------------</span></div><div class="line"><span class="keyword">const</span> log4js = <span class="built_in">require</span>(<span class="string">'koa-log4'</span>)</div><div class="line"><span class="built_in">require</span>(<span class="string">'./log'</span>)</div><div class="line"><span class="keyword">const</span> logger = log4js.getLogger(<span class="string">'app'</span>)</div><div class="line"><span class="comment">//-----------------</span></div><div class="line"><span class="keyword">const</span> route = <span class="built_in">require</span>(<span class="string">'./router'</span>)  <span class="comment">//引入 router 配置</span></div><div class="line"><span class="comment">//-----------------</span></div><div class="line">logger.info(<span class="string">'--------step into koa-------------'</span>)</div><div class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa()</div><div class="line">app.use(nunjucksViews(<span class="string">`<span class="subst">$&#123;__dirname&#125;</span>/views`</span>, &#123;  </div><div class="line">    ext: <span class="string">'html'</span>,   </div><div class="line">    noCache: <span class="literal">true</span>,  </div><div class="line">    watch: <span class="literal">true</span>,  </div><div class="line">    filters: &#123;  <span class="comment">//过滤器  </span></div><div class="line">        json: <span class="function"><span class="keyword">function</span>(<span class="params">str</span>) </span>&#123;</div><div class="line">          <span class="keyword">return</span> <span class="built_in">JSON</span>.stringify(str, <span class="literal">null</span>, <span class="number">2</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;,</div><div class="line">    globals: &#123;  <span class="comment">//设置对于nunjucks的全局变量</span></div><div class="line">        <span class="comment">// staticPath: '//static'</span></div><div class="line">    &#125;</div><div class="line">&#125;))</div><div class="line">app.use(mount(<span class="string">'/static'</span>, server(<span class="string">`<span class="subst">$&#123;__dirname&#125;</span>/public`</span>)))  </div><div class="line">app.use(log4js.koaLogger(log4js.getLogger(<span class="string">'http'</span>), &#123; level: <span class="string">'auto'</span> &#125;))</div><div class="line"><span class="comment">//-----------------</span></div><div class="line">app.use(bodyParser()) <span class="comment">//使用 bodyparse 解析参数 默认支持json， form</span></div><div class="line"><span class="comment">//------------------</span></div><div class="line">app.use(session(&#123;</div><div class="line">    key: <span class="string">"sessionId"</span>,   <span class="comment">//default "koa:sess",</span></div><div class="line">    maxAge: <span class="number">5000</span>  </div><div class="line">&#125;))</div><div class="line"><span class="comment">//---------------</span></div><div class="line">app.use(route.routes()) <span class="comment">//路由</span></div><div class="line">    .use(route.allowedMethods())</div><div class="line"><span class="comment">//----------------</span></div><div class="line">app.listen(<span class="number">3000</span>, () =&gt; <span class="built_in">console</span>.log(<span class="string">'server started， port 3000'</span>))</div><div class="line"><span class="built_in">module</span>.exports = app</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="四、RESTful-API-调用"><a href="#四、RESTful-API-调用" class="headerlink" title="四、RESTful API 调用"></a>四、RESTful API 调用</h2><blockquote>
+<p>方案： 在index.html文件中，通过 <a href="http://www.open-open.com/lib/view/open1426815580164.html" target="_blank" rel="external">fetch api</a> 上述的4个接口，实现数据的增、删、改、查<br><strong> 1、 </strong>修改index.html文件<br><figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">body</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"get"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Get all users<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">'users'</span>&gt;</span></div><div class="line">      <span class="tag">&lt;<span class="name">p</span>&gt;</span>Name: -- &amp;nbsp;&amp;nbsp;age: --<span class="tag">&lt;/<span class="name">p</span>&gt;</span></div><div class="line">    <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">   <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">id</span>=<span class="string">"get-users"</span>, <span class="attr">value</span>=<span class="string">"GET User"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"post"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Add users<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">lable</span>&gt;</span>Name:<span class="tag">&lt;/<span class="name">lable</span>&gt;</span> <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"add-name"</span> <span class="attr">placeholder</span>=<span class="string">"input name"</span> &gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">lable</span>&gt;</span>Age:<span class="tag">&lt;/<span class="name">lable</span>&gt;</span> <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"add-age"</span> <span class="attr">placeholder</span>=<span class="string">"input age"</span> &gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"Add user"</span> <span class="attr">id</span>=<span class="string">"add-user"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"update"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Modify users<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">lable</span>&gt;</span>Name:<span class="tag">&lt;/<span class="name">lable</span>&gt;</span> <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"mod-name"</span> <span class="attr">placeholder</span>=<span class="string">"input name"</span> &gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">lable</span>&gt;</span>Age:<span class="tag">&lt;/<span class="name">lable</span>&gt;</span> <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"mod-age"</span> <span class="attr">placeholder</span>=<span class="string">"input age"</span> &gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"Mod user"</span> <span class="attr">id</span>=<span class="string">"mod-user"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">  <span class="tag">&lt;<span class="name">div</span> <span class="attr">class</span>=<span class="string">"delete"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">h2</span>&gt;</span>Delete users<span class="tag">&lt;/<span class="name">h2</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">lable</span>&gt;</span>Name:<span class="tag">&lt;/<span class="name">lable</span>&gt;</span> <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"del-name"</span> <span class="attr">placeholder</span>=<span class="string">"input name"</span> &gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">value</span>=<span class="string">"Del user"</span> <span class="attr">id</span>=<span class="string">"del-user"</span>&gt;</span></div><div class="line">  <span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">body</span>&gt;</span></div><div class="line"><span class="tag">&lt;<span class="name">script</span>&gt;</span><span class="javascript"></span></div><div class="line">  (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> fetchOprate = (url, method, data) =&gt; &#123;</div><div class="line">      fetch(url, &#123;</div><div class="line">        method: method, <span class="comment">//请求方法 post， patch， delete</span></div><div class="line">        credentials: <span class="string">'include'</span>,</div><div class="line">        headers: &#123;  <span class="comment">//带上这个请求头，否则request body无法解析</span></div><div class="line">          <span class="string">'Content-Type'</span>: <span class="string">'application/json'</span>,</div><div class="line">        &#125;,</div><div class="line">        body: <span class="built_in">JSON</span>.stringify(data)</div><div class="line">      &#125;).then(res =&gt; &#123;</div><div class="line">        res.json().then(resp =&gt; &#123; <span class="comment">//返回JOSN字符串解析</span></div><div class="line">          <span class="built_in">console</span>.log(<span class="string">'resp'</span>, resp) <span class="comment">//console输出字符串</span></div><div class="line">        &#125;)</div><div class="line">      &#125;).catch(err =&gt; &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'err'</span>, err)</div><div class="line">      &#125;)</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//get 请求</span></div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'get-users'</span>).addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      fetch(<span class="string">'/api/user'</span>, &#123;</div><div class="line">        method: <span class="string">'GET'</span>,</div><div class="line">        credentials: <span class="string">'include'</span>,</div><div class="line">      &#125;).then(res =&gt; &#123;</div><div class="line">        res.json().then(resp =&gt; &#123;</div><div class="line">          <span class="keyword">var</span> elem = <span class="string">''</span></div><div class="line">          <span class="keyword">for</span>(<span class="keyword">var</span> i=<span class="number">0</span>; i&lt;resp.data.length; i++) &#123; <span class="comment">//将渲染结果</span></div><div class="line">            <span class="keyword">var</span> item = resp.data[i]</div><div class="line">            elem += <span class="string">'&lt;p&gt;Name: '</span> + item.name + <span class="string">'&amp;nbsp;&amp;nbsp;age: '</span> + item.age + <span class="string">'&lt;/p&gt;'</span></div><div class="line">          &#125;</div><div class="line">          <span class="built_in">console</span>.log(<span class="string">'elem'</span>, elem)</div><div class="line">          <span class="built_in">document</span>.getElementById(<span class="string">'users'</span>).innerHTML = elem</div><div class="line">        &#125;)</div><div class="line">      &#125;).catch(err =&gt; &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'err'</span>, err)</div><div class="line">      &#125;)</div><div class="line">    &#125;)</div><div class="line">    <span class="comment">//post 请求</span></div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'add-user'</span>).addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> user = &#123;&#125;</div><div class="line">      user.name = <span class="built_in">document</span>.getElementById(<span class="string">'add-name'</span>).value</div><div class="line">      user.age = <span class="built_in">document</span>.getElementById(<span class="string">'add-age'</span>).value</div><div class="line">      fetchOprate(<span class="string">'/api/user'</span>, <span class="string">'POST'</span>, user) <span class="comment">//发生请求</span></div><div class="line">    &#125;)</div><div class="line">    <span class="comment">//patch 请求</span></div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'mod-user'</span>).addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> name = <span class="built_in">document</span>.getElementById(<span class="string">'mod-name'</span>).value</div><div class="line">      <span class="keyword">var</span> age = <span class="built_in">document</span>.getElementById(<span class="string">'mod-age'</span>).value</div><div class="line">      fetchOprate(<span class="string">'/api/user/'</span>+name, <span class="string">'PATCH'</span>, &#123;age: age&#125;) <span class="comment">//发送请求</span></div><div class="line">      <span class="comment">//在router.js文件中，该接口的请求路径为 '/api/user/:name'， 需带上参数 name</span></div><div class="line">    &#125;)</div><div class="line">    <span class="comment">//delete 请求</span></div><div class="line">    <span class="built_in">document</span>.getElementById(<span class="string">'del-user'</span>).addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="keyword">var</span> name = <span class="built_in">document</span>.getElementById(<span class="string">'del-name'</span>).value</div><div class="line">      fetchOprate(<span class="string">'/api/user/'</span>+name, <span class="string">'DELETE'</span>, &#123;&#125;)</div><div class="line">    &#125;)</div><div class="line">  &#125;)()</div><div class="line"><span class="tag">&lt;/<span class="name">script</span>&gt;</span></div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="五、测试"><a href="#五、测试" class="headerlink" title="五、测试"></a>五、测试</h2><blockquote>
+<p><strong>1、</strong>启动服务， 在浏览器输入 <a href="http://localhost:3000/" target="_blank" rel="external">http://localhost:3000/</a>, 如下图所示：<br><img src="/images/restful1.png" alt="restful"><br><strong>2、</strong> 获取数据： 单击 “GET User”， 如下图所示： 在json中加入的数据都加载出来了<br><img src="/images/restful2.png" alt="restful"><br><strong>3、</strong> 增加数据： 输入name， age, 点击 Add User, 再点击 GET User: 可以看到新增的数据<br><img src="/images/restful3.png" alt="restful"><br><strong>4、</strong> 修改数据，和删除数据 操作类似<br><strong>5、</strong> 通过查看user.json文件中的数据也能判断操作是否成功   </p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/koa/" rel="tag">#koa</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/18/koa2-web应用进阶—日志/" rel="next" title="第三篇：koa2-web应用进阶—日志">
+                <i class="fa fa-chevron-left"></i> 第三篇：koa2-web应用进阶—日志
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/18/koa2-web应用进阶—系统稳定性/" rel="prev" title="第五篇：koa2-web应用进阶—系统稳定性">
+                第五篇：koa2-web应用进阶—系统稳定性 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/09/18/koa2-web应用进阶—REST接口/"
+     data-title="第四篇：koa2-web应用进阶—REST接口"
+     data-content=""
+     data-url="https://feifeiyum.github.io/2016/09/18/koa2-web应用进阶—REST接口/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/18/koa2-web应用进阶—REST接口/"
+           data-title="第四篇：koa2-web应用进阶—REST接口" data-url="https://feifeiyum.github.io/2016/09/18/koa2-web应用进阶—REST接口/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/portrait/me2.jpg"
+               alt="Feifeiyu" />
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、REST-方法"><span class="nav-number">1.</span> <span class="nav-text">一、REST 方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、依赖引入"><span class="nav-number">2.</span> <span class="nav-text">二、依赖引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、实现"><span class="nav-number">3.</span> <span class="nav-text">三、实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、RESTful-API-调用"><span class="nav-number">4.</span> <span class="nav-text">四、RESTful API 调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#五、测试"><span class="nav-number">5.</span> <span class="nav-text">五、测试</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

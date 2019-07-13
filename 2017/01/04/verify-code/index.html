@@ -1,0 +1,739 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="js," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="关键字： 验证码， js, javascript, 校验, code, 
+本文将介绍一种基于js实现的一款验证码生成校验组件，验证码输入忽略大小写注意： 如果对安全性要求高的应用不建议采用此组件， 无法抵御脚本攻击">
+<meta property="og:type" content="article">
+<meta property="og:title" content="验证码组件 Yverifycode">
+<meta property="og:url" content="https://feifeiyum.github.io/2017/01/04/verify-code/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="关键字： 验证码， js, javascript, 校验, code, 
+本文将介绍一种基于js实现的一款验证码生成校验组件，验证码输入忽略大小写注意： 如果对安全性要求高的应用不建议采用此组件， 无法抵御脚本攻击">
+<meta property="og:image" content="https://feifeiyum.github.io/images/components/yverifycode1.png">
+<meta property="og:updated_time" content="2017-01-18T10:02:35.445Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="验证码组件 Yverifycode">
+<meta name="twitter:description" content="关键字： 验证码， js, javascript, 校验, code, 
+本文将介绍一种基于js实现的一款验证码生成校验组件，验证码输入忽略大小写注意： 如果对安全性要求高的应用不建议采用此组件， 无法抵御脚本攻击">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/components/yverifycode1.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 验证码组件 Yverifycode | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br />
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-font">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-html5"></i> <br />
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br />
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                验证码组件 Yverifycode
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-01-04T09:19:42+08:00" content="2017-01-04">
+              2017-01-04
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/front/" itemprop="url" rel="index">
+                    <span itemprop="name">front</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/04/verify-code/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/04/verify-code/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>关键字： 验证码， js, javascript, 校验, code, </p>
+<p>本文将介绍一种基于js实现的一款验证码生成校验组件，<br>验证码输入忽略大小写<br><img src="/images/components/yverifycode1.png" alt="Yverifycode"><br><strong>注意</strong>： 如果对安全性要求高的应用不建议采用此组件， 无法抵御脚本攻击  </p>
+</blockquote>
+<a id="more"></a>
+<h2 id="Yverifycode-使用"><a href="#Yverifycode-使用" class="headerlink" title="Yverifycode 使用"></a>Yverifycode 使用</h2><h3 id="html-标签元素"><a href="#html-标签元素" class="headerlink" title="html 标签元素"></a>html 标签元素</h3><blockquote>
+<p>使用Yverifycode 时需要绑定三个 html 元素的 id 属性</p>
+<ul>
+<li>容纳验证码图片的容器， 例如：下面例子中的 #code-win, 容器的容器的尺寸决定了验证码图片的尺寸, 该元素是必须的   </li>
+<li>更换验证码的按钮， 例如： 下面例子中的“换一张”, 此按钮是用于更换验证码图片的， 该元素不是必须的，也可以调用 Yverifycode.reset 方法实现  </li>
+<li>验证码输入框, 例如： 下面例子中的 #code-input, 用于输入验证码， 该元素是必须的   </li>
+</ul>
+</blockquote>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"for-code"</span> <span class="attr">class</span>=<span class="string">"for-code"</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">div</span> <span class="attr">id</span>=<span class="string">"code-win"</span> <span class="attr">class</span>=<span class="string">"code-win"</span>&gt;</span><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">id</span>=<span class="string">"code-reset"</span> <span class="attr">value</span>=<span class="string">"换一张"</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">br</span>&gt;</span> </div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">id</span>=<span class="string">"code-input"</span>&gt;</span> <span class="tag">&lt;<span class="name">br</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"button"</span> <span class="attr">id</span>=<span class="string">"code-verify"</span> <span class="attr">value</span>=<span class="string">"确定"</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">div</span>&gt;</span></div></pre></td></tr></table></figure>
+<h3 id="组件调用"><a href="#组件调用" class="headerlink" title="组件调用"></a>组件调用</h3><blockquote>
+<p><strong>1、引入Yverifycode</strong> 在 html 文件或以模块化方式在 js 文件中引入  </p>
+<p><strong>2、初始化</strong> Yverifycode 初始化参数以对象的形式传入，参数如下：  </p>
+<ul>
+<li><strong>input</strong>: 对应验证码输入框的 id 属性值， 必填， 类型 string  </li>
+<li><strong>container</strong>: 验证码图片对应容器(元素) id 属性值, 必填， 类型 string  </li>
+<li><strong>reset</strong>: 更新验证码元素 id 属性值， 非必填， 类型 string  </li>
+<li><strong>length</strong>: 验证码位数， 非必填， 类型 number, 默认值 4   </li>
+<li><strong>width</strong>: 验证码初始化显示宽度， 非必填， 类型 number, 默认 100(px)</li>
+<li><strong>bgColor</strong>: 验证码图片背景颜色， 非必填， 类型 16色值(例如：#ff0000), 默认白色  </li>
+<li><strong>bgImg</strong>: 验证码图片背景图片： 非必填， 类型 图片地址(sting), 使用优先级高于背景颜色， 即同时设置 bgColor 和 bgImg: 只有 bgImg 生效  </li>
+</ul>
+<p><strong>3、获取验证结果</strong> 调用 Yverifycode 的 verify 方法获取校验结果，如果返回结果为 true, 表示校验通过， 为 false 校验失败  </p>
+<p>例：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//配置初始化参数</span></div><div class="line"><span class="keyword">let</span> verOpt = &#123;</div><div class="line">    input: <span class="string">'code-input'</span>,</div><div class="line">    container: <span class="string">'code-win'</span>,</div><div class="line">    reset: <span class="string">'code-reset'</span>,</div><div class="line">    length: <span class="number">6</span>,</div><div class="line">    bgColor: <span class="string">'#AEEEEE'</span>,</div><div class="line">    bgImg: <span class="string">'/static/images/default.jpg'</span></div><div class="line">&#125;</div><div class="line"><span class="comment">//实例化 Yverifycode</span></div><div class="line"><span class="keyword">let</span> yVerifycode = <span class="keyword">new</span> Yverifycode(verOpt)</div><div class="line"><span class="comment">//调用 reset 方法 重置验证码</span></div><div class="line"><span class="comment">// $('#code-reset').click(() =&gt; &#123;</span></div><div class="line"><span class="comment">//     yVerifycode.reset()</span></div><div class="line"><span class="comment">// &#125;)</span></div><div class="line"><span class="comment">//调用 verify 方法 获取校验结果 </span></div><div class="line">$(<span class="string">'#code-verify'</span>).click(() =&gt; &#123;</div><div class="line">    <span class="keyword">let</span> state = yVerifycode.verify()</div><div class="line">    <span class="keyword">if</span>(state) &#123;</div><div class="line">        alert(<span class="string">'Pass'</span>)</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        alert(<span class="string">'Failed'</span>)</div><div class="line">    &#125;</div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="Yverifycode-源码"><a href="#Yverifycode-源码" class="headerlink" title="Yverifycode 源码"></a>Yverifycode 源码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * author: feifeiyu</div><div class="line"> * version: 1.3</div><div class="line"> * Yverifycode is a verification code component</div><div class="line"> * @param input //verification code input Dom id, not null </div><div class="line"> * @param container  //verification code image container Dom id, not null</div><div class="line"> * @param reset //verification code reset Dom id </div><div class="line"> * @param length //verification code length, default 4</div><div class="line"> * @param bgColor //verification code container background color, </div><div class="line"> * @param bgImg  //verification code container background image,</div><div class="line"> * Yverifycode blog: https://feifeiyum.github.io/2017/01/04/verify-code/</div><div class="line">*/</div><div class="line"></div><div class="line"><span class="comment">//定义Yverifycode </span></div><div class="line"><span class="keyword">var</span> Yverifycode = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> NewVC = <span class="function"><span class="keyword">function</span>(<span class="params">opt</span>) </span>&#123;</div><div class="line">        <span class="comment">//初始化值校验</span></div><div class="line">        <span class="keyword">if</span>(opt.input === <span class="literal">undefined</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'verification code input Dom target id can\'t be null'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.container === <span class="literal">undefined</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'verification code image Dom container target id can\'t be null'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.reset !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.reset !== <span class="string">'string'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'type of verification code reset dom id is string '</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.length !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.length !== <span class="string">'number'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'type of verification code length is number'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.width !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.width !== <span class="string">'number'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'type of verification code window width is number'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.bgColor !== <span class="literal">undefined</span> &amp;&amp; !<span class="regexp">/^#([a-f0-9A-F]&#123;3&#125;|[a-f0-9A-F]&#123;6&#125;)$/</span>.test(opt.bgColor)) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'type of verification code background color is hex'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.bgImg !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.bgImg !== <span class="string">'string'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'type of verification code background image is url(string)'</span></div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">this</span>.input = <span class="built_in">document</span>.getElementById(opt.input)</div><div class="line">        opt.reset &amp;&amp; (<span class="keyword">this</span>.reset = opt.reset)</div><div class="line">        <span class="keyword">this</span>.container = opt.container</div><div class="line">        <span class="keyword">this</span>.length = opt.length || <span class="number">4</span></div><div class="line">        <span class="keyword">this</span>.width = opt.width || <span class="number">100</span></div><div class="line">        opt.bgColor &amp;&amp; (<span class="keyword">this</span>.bgColor = opt.bgColor)</div><div class="line">        opt.bgImg &amp;&amp; (<span class="keyword">this</span>.bgImg = opt.bgImg)</div><div class="line">        <span class="keyword">this</span>.code = <span class="string">''</span></div><div class="line"></div><div class="line">        <span class="comment">//初始化</span></div><div class="line">        <span class="keyword">this</span>.init()</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//初始化函数</span></div><div class="line">    NewVC.prototype.init = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></div><div class="line">        self.styleOption()</div><div class="line">        </div><div class="line">        self.genDom()</div><div class="line">        self.drawCode()</div><div class="line">        self.drawLines()</div><div class="line"></div><div class="line">        <span class="keyword">if</span>(self.reset) &#123;</div><div class="line">            <span class="built_in">document</span>.getElementById(self.reset).addEventListener(<span class="string">'click'</span>, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123; </div><div class="line">                self.refresh.call(self) </div><div class="line">            &#125;, <span class="literal">false</span>)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//随机数生成器</span></div><div class="line">    NewVC.prototype.randInt = <span class="function"><span class="keyword">function</span>(<span class="params">start, end</span>) </span>&#123;</div><div class="line">        !start &amp;&amp; (start = <span class="number">0</span>)</div><div class="line">        !end &amp;&amp; (end = <span class="number">10</span>)</div><div class="line">        <span class="keyword">var</span> distance = end - start </div><div class="line">        <span class="keyword">var</span> num = <span class="built_in">Math</span>.random() * distance + start </div><div class="line">        <span class="keyword">return</span> <span class="built_in">Math</span>.floor(num)</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//生成随机校验码</span></div><div class="line">    NewVC.prototype.genRandStr = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> codeChars = [</div><div class="line">            <span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>, <span class="number">7</span>, <span class="number">8</span>, <span class="number">9</span>,   </div><div class="line">            <span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>, <span class="string">'e'</span>, <span class="string">'f'</span>, <span class="string">'g'</span>, <span class="string">'h'</span>, <span class="string">'i'</span>, <span class="string">'j'</span>, <span class="string">'k'</span>, <span class="string">'l'</span>, <span class="string">'m'</span>, <span class="string">'n'</span>, <span class="string">'o'</span>, <span class="string">'p'</span>, <span class="string">'q'</span>, <span class="string">'r'</span>, <span class="string">'s'</span>, <span class="string">'t'</span>, <span class="string">'u'</span>, <span class="string">'v'</span>, <span class="string">'w'</span>, <span class="string">'x'</span>, <span class="string">'y'</span>, <span class="string">'z'</span>,  </div><div class="line">            <span class="string">'A'</span>, <span class="string">'B'</span>, <span class="string">'C'</span>, <span class="string">'D'</span>, <span class="string">'E'</span>, <span class="string">'F'</span>, <span class="string">'G'</span>, <span class="string">'H'</span>, <span class="string">'I'</span>, <span class="string">'J'</span>, <span class="string">'K'</span>, <span class="string">'L'</span>, <span class="string">'M'</span>, <span class="string">'N'</span>, <span class="string">'O'</span>, <span class="string">'P'</span>, <span class="string">'Q'</span>, <span class="string">'R'</span>, <span class="string">'S'</span>, <span class="string">'T'</span>, <span class="string">'U'</span>, <span class="string">'V'</span>, <span class="string">'W'</span>, <span class="string">'X'</span>, <span class="string">'Y'</span>, <span class="string">'Z'</span></div><div class="line">        ]</div><div class="line">        </div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.length; i++) &#123;</div><div class="line">            <span class="keyword">this</span>.code += (codeChars[<span class="keyword">this</span>.randInt(<span class="number">0</span>, codeChars.length)])</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//生成校验码图片框</span></div><div class="line">    NewVC.prototype.genDom = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>.codeWin = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>)</div><div class="line">        <span class="keyword">this</span>.codeWin.style.cssText = <span class="string">'position:relative;width:100%;height:100%;overflow: hidden;'</span></div><div class="line">        <span class="keyword">if</span>(<span class="keyword">this</span>.bgImg) &#123;</div><div class="line">            <span class="keyword">this</span>.codeWin.style.cssText += <span class="string">'background: url('</span> + <span class="keyword">this</span>.bgImg + <span class="string">') no-repeat;'</span></div><div class="line">            + <span class="string">'background-size: 100% 100%;'</span></div><div class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(<span class="keyword">this</span>.bgColor) &#123; </div><div class="line">            <span class="keyword">this</span>.codeWin.style.cssText += <span class="string">'background: '</span> + <span class="keyword">this</span>.bgColor + <span class="string">';'</span></div><div class="line">        &#125;</div><div class="line">        <span class="built_in">document</span>.getElementById(<span class="keyword">this</span>.container).appendChild(<span class="keyword">this</span>.codeWin)</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//校验码样式表</span></div><div class="line">    NewVC.prototype.styleOption = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>.codeStyle = &#123;</div><div class="line">            fontSizeMin: <span class="number">20</span>,</div><div class="line">            fontSizeMax: <span class="number">38</span>,</div><div class="line">            colors: [</div><div class="line">                <span class="string">'#00FF00'</span>,</div><div class="line">                <span class="string">'#0000FF'</span>,</div><div class="line">                <span class="string">'#FF0000'</span>,</div><div class="line">                <span class="string">'#53da33'</span>,</div><div class="line">                <span class="string">'#AA0000'</span>,</div><div class="line">                <span class="string">'#FFBB00'</span>,</div><div class="line">                <span class="string">'#551A8B'</span>,</div><div class="line">                <span class="string">'#8B008B'</span></div><div class="line">            ],</div><div class="line">            fonts: [</div><div class="line">                <span class="string">'Microsoft Yahei'</span>,</div><div class="line">                <span class="string">'tahoma'</span>,</div><div class="line">                <span class="string">'arial'</span>,</div><div class="line">                <span class="string">'Hiragino Sans GB'</span>,</div><div class="line">                <span class="string">'helvetica neue'</span>,</div><div class="line">                <span class="string">'helvetica'</span>,</div><div class="line">                <span class="string">'arial'</span>,</div><div class="line">                <span class="string">'Sans-serif'</span>,</div><div class="line">                <span class="string">'Hiragino Sans GB'</span>,</div><div class="line">                <span class="string">'Hiragino Sans GB W3'</span>,</div><div class="line">                <span class="string">'SimHei'</span></div><div class="line">            ],</div><div class="line">            lineColors: [</div><div class="line">                <span class="string">'#888888'</span>,</div><div class="line">                <span class="string">'#FF7744'</span>,</div><div class="line">                <span class="string">'#888800'</span>,</div><div class="line">                <span class="string">'#008888'</span></div><div class="line">            ],</div><div class="line">            lineStyles: [</div><div class="line">                <span class="string">'dashed'</span>,</div><div class="line">                <span class="string">'solid'</span>,</div><div class="line">                <span class="string">'dotted'</span>,</div><div class="line">                <span class="string">'double'</span>,</div><div class="line">                <span class="string">'ridge'</span></div><div class="line">            ]</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//绘制随机校验码</span></div><div class="line">    NewVC.prototype.drawCode = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>.genRandStr()</div><div class="line">        <span class="keyword">var</span> widthUnit = (<span class="keyword">this</span>.codeWin.clientWidth || <span class="keyword">this</span>.width) / <span class="keyword">this</span>.code.length</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'widthUnit'</span>, widthUnit)</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="keyword">this</span>.code.length; i++) &#123;</div><div class="line">            <span class="keyword">var</span> codeDom = <span class="built_in">document</span>.createElement(<span class="string">'span'</span>)</div><div class="line">            codeDom.style.cssText = <span class="string">'position:absolute;'</span></div><div class="line">                + <span class="string">'top:'</span> + <span class="keyword">this</span>.randInt(<span class="number">0</span>, <span class="number">15</span>) + <span class="string">'%;'</span></div><div class="line">                + <span class="string">'left:'</span> + <span class="keyword">this</span>.randInt(widthUnit * i, widthUnit * i + widthUnit - <span class="number">20</span>) + <span class="string">'px;'</span></div><div class="line">                + <span class="string">'font-size:'</span> + <span class="keyword">this</span>.randInt(<span class="keyword">this</span>.codeStyle.fontSizeMin, <span class="keyword">this</span>.codeStyle.fontSizeMax) + <span class="string">'px;'</span></div><div class="line">                + <span class="string">'color:'</span> + <span class="keyword">this</span>.codeStyle.colors[<span class="keyword">this</span>.randInt(<span class="number">0</span>,         <span class="keyword">this</span>.codeStyle.colors.length)] + <span class="string">';'</span></div><div class="line">                + <span class="string">'font-family:'</span> + <span class="keyword">this</span>.codeStyle.fonts[<span class="keyword">this</span>.randInt(<span class="number">0</span>, <span class="keyword">this</span>.codeStyle.fonts.length)] + <span class="string">';'</span></div><div class="line">                + <span class="string">'font-weight:'</span> + <span class="keyword">this</span>.randInt(<span class="number">200</span>, <span class="number">900</span>) + <span class="string">';'</span></div><div class="line">                + <span class="string">'transform:rotate('</span> + <span class="keyword">this</span>.randInt(<span class="number">-35</span>, <span class="number">35</span>) + <span class="string">'deg);'</span></div><div class="line">                + <span class="string">'-ms-transform:rotate('</span> + <span class="keyword">this</span>.randInt(<span class="number">-35</span>, <span class="number">35</span>) + <span class="string">'deg);'</span></div><div class="line">                + <span class="string">'-webkit-transform:rotate('</span> + <span class="keyword">this</span>.randInt(<span class="number">-35</span>, <span class="number">35</span>) + <span class="string">'deg);'</span></div><div class="line">                + <span class="string">'-ms-transform:rotate('</span> + <span class="keyword">this</span>.randInt(<span class="number">-35</span>, <span class="number">35</span>) + <span class="string">'deg);'</span></div><div class="line">                + <span class="string">'-moz-transform:rotate('</span> + <span class="keyword">this</span>.randInt(<span class="number">-35</span>, <span class="number">35</span>) + <span class="string">'deg);'</span></div><div class="line">                + <span class="string">'-o-transform:rotate('</span> + <span class="keyword">this</span>.randInt(<span class="number">-35</span>, <span class="number">35</span>) + <span class="string">'deg);'</span></div><div class="line">            codeDom.innerHTML = <span class="keyword">this</span>.code[i]</div><div class="line">            <span class="keyword">this</span>.codeWin.appendChild(codeDom)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//绘制干扰线条</span></div><div class="line">    NewVC.prototype.drawLines = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> i = <span class="number">0</span>; i &lt; <span class="number">8</span>; i++) &#123;</div><div class="line">            <span class="keyword">var</span> lineDom = <span class="built_in">document</span>.createElement(<span class="string">'hr'</span>)</div><div class="line">            lineDom.style.cssText = <span class="string">'position:absolute;'</span></div><div class="line">                + <span class="string">'top:'</span> + <span class="keyword">this</span>.randInt(<span class="number">0</span>, <span class="number">99</span>) + <span class="string">'%;'</span></div><div class="line">                + <span class="string">'left:'</span> + <span class="keyword">this</span>.randInt(<span class="number">0</span>, <span class="number">80</span>) + <span class="string">'%;'</span></div><div class="line">                + <span class="string">'border:0;'</span></div><div class="line">                + <span class="string">'border-top:'</span> + <span class="keyword">this</span>.randInt(<span class="number">1</span>, <span class="number">5</span>) + <span class="string">'px '</span> + <span class="keyword">this</span>.codeStyle.lineStyles[<span class="keyword">this</span>.randInt(<span class="number">0</span>, <span class="keyword">this</span>.codeStyle.lineStyles.length)] + <span class="string">';'</span></div><div class="line">                + <span class="string">'border-color:'</span> + <span class="keyword">this</span>.codeStyle.lineColors[<span class="keyword">this</span>.randInt(<span class="number">0</span>,         <span class="keyword">this</span>.codeStyle.lineColors.length)] + <span class="string">';'</span></div><div class="line">                + <span class="string">'width:'</span> + <span class="keyword">this</span>.randInt(<span class="number">10</span>, <span class="keyword">this</span>.codeWin.clientWidth) + <span class="string">'px;'</span></div><div class="line">                + <span class="string">'opacity:'</span> + <span class="keyword">this</span>.randInt(<span class="number">3</span>, <span class="number">8</span>) / <span class="number">10</span> + <span class="string">';'</span></div><div class="line">                + <span class="string">'transform:rotate('</span> + <span class="keyword">this</span>.randInt(<span class="number">-35</span>, <span class="number">35</span>) + <span class="string">'deg);'</span></div><div class="line">                + <span class="string">'-ms-transform:rotate('</span> + <span class="keyword">this</span>.randInt(<span class="number">-35</span>, <span class="number">35</span>) + <span class="string">'deg);'</span></div><div class="line">                + <span class="string">'-webkit-transform:rotate('</span> + <span class="keyword">this</span>.randInt(<span class="number">-35</span>, <span class="number">35</span>) + <span class="string">'deg);'</span></div><div class="line">                + <span class="string">'-ms-transform:rotate('</span> + <span class="keyword">this</span>.randInt(<span class="number">-35</span>, <span class="number">35</span>) + <span class="string">'deg);'</span></div><div class="line">                + <span class="string">'-moz-transform:rotate('</span> + <span class="keyword">this</span>.randInt(<span class="number">-35</span>, <span class="number">35</span>) + <span class="string">'deg);'</span></div><div class="line">                + <span class="string">'-o-transform:rotate('</span> + <span class="keyword">this</span>.randInt(<span class="number">-35</span>, <span class="number">35</span>) + <span class="string">'deg);'</span></div><div class="line">            <span class="keyword">this</span>.codeWin.appendChild(lineDom)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//清空校验码</span></div><div class="line">    NewVC.prototype.clean = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>.input.value = <span class="string">''</span></div><div class="line">        <span class="keyword">this</span>.code = <span class="string">''</span></div><div class="line">        <span class="keyword">this</span>.codeWin.innerHTML = <span class="string">''</span></div><div class="line">    &#125;</div><div class="line">    <span class="comment">//更新校验码</span></div><div class="line">    NewVC.prototype.refresh = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">this</span>.clean()</div><div class="line">        <span class="keyword">this</span>.drawCode()</div><div class="line">        <span class="keyword">this</span>.drawLines()</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//获取校验结果</span></div><div class="line">    NewVC.prototype.verify = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> inputCode = <span class="keyword">this</span>.input.value</div><div class="line">        inputCode = inputCode.trim().toLowerCase()</div><div class="line">        <span class="keyword">var</span> code = <span class="keyword">this</span>.code.toLowerCase()</div><div class="line">        <span class="keyword">if</span>(inputCode === code) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="literal">true</span></div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">return</span> <span class="literal">false</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> NewVC</div><div class="line">&#125;())</div><div class="line"></div><div class="line"><span class="comment">//采用模块化引入时使用该句</span></div><div class="line"><span class="comment">//module.exports = Yverifycode</span></div></pre></td></tr></table></figure>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag">#js</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/12/25/css-文本/" rel="next" title="CSS-文本视觉">
+                <i class="fa fa-chevron-left"></i> CSS-文本视觉
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/01/11/webpack2-intro/" rel="prev" title="Webpack 2 打包解决方案">
+                Webpack 2 打包解决方案 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2017/01/04/verify-code/"
+     data-title="验证码组件 Yverifycode"
+     data-content=""
+     data-url="https://feifeiyum.github.io/2017/01/04/verify-code/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2017/01/04/verify-code/"
+           data-title="验证码组件 Yverifycode" data-url="https://feifeiyum.github.io/2017/01/04/verify-code/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/portrait/me2.jpg"
+               alt="Feifeiyu" />
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Yverifycode-使用"><span class="nav-number">1.</span> <span class="nav-text">Yverifycode 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#html-标签元素"><span class="nav-number">1.1.</span> <span class="nav-text">html 标签元素</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#组件调用"><span class="nav-number">1.2.</span> <span class="nav-text">组件调用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yverifycode-源码"><span class="nav-number">2.</span> <span class="nav-text">Yverifycode 源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number">3.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

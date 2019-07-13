@@ -1,0 +1,746 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="js," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="本文主要介绍一下在 h5 端如何实现列表的分页加载， 更简单的说就是实现，页面顶部下拉: 刷新当前列表; 页面底部上拉: 加载更多。主要使用的技术栈： Touch event; scrollTop; scrollHeight外部依赖： http请求使用的是api reqwest,">
+<meta property="og:type" content="article">
+<meta property="og:title" content="H5 端分页组件 Yscroll">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/09/26/yscroll-for-h5/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="本文主要介绍一下在 h5 端如何实现列表的分页加载， 更简单的说就是实现，页面顶部下拉: 刷新当前列表; 页面底部上拉: 加载更多。主要使用的技术栈： Touch event; scrollTop; scrollHeight外部依赖： http请求使用的是api reqwest,">
+<meta property="og:image" content="https://feifeiyum.github.io/images/yscroll.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/scroll-wrap.png">
+<meta property="og:updated_time" content="2017-02-10T07:10:19.002Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="H5 端分页组件 Yscroll">
+<meta name="twitter:description" content="本文主要介绍一下在 h5 端如何实现列表的分页加载， 更简单的说就是实现，页面顶部下拉: 刷新当前列表; 页面底部上拉: 加载更多。主要使用的技术栈： Touch event; scrollTop; scrollHeight外部依赖： http请求使用的是api reqwest,">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/yscroll.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> H5 端分页组件 Yscroll | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br />
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-font">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-html5"></i> <br />
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br />
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                H5 端分页组件 Yscroll
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-26T20:52:55+08:00" content="2016-09-26">
+              2016-09-26
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/front/" itemprop="url" rel="index">
+                    <span itemprop="name">front</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/26/yscroll-for-h5/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/26/yscroll-for-h5/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文主要介绍一下在 h5 端如何实现列表的分页加载， 更简单的说就是实现，页面顶部下拉: 刷新当前列表; 页面底部上拉: 加载更多。<br>主要使用的技术栈： <a href="https://developer.mozilla.org/en-US/docs/Web/API/Touch_events" target="_blank" rel="external">Touch event</a>; <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTop" target="_blank" rel="external">scrollTop</a>; <a href="https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollHeight" target="_blank" rel="external">scrollHeight</a><br>外部依赖： http请求使用的是api <a href="https://github.com/ded/reqwest" target="_blank" rel="external">reqwest</a>,<br><img src="/images/yscroll.png" alt="yscroll"></p>
+</blockquote>
+ <a id="more"></a>
+<h2 id="Yscroll-使用"><a href="#Yscroll-使用" class="headerlink" title="Yscroll 使用"></a>Yscroll 使用</h2><blockquote>
+<p>1、在使用页面先引入 reqwest, 然后引入 yscroll.js<br>2、配置参数</p>
+<blockquote>
+<ul>
+<li>target: 列表元素的父元素 <strong>id</strong>, 类型string, 必填</li>
+<li>refresh: 是否允许刷新功能： true 可以刷新， false 禁止刷新。 类型 boolean, 选填， default: true</li>
+<li>url: 请求列表的地址。 选填  </li>
+<li>headers: http请求头部的字段   </li>
+<li>param： 请求参数， 选填， 类型 对象</li>
+<li>height: 整个列表可视区域的高度(单位px)。类型 number， default： 屏幕高度，即 window.screen.height</li>
+<li>loadImmedate: 是否在初始化的时候就请求数据， 如果为false则在上拉后请求数据。类型 boolean, 选填， default： true。</li>
+<li>preload: 是否使能预加载，即浏览器拉到底部一定位置时自动请求下一页。类型 boolean, 选填， default： true   </li>
+<li>cb: 回调函数, 选填， 类型 function</li>
+</ul>
+</blockquote>
+<p>3、reset 方法</p>
+<blockquote>
+<ul>
+<li>url: 请求地址， 选填</li>
+<li>param: 请求参数， 选填， 类型 对象</li>
+<li>cb: 回调函数， 选填， 类型 function</li>
+</ul>
+</blockquote>
+<p><strong>缺点：</strong> 加载提示图标未作优化</p>
+<p>3、初始化：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"> var options = &#123;&#125;  //配置参数, 所有参数组成一个对象</div><div class="line"> options.target = &apos;list-wrap&apos;</div><div class="line"> options.url = &apos;/api/list/&apos;</div><div class="line"> var yscroll = new Yscroll(options, function(err, resp)&#123;  //回调函数</div><div class="line">    if(err) &#123;  //报错</div><div class="line">        console.log(&apos;err&apos;, err)</div><div class="line">        return</div><div class="line">    &#125;</div><div class="line">    if(resp == &apos;refresh&apos;) &#123;   </div><div class="line">       //code clear list</div><div class="line">       list = []</div><div class="line">    &#125; else &#123;  //根据结果渲染列表</div><div class="line">       // render list</div><div class="line">       //...</div><div class="line">    &#125;   </div><div class="line">&#125;)</div></pre></td></tr></table></figure></p>
+<p>4、Yscroll 的 reset 方法， 主要用于 url 或 请求参数改变的场景<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">//首先new 一个 Yscroll 对象 如上例</div><div class="line">    yscroll.reset(</div><div class="line">      &apos;/api/list&apos;,</div><div class="line">      &#123;keywords: key&#125;,  //请求参数， 无参数传空对象</div><div class="line">      function(err, resp) &#123;</div><div class="line">          if(err) &#123; //报错</div><div class="line">              console.log(&apos;err&apos;, err)</div><div class="line">              return</div><div class="line">          &#125;</div><div class="line">         if(resp == &apos;refresh&apos;) &#123;   </div><div class="line">            //code clear list</div><div class="line">            list = []</div><div class="line">         &#125; else &#123;  //根据结果渲染列表</div><div class="line">            // render list</div><div class="line">            ...</div><div class="line">         &#125;    </div><div class="line">      &#125;</div><div class="line">    )</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="Yscroll-原理"><a href="#Yscroll-原理" class="headerlink" title="Yscroll 原理"></a>Yscroll 原理</h2><blockquote>
+<p>大致流程：<br>1、初始化： 在列表的父类下插入一个子元素, 作为列表元素的父元素， 如下图所示(id=”scroll-wrapper”)<br><img src="/images/scroll-wrap.png" alt="scroll-wrapper"><br>并为该元素注册 touch 事件 ( touchstart, touchmove, touchend, touchcancel )<br>2、页面滑动时：</p>
+<ul>
+<li>当页面滑动到顶部时， 如果继续往上拉页面， 刷新当前列表</li>
+<li>当页面滑动到底部时， 如果继续下拉页面， 请求下一页列表</li>
+</ul>
+<h2 id="Yscroll-源码"><a href="#Yscroll-源码" class="headerlink" title="Yscroll 源码"></a>Yscroll 源码</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div><div class="line">189</div><div class="line">190</div><div class="line">191</div><div class="line">192</div><div class="line">193</div><div class="line">194</div><div class="line">195</div><div class="line">196</div><div class="line">197</div><div class="line">198</div><div class="line">199</div><div class="line">200</div><div class="line">201</div><div class="line">202</div><div class="line">203</div><div class="line">204</div><div class="line">205</div><div class="line">206</div><div class="line">207</div><div class="line">208</div><div class="line">209</div><div class="line">210</div><div class="line">211</div><div class="line">212</div><div class="line">213</div><div class="line">214</div><div class="line">215</div><div class="line">216</div><div class="line">217</div><div class="line">218</div><div class="line">219</div><div class="line">220</div><div class="line">221</div><div class="line">222</div><div class="line">223</div><div class="line">224</div><div class="line">225</div><div class="line">226</div><div class="line">227</div><div class="line">228</div><div class="line">229</div><div class="line">230</div><div class="line">231</div><div class="line">232</div><div class="line">233</div><div class="line">234</div><div class="line">235</div><div class="line">236</div><div class="line">237</div><div class="line">238</div><div class="line">239</div><div class="line">240</div><div class="line">241</div><div class="line">242</div><div class="line">243</div><div class="line">244</div><div class="line">245</div><div class="line">246</div><div class="line">247</div><div class="line">248</div><div class="line">249</div><div class="line">250</div><div class="line">251</div><div class="line">252</div><div class="line">253</div><div class="line">254</div><div class="line">255</div><div class="line">256</div><div class="line">257</div><div class="line">258</div><div class="line">259</div><div class="line">260</div><div class="line">261</div><div class="line">262</div><div class="line">263</div><div class="line">264</div><div class="line">265</div><div class="line">266</div><div class="line">267</div><div class="line">268</div><div class="line">269</div><div class="line">270</div><div class="line">271</div><div class="line">272</div><div class="line">273</div><div class="line">274</div><div class="line">275</div><div class="line">276</div><div class="line">277</div><div class="line">278</div><div class="line">279</div><div class="line">280</div><div class="line">281</div><div class="line">282</div><div class="line">283</div><div class="line">284</div><div class="line">285</div><div class="line">286</div><div class="line">287</div><div class="line">288</div><div class="line">289</div><div class="line">290</div><div class="line">291</div><div class="line">292</div><div class="line">293</div><div class="line">294</div><div class="line">295</div><div class="line">296</div><div class="line">297</div><div class="line">298</div><div class="line">299</div><div class="line">300</div><div class="line">301</div><div class="line">302</div><div class="line">303</div><div class="line">304</div><div class="line">305</div><div class="line">306</div><div class="line">307</div><div class="line">308</div><div class="line">309</div><div class="line">310</div><div class="line">311</div><div class="line">312</div><div class="line">313</div><div class="line">314</div><div class="line">315</div><div class="line">316</div><div class="line">317</div><div class="line">318</div><div class="line">319</div><div class="line">320</div><div class="line">321</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"> * author: feifeiyu</div><div class="line"> * verion: 2.0</div><div class="line"> * @param target // list container DOM id， not null</div><div class="line"> * @param refresh  // enable or disable page refresh, type: boolean, default: true</div><div class="line"> * @param url // request api address, type: url string,</div><div class="line"> * @param headers //http request headers, type: object</div><div class="line"> * @param param //http request query(parameters), type: object</div><div class="line"> * @param height //list container height, type: number, default: window.screen.height</div><div class="line"> * @param loadImmedate  // whether send request on page init or not, type: boolean, default: true</div><div class="line"> * @param preload  // enable or disable page list preload, default: true</div><div class="line"> × @param cb // callback type: function</div><div class="line"> * parameters for reset function</div><div class="line"> * @param url // reset request api address, type: url string  </div><div class="line"> * @param param // reset request query, type: object</div><div class="line"> * @param cb // callback type: function</div><div class="line"> * Yscroll is a page split component for h5</div><div class="line"> * Yscroll blog: https://feifeiyum.github.io/2016/09/26/yscroll-for-h5/</div><div class="line"> */</div><div class="line"><span class="comment">//添加依赖(配合 export 使用)</span></div><div class="line"><span class="comment">//const reqwest = require('reqwest')</span></div><div class="line"></div><div class="line"><span class="keyword">var</span> Yscroll = (<span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">    <span class="keyword">var</span> YS = <span class="function"><span class="keyword">function</span>(<span class="params">opt, cb</span>) </span>&#123;</div><div class="line">        <span class="keyword">if</span>(!opt.target) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yscroll - target id can\'t be null'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> opt.target !== <span class="string">'string'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yscroll - type of target id is string'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.url !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.url !== <span class="string">'string'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yscroll - type of request url is string '</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.headers !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.headers !== <span class="string">'object'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yscroll - type of headers (http headers) is object '</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.refresh !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.refresh !== <span class="string">'boolean'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yscroll - type of refresh is boolean'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.loadImmediate !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.loadImmediate !== <span class="string">'boolean'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yscroll - type of loadImmediate is boolean'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.preload !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.preload !== <span class="string">'boolean'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yscroll - type of preload is boolean'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.height !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.height !== <span class="string">'number'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yscroll - type of height is number'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(opt.param !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> opt.param != <span class="string">'object'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yscroll - type of param is object'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(!cb) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yscroll - callback function cant not be null'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(<span class="keyword">typeof</span> cb !== <span class="string">'function'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yscroll - callback function type is not function'</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></div><div class="line">        self.refresh = opt.refresh !== <span class="literal">undefined</span> ? opt.refresh : <span class="literal">true</span> <span class="comment">//是否使能下拉刷新</span></div><div class="line">        opt.headers &amp;&amp; (self.headers = opt.headers) <span class="comment">//http 请求头部</span></div><div class="line">        self.height = opt.height || <span class="built_in">window</span>.screen.height <span class="comment">//列表高度</span></div><div class="line">        opt.url &amp;&amp; (self.next = opt.url)  <span class="comment">//请求地址</span></div><div class="line">        self.preload = opt.preload !== <span class="literal">undefined</span> ? opt.preload : <span class="literal">true</span> <span class="comment">//是否使能预加载</span></div><div class="line">        self.loadEnable = opt.url !== <span class="literal">undefined</span></div><div class="line">        self.cb = cb <span class="comment">//回调</span></div><div class="line">        <span class="comment">//是否实例化后就加载数据</span></div><div class="line">        <span class="keyword">var</span> loadImmediate = opt.loadImmediate !== <span class="literal">undefined</span> ? opt.loadImmediate : <span class="literal">true</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span>(opt.param) &#123;</div><div class="line">            self.next = self.assembleQuery(self.next, opt.param)</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="comment">//生成所需要dom</span></div><div class="line">        self.genDom(opt.target)</div><div class="line">        <span class="comment">//注册事件</span></div><div class="line">        self.touchEvt()</div><div class="line">        <span class="comment">//加载数据</span></div><div class="line">        loadImmediate &amp;&amp; self.fetchData()</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    YS.prototype.genDom = <span class="function"><span class="keyword">function</span>(<span class="params">target</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></div><div class="line">        <span class="comment">//Yscroll Wrap</span></div><div class="line">        self.ysWrap = <span class="built_in">document</span>.createElement(<span class="string">'div'</span>)</div><div class="line">        self.ysWrap.id = <span class="string">'yscroll-wrapper'</span></div><div class="line">        self.ysWrap.style.cssText = <span class="string">'position:absolute;'</span></div><div class="line">            + <span class="string">'width:100%;'</span></div><div class="line">            + <span class="string">'overflow-x:hidden;'</span></div><div class="line">            + <span class="string">'overflow-y:scroll;'</span></div><div class="line">            + <span class="string">'-webkit-overflow-scrolling:touch;'</span></div><div class="line">            + <span class="string">'height:'</span> + self.height + <span class="string">'px;'</span></div><div class="line">        </div><div class="line">        <span class="comment">//加载更多图标</span></div><div class="line">        self.loadMoreNode = <span class="built_in">document</span>.createElement(<span class="string">'p'</span>)</div><div class="line">        self.loadMoreNode.id = <span class="string">'yscroll-more'</span></div><div class="line">        self.loadMoreNode.style.cssText = <span class="string">'display:none;'</span></div><div class="line">            + <span class="string">'margin:0;'</span></div><div class="line">            + <span class="string">'bottom:-28px;'</span></div><div class="line">            + <span class="string">'text-align:center;'</span></div><div class="line">            + <span class="string">'height:28px;'</span></div><div class="line">            + <span class="string">'line-height:28px;'</span></div><div class="line">            + <span class="string">'font-size:12px;'</span></div><div class="line">            + <span class="string">'color:#323232;'</span></div><div class="line">        self.loadMoreNode.innerHTML = <span class="string">'上拉加载更多'</span></div><div class="line"></div><div class="line">        <span class="comment">//下拉刷新图标</span></div><div class="line">        self.refreshNode = <span class="built_in">document</span>.createElement(<span class="string">'p'</span>)</div><div class="line">        self.refreshNode.id = <span class="string">'yscroll-more'</span></div><div class="line">        self.refreshNode.style.cssText = <span class="string">'display:none;'</span></div><div class="line">            + <span class="string">'margin:0;'</span></div><div class="line">            + <span class="string">'text-align:center;'</span></div><div class="line">            + <span class="string">'height:28px;'</span></div><div class="line">            + <span class="string">'line-height:28px;'</span></div><div class="line">            + <span class="string">'font-size:12px;'</span></div><div class="line">            + <span class="string">'color:#323232;'</span></div><div class="line">        self.refreshNode.innerHTML = <span class="string">'下拉刷新'</span></div><div class="line"></div><div class="line">        <span class="keyword">var</span> targetNode = <span class="built_in">document</span>.getElementById(target) </div><div class="line">        <span class="keyword">var</span> tarParent = targetNode.parentNode</div><div class="line">        tarParent.style.position = <span class="string">'relative'</span></div><div class="line"></div><div class="line">        <span class="keyword">if</span>(!targetNode) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error]: Yscroll - can not find list target DOM'</span></div><div class="line">        &#125;</div><div class="line">        self.ysWrap.appendChild(self.refreshNode)</div><div class="line">        self.ysWrap.appendChild(targetNode)</div><div class="line">        self.ysWrap.appendChild(self.loadMoreNode)</div><div class="line">        tarParent.appendChild(self.ysWrap)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    YS.prototype.fetchData = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'next'</span>, self.next)</div><div class="line">        <span class="keyword">if</span>(self.next === <span class="string">'refresh'</span>) &#123;</div><div class="line">            self.loadEnable = <span class="literal">true</span></div><div class="line">            self.cb(<span class="literal">null</span>, <span class="string">'refresh'</span>)</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            self.loadMoreNode.innerHTML = <span class="string">'加载中 . . .'</span></div><div class="line">            self.refreshNode.innerHTML = <span class="string">'加载中 . . .'</span></div><div class="line">            reqwest(&#123;</div><div class="line">                url: self.next,</div><div class="line">                method: <span class="string">'GET'</span>,</div><div class="line">                headers: self.headers,</div><div class="line">                crossOrigin: <span class="literal">true</span></div><div class="line">            &#125;).then(<span class="function"><span class="keyword">function</span>(<span class="params">resp</span>) </span>&#123;</div><div class="line">                <span class="keyword">if</span>(resp.next) &#123;</div><div class="line">                    self.next = resp.next</div><div class="line">                    self.loadMoreNode.style.display = <span class="string">'none'</span></div><div class="line">                    self.loadMoreNode.innerHTML = <span class="string">'上拉加载更多'</span></div><div class="line">                &#125; <span class="keyword">else</span> &#123;</div><div class="line">                    self.loadEnable = <span class="literal">false</span></div><div class="line">                    self.loadMoreNode.style.display = <span class="string">'block'</span></div><div class="line">                    self.loadMoreNode.innerHTML = <span class="string">'没有更多了'</span></div><div class="line">                &#125;</div><div class="line">                self.refreshNode.style.display = <span class="string">'none'</span></div><div class="line">                self.refreshNode.innerHTML = <span class="string">'下拉刷新'</span></div><div class="line">                </div><div class="line">                self.cb(<span class="literal">null</span>, resp)</div><div class="line">            &#125;)</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    YS.prototype.touchEvt = <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></div><div class="line">        <span class="keyword">var</span> startY = <span class="number">0</span> <span class="comment">//滑动起点</span></div><div class="line">        <span class="keyword">var</span> offsetY = <span class="number">0</span> <span class="comment">//拉动距离</span></div><div class="line"></div><div class="line">        <span class="comment">//touch事件处理</span></div><div class="line">        <span class="keyword">var</span> touch = <span class="function"><span class="keyword">function</span>(<span class="params">e</span>) </span>&#123;</div><div class="line">            <span class="comment">// e.preventDefault()  //加了 scroll 事件没了</span></div><div class="line">            <span class="keyword">var</span> evt = e || <span class="built_in">window</span>.event</div><div class="line">            <span class="keyword">var</span> offsetTop = self.ysWrap.scrollHeight - self.height  <span class="comment">//相对与顶部最大偏移距离</span></div><div class="line">            <span class="keyword">var</span> scrollTop = self.ysWrap.scrollTop</div><div class="line">            <span class="keyword">var</span> touch = e.touches[<span class="number">0</span>]</div><div class="line">           </div><div class="line">            <span class="keyword">switch</span>(evt.type) &#123;</div><div class="line">                <span class="keyword">case</span> <span class="string">'touchstart'</span>:</div><div class="line">                    startY = touch.pageY</div><div class="line">                    <span class="keyword">break</span></div><div class="line">                <span class="keyword">case</span> <span class="string">'touchmove'</span>:</div><div class="line">                    <span class="keyword">if</span>(touch.pageY &lt; <span class="number">200</span>) &#123; <span class="comment">//avoid scroll leakage</span></div><div class="line">                        evt.preventDefault</div><div class="line">                    &#125; <span class="keyword">else</span> &#123;</div><div class="line">                        offsetY = touch.pageY - startY</div><div class="line">                        <span class="keyword">if</span>(self.refresh &amp;&amp; scrollTop === <span class="number">0</span> &amp;&amp; offsetY &gt; <span class="number">0</span>) &#123;</div><div class="line">                            <span class="comment">//在顶部，下拉</span></div><div class="line">                            evt.preventDefault()</div><div class="line">                            self.ysWrap.style.top = offsetY + <span class="string">'px'</span></div><div class="line">                            self.refreshNode.style.display = <span class="string">'block'</span></div><div class="line">                            self.loadMoreNode.style.display = <span class="string">'none'</span></div><div class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span>((offsetTop - scrollTop) &lt; <span class="number">3</span> &amp;&amp; offsetTop &gt; <span class="number">0</span> &amp;&amp; offsetY &lt; <span class="number">0</span>) &#123;</div><div class="line">                            <span class="comment">//在底部， 上拉</span></div><div class="line">                            <span class="comment">//页面存在折叠 即 offsetTop &gt; 0</span></div><div class="line">                            evt.preventDefault()</div><div class="line">                            self.ysWrap.style.top = offsetY + <span class="string">'px'</span></div><div class="line">                            self.loadMoreNode.style.display = <span class="string">'block'</span></div><div class="line">                            self.refreshNode.style.display = <span class="string">'none'</span></div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">break</span></div><div class="line">                <span class="keyword">case</span> <span class="string">'touchend'</span>:</div><div class="line">                    self.ysWrap.style.top = <span class="string">'0px'</span></div><div class="line">                    <span class="keyword">if</span>(!self.loadEnable &amp;&amp; offsetY &lt; <span class="number">0</span>) &#123;</div><div class="line">                        <span class="comment">//不加载更多，下拉时，把页面拉到底部</span></div><div class="line">                        <span class="keyword">if</span>((offsetTop - scrollTop) &lt; <span class="number">100</span>) &#123;</div><div class="line">                            <span class="built_in">document</span>.body.scrollTop = <span class="number">10000</span>  <span class="comment">//把body移到底部</span></div><div class="line">                            offsetTop &amp;&amp; (self.ysWrap.scrollTop = self.ysWrap.scrollHeight)</div><div class="line">                        &#125; </div><div class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(self.loadEnable &amp;&amp; offsetY &lt; <span class="number">0</span>) &#123;</div><div class="line">                        <span class="comment">//下滑</span></div><div class="line">                        <span class="keyword">if</span>((offsetTop - scrollTop) &lt; <span class="number">100</span>) &#123;</div><div class="line">                            <span class="built_in">document</span>.body.scrollTop = <span class="number">10000</span>  <span class="comment">//把body移到底部</span></div><div class="line">                        &#125;</div><div class="line">                        </div><div class="line">                        <span class="keyword">if</span>(self.preload &amp;&amp; (offsetTop - scrollTop) / self.height &lt; <span class="number">0.3</span>) &#123;</div><div class="line">                            <span class="comment">//提前加载， 在页面滚到到底部之前加载</span></div><div class="line">                            self.fetchData() <span class="comment">//请求接口</span></div><div class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span>((offsetTop - scrollTop) &lt; <span class="number">3</span> &amp;&amp; offsetY &lt; <span class="number">-100</span>) &#123;</div><div class="line">                            <span class="comment">//下拉加载 在页面滚到到底部加载</span></div><div class="line">                            self.fetchData() <span class="comment">//请求接口</span></div><div class="line">                        &#125;</div><div class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(self.refresh &amp;&amp; offsetY &gt; <span class="number">0</span>) &#123;</div><div class="line">                        <span class="comment">//上滑</span></div><div class="line">                        <span class="built_in">document</span>.body.scrollTop = <span class="number">0</span>  <span class="comment">//把body移到顶部</span></div><div class="line">                        <span class="keyword">if</span>(scrollTop == <span class="number">0</span>) &#123;</div><div class="line">                            <span class="keyword">if</span> (offsetY &gt; <span class="number">120</span>) &#123;</div><div class="line">                                <span class="keyword">let</span> urlTmp = self.next</div><div class="line">                                self.next = <span class="string">'refresh'</span></div><div class="line">                                self.fetchData() <span class="comment">//请求清空</span></div><div class="line">                                self.next = urlTmp.replace(<span class="regexp">/&amp;?page=\d+/</span>, <span class="string">''</span>)</div><div class="line">                                self.fetchData()  <span class="comment">//重新加载数据</span></div><div class="line">                            &#125; </div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">break</span></div><div class="line">                <span class="keyword">case</span> <span class="string">'touchcancel'</span>: </div><div class="line">                    self.ysWrap.style.top = <span class="string">'0px'</span></div><div class="line">                    <span class="keyword">if</span>(!self.loadEnable &amp;&amp; offsetY &lt; <span class="number">0</span>) &#123;</div><div class="line">                        <span class="comment">//不加载更多，下拉时，把页面拉到底部</span></div><div class="line">                        <span class="keyword">if</span>((offsetTop - scrollTop) &lt; <span class="number">100</span>) &#123;</div><div class="line">                            <span class="built_in">document</span>.body.scrollTop = <span class="number">10000</span>  <span class="comment">//把body移到底部</span></div><div class="line">                            offsetTop &amp;&amp; (self.ysWrap.scrollTop = self.ysWrap.scrollHeight)</div><div class="line">                        &#125; </div><div class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(self.loadEnable &amp;&amp; offsetY &lt; <span class="number">0</span>) &#123;</div><div class="line">                        <span class="comment">//下滑</span></div><div class="line">                        <span class="keyword">if</span>((offsetTop - scrollTop) &lt; <span class="number">100</span>) &#123;</div><div class="line">                            <span class="built_in">document</span>.body.scrollTop = <span class="number">10000</span>  <span class="comment">//把body移到底部</span></div><div class="line">                        &#125;</div><div class="line">                        </div><div class="line">                        <span class="keyword">if</span>(self.preload &amp;&amp; (offsetTop - scrollTop) / self.height &lt; <span class="number">0.3</span>) &#123;</div><div class="line">                            <span class="comment">//提前加载， 在页面滚到到底部之前加载</span></div><div class="line">                            self.fetchData() <span class="comment">//请求接口</span></div><div class="line">                        &#125; <span class="keyword">else</span> <span class="keyword">if</span>((offsetTop - scrollTop) &lt; <span class="number">3</span> &amp;&amp; offsetY &lt; <span class="number">-100</span>) &#123;</div><div class="line">                            <span class="comment">//下拉加载 在页面滚到到底部加载</span></div><div class="line">                            self.fetchData() <span class="comment">//请求接口</span></div><div class="line">                        &#125;</div><div class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span>(self.refresh &amp;&amp; offsetY &gt; <span class="number">0</span>) &#123;</div><div class="line">                        <span class="comment">//上滑</span></div><div class="line">                        <span class="built_in">document</span>.body.scrollTop = <span class="number">0</span>  <span class="comment">//把body移到顶部</span></div><div class="line">                        <span class="keyword">if</span>(scrollTop == <span class="number">0</span>) &#123;</div><div class="line">                            <span class="keyword">if</span> (offsetY &gt; <span class="number">120</span>) &#123;</div><div class="line">                                <span class="keyword">let</span> urlTmp = self.next</div><div class="line">                                self.next = <span class="string">'refresh'</span></div><div class="line">                                self.fetchData() <span class="comment">//请求清空</span></div><div class="line">                                self.next = urlTmp.replace(<span class="regexp">/&amp;?page=\d+/</span>, <span class="string">''</span>)</div><div class="line">                                self.fetchData()  <span class="comment">//重新加载数据</span></div><div class="line">                            &#125; </div><div class="line">                        &#125;</div><div class="line">                    &#125;</div><div class="line">                    <span class="keyword">break</span></div><div class="line">                <span class="keyword">default</span>:</div><div class="line">                    <span class="keyword">break</span></div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        self.ysWrap.addEventListener(<span class="string">'touchstart'</span>, touch, <span class="literal">false</span>)</div><div class="line">        self.ysWrap.addEventListener(<span class="string">'touchmove'</span>, touch, <span class="literal">false</span>)</div><div class="line">        self.ysWrap.addEventListener(<span class="string">'touchend'</span>, touch, <span class="literal">false</span>)</div><div class="line">        self.ysWrap.addEventListener(<span class="string">'touchcancel'</span>, touch, <span class="literal">false</span>)</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    YS.prototype.reset = <span class="function"><span class="keyword">function</span>(<span class="params">url, param, cb</span>) </span>&#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'in reset'</span>)</div><div class="line">        <span class="keyword">var</span> self = <span class="keyword">this</span></div><div class="line">        <span class="keyword">if</span>(url !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> url !== <span class="string">'string'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error] Yscroll - type of url in Yscroll.reset is string'</span></div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(param !== <span class="literal">undefined</span> &amp;&amp; <span class="keyword">typeof</span> param !== <span class="string">'object'</span>) &#123;</div><div class="line">            <span class="keyword">throw</span> <span class="string">'[error] Yscroll - type of param in Yscroll.reset is object'</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        url &amp;&amp; (self.next = url)</div><div class="line">        <span class="keyword">if</span>(param) &#123;</div><div class="line">            self.next = self.assembleQuery(self.next, param)</div><div class="line">        &#125;</div><div class="line">        cb &amp;&amp; (self.cb = cb)</div><div class="line">        </div><div class="line">        <span class="comment">//请求数据</span></div><div class="line">        self.fetchData()</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="comment">//组装参数</span></div><div class="line">    YS.prototype.assembleQuery = <span class="function"><span class="keyword">function</span>(<span class="params">url, param</span>) </span>&#123;</div><div class="line">        <span class="keyword">var</span> query = <span class="string">''</span></div><div class="line">        <span class="keyword">for</span>(<span class="keyword">var</span> key <span class="keyword">in</span> param) &#123;</div><div class="line">            query += <span class="string">'&amp;'</span> + key + <span class="string">'='</span> + param[key]</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">if</span>(<span class="regexp">/\?\w+/</span>.test(url)) &#123;</div><div class="line">            url += query</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            url += <span class="string">'?'</span> + query.slice(<span class="number">1</span>)</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> url</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> YS</div><div class="line">&#125;())</div><div class="line"></div><div class="line"><span class="comment">//采用模块化引入时使用该句</span></div><div class="line"><span class="comment">//module.exports = Yscroll</span></div></pre></td></tr></table></figure>
+</blockquote>
+<h2 id="END"><a href="#END" class="headerlink" title="END"></a>END</h2>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/js/" rel="tag">#js</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/18/koa2-web应用进阶—数据持久化/" rel="next" title="第七篇：koa2 web应用进阶—数据持久化">
+                <i class="fa fa-chevron-left"></i> 第七篇：koa2 web应用进阶—数据持久化
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/10/05/常用css样式/" rel="prev" title="常用css样式">
+                常用css样式 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/09/26/yscroll-for-h5/"
+     data-title="H5 端分页组件 Yscroll"
+     data-content=""
+     data-url="https://feifeiyum.github.io/2016/09/26/yscroll-for-h5/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/26/yscroll-for-h5/"
+           data-title="H5 端分页组件 Yscroll" data-url="https://feifeiyum.github.io/2016/09/26/yscroll-for-h5/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/portrait/me2.jpg"
+               alt="Feifeiyu" />
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Yscroll-使用"><span class="nav-number">1.</span> <span class="nav-text">Yscroll 使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yscroll-原理"><span class="nav-number">2.</span> <span class="nav-text">Yscroll 原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Yscroll-源码"><span class="nav-number">3.</span> <span class="nav-text">Yscroll 源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#END"><span class="nav-number">4.</span> <span class="nav-text">END</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

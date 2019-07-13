@@ -1,0 +1,730 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="koa," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="之前几篇的介绍都是针对某个功能点的介绍，当整个 web 应用变大后，一个清晰的工程目录结构和系统参数配置也是十分必要的。本篇主要目标的介绍koa2-web应用工程目录设计、环境变量/系统变量的配置，同时本篇也是对之前几篇介绍内容的一个整合。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="第六篇：koa2-web应用进阶—系统配置">
+<meta property="og:url" content="https://feifeiyum.github.io/2016/09/18/koa2-web应用进阶-系统配置/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="之前几篇的介绍都是针对某个功能点的介绍，当整个 web 应用变大后，一个清晰的工程目录结构和系统参数配置也是十分必要的。本篇主要目标的介绍koa2-web应用工程目录设计、环境变量/系统变量的配置，同时本篇也是对之前几篇介绍内容的一个整合。">
+<meta property="og:updated_time" content="2016-09-18T11:34:44.731Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="第六篇：koa2-web应用进阶—系统配置">
+<meta name="twitter:description" content="之前几篇的介绍都是针对某个功能点的介绍，当整个 web 应用变大后，一个清晰的工程目录结构和系统参数配置也是十分必要的。本篇主要目标的介绍koa2-web应用工程目录设计、环境变量/系统变量的配置，同时本篇也是对之前几篇介绍内容的一个整合。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> 第六篇：koa2-web应用进阶—系统配置 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br />
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-font">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-html5"></i> <br />
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br />
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                第六篇：koa2-web应用进阶—系统配置
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2016-09-18T19:27:59+08:00" content="2016-09-18">
+              2016-09-18
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/node/" itemprop="url" rel="index">
+                    <span itemprop="name">node</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/18/koa2-web应用进阶-系统配置/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/18/koa2-web应用进阶-系统配置/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>之前几篇的介绍都是针对某个功能点的介绍，当整个 web 应用变大后，一个清晰的工程目录结构和系统参数配置也是十分必要的。本篇主要目标的介绍koa2-web应用工程目录设计、环境变量/系统变量的配置，同时本篇也是对之前几篇介绍内容的一个整合。</p>
+<a id="more"></a>
+</blockquote>
+<h2 id="一、工程结构设计"><a href="#一、工程结构设计" class="headerlink" title="一、工程结构设计"></a>一、工程结构设计</h2><blockquote>
+<p>koa2-web应用目录结构设计<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line">koa2-web</div><div class="line">  ├──bin #应用启动相关配置文件路径</div><div class="line">  |   ├──dispatch.js #系统 cluster配置文件, 采用pm2启动应用不需要该文件</div><div class="line">  |   ├──worker.js # graceful配置文件, 采用pm2启动应用不需要该文件</div><div class="line">  |   ├──log.js #日志配置文件</div><div class="line">  |   └──app.js #koa2应用主文件，一般系统中间件在该文件中引入</div><div class="line">  |</div><div class="line">  ├──public #系统静态文件路径</div><div class="line">  |   ├──common #放置公共文件，如：jQuery, favicon.ico</div><div class="line">  |   └── &apos;&apos;&apos;</div><div class="line">  ├──src #开发文件路径</div><div class="line">  |   ├──app #业务逻辑接口放置于本路径</div><div class="line">  |   ├──router #路由文件路径，所有http请求在次目录下处理</div><div class="line">  |   ├──lib #公共模块抽取置于此路径</div><div class="line">  |   ├──dao #持久层，该目录仅限于数据库操作</div><div class="line">  |   └──views #view层文件放置路径， 模板、js、css/less等文件</div><div class="line">  |       ├──layout 公共模板文件</div><div class="line">  |       └──&apos;&apos;&apos;</div><div class="line">  ├──config  #配置文件路径</div><div class="line">  |   ├──dev.env.config.js #开发环境配置文件</div><div class="line">  |   ├──test.env.config.js #测试环境配置文件</div><div class="line">  |   ├──prod.env.config.js #开发环境配置文件</div><div class="line">  |   ├──log4js.json #log配置文件</div><div class="line">  |   └──package.config.js #打包配置文件（打包篇介绍）</div><div class="line">  |</div><div class="line">  ├──logs  #日志文件输出路径</div><div class="line">  ├──node_modules #node依赖路径，node引入依赖自动生成</div><div class="line">  ├──webpack.config.js # webpack打包配置文件（打包篇介绍）</div><div class="line">  ├──package.json #工程管理文件，系统依赖管理，启动命令、环境变量配置，</div><div class="line">  ├──.gitignore</div><div class="line">  └──README.md</div></pre></td></tr></table></figure></p>
+</blockquote>
+<h2 id="二、三套环境配置文件"><a href="#二、三套环境配置文件" class="headerlink" title="二、三套环境配置文件"></a>二、三套环境配置文件</h2><blockquote>
+<p>一般而言，web系统开发的环境分为 “开发， 测试， 生产”三套环境， node 中可以通过设置系统变量 NODE_ENV 来判断koa 应用现在处于哪一套环境。<br><strong>1、</strong>在上述工程结构中的dev.env.config.js, test.env.config.js, prod.env.config.js 三个文件主要是配置 web 应用在不同环境下的一些系统参数，例如：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="meta">'use strict'</span></div><div class="line"><span class="comment">//全局变量，系统侦听端口</span></div><div class="line">global.listen_port = <span class="number">3000</span>  </div><div class="line"><span class="comment">//redis配置</span></div><div class="line"><span class="keyword">let</span> redisConfig = &#123;</div><div class="line">   port: <span class="number">6379</span>,</div><div class="line">   host: <span class="string">'192.168.1.100'</span>,</div><div class="line">&#125;</div><div class="line"><span class="comment">//非全局变量 需要导出</span></div><div class="line"><span class="built_in">module</span>.exports = &#123;</div><div class="line">  redisConfig: redisConfig</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>2、</strong>引入配置文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//根据环境变量值，引入相应的配置.( NODE_ENV设置在下一节介绍 )</span></div><div class="line"><span class="comment">//以这种方式引入，全局变量将生效</span></div><div class="line"><span class="comment">//下面这段代码最好在koa.js执行前引入，例如置于app.js文件的最顶部</span></div><div class="line"><span class="keyword">if</span>( process.env.NODE_ENV === <span class="string">'development'</span> ) &#123; </div><div class="line">   <span class="built_in">require</span>(<span class="string">'../config/dev.env.config'</span>) </div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>( process.env.NODE_ENV === <span class="string">'test'</span> ) &#123;</div><div class="line">   <span class="built_in">require</span>(<span class="string">'../config/test.env.config'</span>)</div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>( process.env.NODE_ENV === <span class="string">'production'</span> ) &#123;</div><div class="line">   <span class="built_in">require</span>(<span class="string">'../config/prod.env.config'</span>)</div><div class="line">&#125;</div><div class="line"><span class="comment">//非全局变量引入， 在需要使用的时候引入</span></div><div class="line"><span class="keyword">let</span> redisConfig = <span class="built_in">require</span>(<span class="string">'../config/dev.env.config'</span>).redisConfig</div><div class="line"><span class="keyword">if</span>( process.env.NODE_ENV === <span class="string">'test'</span> ) &#123;</div><div class="line">   <span class="keyword">const</span> redisConfig = <span class="built_in">require</span>(<span class="string">'../config/test.env.config'</span>).redisConfig</div><div class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span>( process.env.NODE_ENV === <span class="string">'production'</span> ) &#123;</div><div class="line">   <span class="keyword">const</span> redisConfig = <span class="built_in">require</span>(<span class="string">'../config/prod.env.config'</span>).redisConfig</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>3、</strong>系统配置参数也可以像log的配置文件一样写成json文件，应如 依赖 config（npm i –save config) 解析json文件</p>
+</blockquote>
+<h2 id="三、应用启动命令配置"><a href="#三、应用启动命令配置" class="headerlink" title="三、应用启动命令配置"></a>三、应用启动命令配置</h2><blockquote>
+<p><strong>1、</strong>命令配置： 在 package.json 中的scripts 字段是配置node应用的各种脚本运行命令：例如<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">"scripts": &#123;</div><div class="line">   "start": "export NODE_ENV='development' &amp;&amp; node --harmony bin/dispatch.js",</div><div class="line">  "dpytest": "export NODE_ENV='test' &amp;&amp; node --harmony bin/dispatch.js",</div><div class="line">  "dpyprod": "export NODE_ENV='production' &amp;&amp; node --harmony bin/dispatch.js",</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p><strong>2、</strong>命令执行：</p>
+<blockquote>
+<p>npm start：表示执行脚本 “export NODE_ENV=’development’ &amp;&amp; node –harmony bin/dispatch.js”, 这个段脚本可以一分为二：   </p>
+<blockquote>
+<p> a、export NODE_ENV=’development’ 设置 node 环境变量为 ‘development’<br> b、node –harmony bin/dispatch.js node 运行脚本<br>npm run dpytest 和 npm run dpyprod则分别执行脚本”export NODE_ENV=’test’ &amp;&amp; node –harmony bin/dispatch.js”和export NODE_ENV=’production’ &amp;&amp; node –harmony bin/dispatch.js<br>注意： 非 start 的命令， 都需要加上 run, 不加 run 是 start 的特权。<br><strong>3、</strong>使用pm2启动应用例子<br><figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">"scripts": &#123;</div><div class="line">   "pm2dev": "export NODE_ENV='development' &amp;&amp; pm2 start bin/app.js --name serverdev -o logs/app.log &amp;&amp; pm2 logs serverdev",</div><div class="line">   "pm2res": "pm2 restart serverdev",</div><div class="line">   "pm2del": "pm2 delete serverdev",</div><div class="line"> &#125;,</div></pre></td></tr></table></figure></p>
+</blockquote>
+<p>npm run pm2dev 启动服务<br>npm run pm2res 重启服务<br>npm run pm2del 删除进程  </p>
+</blockquote>
+</blockquote>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><blockquote>
+<p>之后的介绍将基于本篇介绍的结构工程结构， 且启动方式将基于pm2</p>
+</blockquote>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/koa/" rel="tag">#koa</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/18/koa2-web应用进阶—系统稳定性/" rel="next" title="第五篇：koa2-web应用进阶—系统稳定性">
+                <i class="fa fa-chevron-left"></i> 第五篇：koa2-web应用进阶—系统稳定性
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/09/18/koa2-web应用进阶—数据持久化/" rel="prev" title="第七篇：koa2 web应用进阶—数据持久化">
+                第七篇：koa2 web应用进阶—数据持久化 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+        <div class="ds-share flat" data-thread-key="2016/09/18/koa2-web应用进阶-系统配置/"
+     data-title="第六篇：koa2-web应用进阶—系统配置"
+     data-content=""
+     data-url="https://feifeiyum.github.io/2016/09/18/koa2-web应用进阶-系统配置/">
+  <div class="ds-share-inline">
+    <ul  class="ds-share-icons-16">
+
+      <li data-toggle="ds-share-icons-more"><a class="ds-more" href="javascript:void(0);">分享到：</a></li>
+      <li><a class="ds-weibo" href="javascript:void(0);" data-service="weibo">微博</a></li>
+      <li><a class="ds-qzone" href="javascript:void(0);" data-service="qzone">QQ空间</a></li>
+      <li><a class="ds-qqt" href="javascript:void(0);" data-service="qqt">腾讯微博</a></li>
+      <li><a class="ds-wechat" href="javascript:void(0);" data-service="wechat">微信</a></li>
+
+    </ul>
+    <div class="ds-share-icons-more">
+    </div>
+  </div>
+</div>
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/09/18/koa2-web应用进阶-系统配置/"
+           data-title="第六篇：koa2-web应用进阶—系统配置" data-url="https://feifeiyum.github.io/2016/09/18/koa2-web应用进阶-系统配置/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/portrait/me2.jpg"
+               alt="Feifeiyu" />
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">26</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://www.yeyuqiu.me/" title="叶宇球博客" target="_blank">叶宇球博客</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、工程结构设计"><span class="nav-number">1.</span> <span class="nav-text">一、工程结构设计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、三套环境配置文件"><span class="nav-number">2.</span> <span class="nav-text">二、三套环境配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、应用启动命令配置"><span class="nav-number">3.</span> <span class="nav-text">三、应用启动命令配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
