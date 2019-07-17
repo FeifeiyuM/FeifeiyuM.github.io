@@ -1,0 +1,848 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="mysql,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="声明本文并非原创，根据原文学习MySQL优化原理，这一篇就够了！整理而成. 姑且当做学习笔记. MySQL 逻辑架构">
+<meta name="keywords" content="mysql">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MySQL 原理整理">
+<meta property="og:url" content="https://feifeiyum.github.io/2019/07/13/mysql-principle/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="声明本文并非原创，根据原文学习MySQL优化原理，这一篇就够了！整理而成. 姑且当做学习笔记. MySQL 逻辑架构">
+<meta property="og:locale" content="en">
+<meta property="og:image" content="https://feifeiyum.github.io/images/database/mysql-struct.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/database/mysql-query-process.png">
+<meta property="og:image" content="https://feifeiyum.github.io/images/database/innodb-btree.jpg">
+<meta property="og:updated_time" content="2019-07-17T06:11:52.582Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="MySQL 原理整理">
+<meta name="twitter:description" content="声明本文并非原创，根据原文学习MySQL优化原理，这一篇就够了！整理而成. 姑且当做学习笔记. MySQL 逻辑架构">
+<meta name="twitter:image" content="https://feifeiyum.github.io/images/database/mysql-struct.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> MySQL 原理整理 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-database">
+          <a href="/categories/database/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-database"></i> <br>
+            
+            Database
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                MySQL 原理整理
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2019-07-13T10:32:44+08:00" content="2019-07-13">
+              2019-07-13
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/database/" itemprop="url" rel="index">
+                    <span itemprop="name">database</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2019/07/13/mysql-principle/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2019/07/13/mysql-principle/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="声明"><a href="#声明" class="headerlink" title="声明"></a>声明</h3><p>本文并非原创，根据原文<a href="https://dbaplus.cn/news-155-1531-1.html" target="_blank" rel="noopener">学习MySQL优化原理，这一篇就够了！</a>整理而成. 姑且当做学习笔记.</p>
+<h2 id="MySQL-逻辑架构"><a href="#MySQL-逻辑架构" class="headerlink" title="MySQL 逻辑架构"></a>MySQL 逻辑架构</h2><p> <img src="/images/database/mysql-struct.png" alt="mysql-struct"></p>
+<a id="more"></a>
+<p>MySQL 逻辑架构分为三层，最上层为客户端层，并非 MySQL 独有的，诸如： 连接处理，授权认证，安全等功能均在这一层处理。</p>
+<p>MySQL 大多数核心服务均在中间这一层，包括查询解析，分析，优化，缓存内置函数（比如：日期：CURDATE(), DATE_SUB(), DATE_ADD(); 数学计算：SUM(), MIN()；加密：AES_DECRYPT(), DECODE() 等函数）。所有夸存储的功能也在这一层实现：包括存错过程，触发器，视图等。</p>
+<p>MySQL 最下层为存储引擎，负责 MySQL 中的数据存储和提取。和 Linux 的文件系统类似，每种存储引擎都有其优势和劣势。中间的服务层通过 API 与存储引擎通信，这些 API 接口屏蔽了不同存储引擎间的差异。</p>
+<h2 id="MySQL-查询过程"><a href="#MySQL-查询过程" class="headerlink" title="MySQL 查询过程"></a>MySQL 查询过程</h2><p>想要获得较高的查询效率，最好的方式是理清楚 MySQL 是如何进行优化和执行查询的。查询优化工作实质上就是遵循一些原则让 MySQL 优化器能够按照预想的合理方式运行而已。<br><img src="/images/database/mysql-query-process.png" alt="mysql-query-process"></p>
+<h3 id="客户端和服务端通信"><a href="#客户端和服务端通信" class="headerlink" title="客户端和服务端通信"></a>客户端和服务端通信</h3><p>Mysql 客户端和服务端通信模式是”半双工”的： 在任一时刻，要么是服务器向客户端发送数据，要么是客户端向服务器发送数据。一旦一段开始发送消息，另一端要接受完整消息才能响应对方。所以无法将一个消息切成小块分批发送，也没有办法进行流量控制</p>
+<p>客户端采用<strong>一个单独的数据包</strong>将查询请求发送服务器，所以当查询语句很长的时候，需要设置 MAX_ALLOWED_PACKET 参数。但是如果查询语句实在太长，服务端会拒绝接收更多的数据并抛出异常</p>
+<p>服务器响应给客户端的数据一般数据量较大，由<strong>多个数据包</strong>组成。当服务器响应客户端请求时，客户端必须完成接收整个返回结果，而不能只取前面的几个数据包。因而，在实际开发中，尽量保持查询简单且只返回必须的数据，减小通信间的数据包大小和数量。这也是查询中尽量避免使用 SELECT * 以及加上 LIMIT 限制的原因之一。</p>
+<h3 id="查询缓存"><a href="#查询缓存" class="headerlink" title="查询缓存"></a>查询缓存</h3><p>在解析一个查询语句之前，如果查询缓存是打开的，那么 MySQL 会检查这个查询语句是否命中查询缓存中的数据。如果当前查询恰好命中查询缓存，在检查一次用户权限后直接返回缓存中的结果。因此，查询不会被解析，也不会生成执行计划，不会执行查询。</p>
+<p>MySQL 将缓存存放在一个应用表（可以认为是类似于 HashMap 的数据结构），通过一个哈希值索引，这个哈希值通过查询本身，当前要查询的数据库、客户端协议版本号等一些可能影响查询结果的信息计算得来的。所以两个查询在任何字符上的不同（包括：空格，注释），都会导致缓存不命中。</p>
+<p>如果查询中包含任何用户自定义函数，存储函数，用户变量，临时表，MySQL 库中的系统表，气查询结果都不会缓存。 比如行数 NOW() 或者 CURRENT_DATE() 会因为查询时间而返回不同结果，影响查询结果。在比如包含 CURRENT_USER 或者 CONNECTION_ID() 的查询语句会因为不同的用户而返回不同的结果，这样的查询结果缓存起来没有意义。</p>
+<p>是缓存就会有失效的时间，MySQL 的查询缓存系统会跟踪查询中涉及的每个表，如果这些表（数据或结构）发生变化，那么这张表相关的所有缓存数据都将失效。正因为如此，在任何的写操作时，MySQL 必须将对应表的缓存都设置为失效。如果查询缓存非常大或者碎片很多，这个操作就有可能带来很大的系统消耗，甚至会导致系统卡顿。</p>
+<p>而且查询缓存对系统的额外消耗不仅仅在于写操作，读操作也会受影响： 1、任何查询语句在开始之前都必须检查缓存是否存在，即使这条 SQL 语句永远不会命中缓存。 2、如果查询结果可以被缓存，那么执行完成以后，会将结果存入缓存，也会需要消耗额外的资源</p>
+<p>基于此，可以分析得出，并不是什么情况下查询缓存都会提高系统性能，缓存操作，缓存失效都会带来额外消耗，只有当缓存带来的资源节约大于其本身消耗，缓存菜会带来系统性能提升。如果想要尝试使用数据库缓存，需要在数据库设计上做一些优化：</p>
+<ul>
+<li>1、用多个小表代替一个大表，不要过度设计</li>
+<li>2、批量插入代替循环单条插入</li>
+<li>3、合理控制缓存空间大小，一般来说大小设置为几十M比较合适</li>
+<li><p>4、可以通过 SQL_CHAHE 和 SQL_NO_CACHE 来控制某个查询语句是否需要进行缓存</p>
+<p>PS: 尽量不要轻易打开缓存，特别是写密集型应用。如果实在需要使用，可以将 query_cache_type 设置为 DEMAND, 这是只有加入 SQL_CACHE 的查询才会走缓存，否者不缓存。这可以可以比较自由得控制查询是否需要被缓存</p>
+</li>
+</ul>
+<h3 id="语法解析和预处理"><a href="#语法解析和预处理" class="headerlink" title="语法解析和预处理"></a>语法解析和预处理</h3><p>语法解析：MySQL 通过关键字将 SQL 语法解析，并生成一颗对应的解析树。这个过程中解析器主要通过语法规则来验证和解析。比如：SQL 语句中是否使用了错误的关键字或者关键字的顺序是否正确等。</p>
+<p>预处理：预处理则会根据 MySQL 规则进一步检查解析树是否合法。比如检查要查询的数据表或数据列是否存在等</p>
+<h3 id="查询优化"><a href="#查询优化" class="headerlink" title="查询优化"></a>查询优化</h3><p>如果通过语法简析和预处理后的步骤后，生产的语法树被认为是合法的了，并且由优化器将其转化成查询计划。多数情况下，一条查询可以有很多种执行方式，最后都返回相应的结果。优化器的作用是找到其中最好的及执行计划。</p>
+<p>MySQL 使用基于成本的优化器，它会尝试预测一个查询使用某种执行计划时的成本，并选择其中成本最小的一个。在 MySQL 可以通过查询当前会话的 last_query_cost 的值来得到其计算当前的查询成本</p>
+<p>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM `account` where `id`&gt;100;</span><br><span class="line">... 结果集</span><br><span class="line"></span><br><span class="line">SHOW STATUS LIKE &quot;LAST_QUERY_COST&quot;;</span><br><span class="line">+-----------------+-------------+</span><br><span class="line">|  Variable_name  | Value       |</span><br><span class="line">+-----------------+-------------+</span><br><span class="line">| Last_query_cost | 28.292028   |</span><br><span class="line">+-----------------|-------------+</span><br></pre></td></tr></table></figure></p>
+<p>示例中的结果表示优化器认为大概需要做 28 个数据也的随机查找才能上面的查询。这个结果是根据一些列的统计信息计算得来的。这些统计信息包括： 每张表或者索引的页面个数，索引的基数，索引和数据行的长度、索引的分布情况等。有非常多的原因会导致 MySQL 选择错误的执行计划，比如统计信息不准确，不会考虑不受其控制的操作成本（用户自定义函数，存储过程)。此外，MySQL 选择成本最低的执行计划，并不意味着执行时间最短</p>
+<p>MySQL 的查询优化器是一个非常复杂的部件，他使用了非常多的优化策略来生成一个最优的执行计划：</p>
+<ul>
+<li>重新定义表的关联顺序（多张表关联查询时，并不一定按照SQL中指定的顺序进行，但有技巧可以指定关联顺序)</li>
+<li>优化MIN()和MAX()函数（找到某列最小的值，如果该列有索引，只需要查找B+Tree索引的最左端，反之找最右端)</li>
+<li>提前终止查询(比如：使用 LIMIT 时，查找到满足的数量的结果集后悔立即终止查询)</li>
+<li>优化排序（在老版本的 MySQL 会使用两次传输排序，即先读取行指针和需要排序的字段在内存中对其进行排序，然后在根据排序结果去读取数据行，新版本中采用的是单次传输排序，也就是一次读取所有的数据行，然后根据给定的列排序，对于I/O密集型应用，效率会搞很多)</li>
+</ul>
+<h3 id="查询执行引擎"><a href="#查询执行引擎" class="headerlink" title="查询执行引擎"></a>查询执行引擎</h3><p>完成解析和优化阶段后，MySQL 会生成对应的执行计划，查询执行引擎根据执行计划给出的指令逐步执行得出结果。整个执行过程大部分操作均是通过调用存储引擎实现的接口来完成的。这些接口被称为 Handler API. 查询过程中的每一张表由一个 Handler 实例表示。实际上， MySQL 在查询优化阶段就为每一张表创建了一个 Handler 实例，优化器可以根据这些实例的接口来获取表的相关信息，包括表的所有列名、索引统计信息等。存储引擎接口提供了非常丰富的功能，但其底层仅有几十个接口，这些接口组合起来完成一次查询的大部分操作。</p>
+<h3 id="返回结果"><a href="#返回结果" class="headerlink" title="返回结果"></a>返回结果</h3><p>查询执行的最后一个阶段就是将结果返回给客户端。即是查询不到数据，MySQL 依然会返回这个查询的相关信息，比如该查询影响到的行数，及执行的时间等。如果查询缓存被打开且查询可以被缓存，MySQL 会将结果缓存。</p>
+<p>查询结果集返回客户端是一个增量且逐步返回的过程，有可能 MySQL 在生成第一条结果时，就开始想客户端逐步返回结果集了。这样服务端就无须存储太多结果而消耗过多内存，也可以让客户端第一时间获得返回结果。需要注意的是，结果集中的每一行都会以一个满足客户端和服务器间的通信协议的数据包发送，再通过 TCP 协议进行传输。再传输过程中，可能对 MySQL 的数据包进行缓存然后批量发送。</p>
+<h3 id="查询过程总结"><a href="#查询过程总结" class="headerlink" title="查询过程总结"></a>查询过程总结</h3><ul>
+<li>客户端向 MySQL 服务器发送一条查询请求</li>
+<li>服务器首先检查查询缓存，如果命中缓存，则立刻返回缓存中结果，否则进入下一步</li>
+<li>服务器进行 SQL 解析、预处理、再有优化器生成对应的执行计划</li>
+<li>MySQL 根据执行计划，调用存储引擎的 API 来执行查询</li>
+<li><p>将结果返回给客户端，同时缓存结果</p>
+<h2 id="性能优化策略"><a href="#性能优化策略" class="headerlink" title="性能优化策略"></a>性能优化策略</h2><p>以下从 Schema设计和数据类型，创建高性能索引，索引相关的数据结构和算法三个方面介绍数据库存储优化策略</p>
+</li>
+</ul>
+<h3 id="Schema设计与数据类型优化"><a href="#Schema设计与数据类型优化" class="headerlink" title="Schema设计与数据类型优化"></a>Schema设计与数据类型优化</h3><p>选择数据类型只要遵循小而简单的原则就好，越小的数据类型通常会更快，占用更少的磁盘、内存、处理时需要的 CPU 周期越少。比如：整型就比字符操作的代价更低。因而用整形类存储 ip 地址，使用 DATETIME 来存储时间，而不是使用字符串。</p>
+<ul>
+<li>通常来说把可为 NULL 的列改为 NOT NULL 不会性能提升有很大帮助。如果想在列上创建索引，就应该将该列设置为 NOT NULL</li>
+<li>对于整型指定宽度，比如INT(11), 没有太大意义。INT 使用23位（4字节)存储空间，那么他的表示范围已经确定，所以 INT(1) 和 INT(20)可以存储数值大小是一样的，INT(11) 只是用来设置显示宽度的，当该 INT 字段设置为 UNSIGNED ZEROFILL 时，会在显示数值时补0知道满足 11 位的显示长度。</li>
+<li>UNSIGNED 表示不允许使用负值， 大致可以使正数的上限提高一倍，比如， TINYINT 存储范围是 -128~127， 而 UNSIGNED TINYNIT 存储范围是 0 ~ 255.</li>
+<li>通常来说，没有太大必要使用 DECIMAL 数据类型，即使是需要存储财务数据时，依然可以使用 BIGINT. 比如需要精确到万分之一，那么可以将数据乘以一百万后然后使用 BIGINT 存储。这样可以避免浮点数的计算不准确和DECIMAL 精确计算代价高的问题。</li>
+<li>TIMESTAMP 使用4个字节存储空间，DATETIME 使用 8 字节存储空间，因而， TIMESTAMP 只能表示 1970-2038 年， 必 DATETIME 表示的范围小得多，而且 TIMESTAMP 的值因时区不同而不同</li>
+<li>大多数情况下没有使用枚举类型的必要，其中一个缺点就是枚举字符串列表是固定的，添加和删除字符串（枚举选项）必须使用 ALTER TABLE</li>
+<li>Schema 的列不要太多，存储引擎的 API 工作时需要在服务器层和存储引擎层之间通过缓冲格式拷贝数据，然后在服务器层将缓冲内容解码成各个列，这个转换过程代价是非常高的。如果列太多而实际使用的列又很少的话，有可能导致 CPU 占用过高</li>
+<li>大表 ALTER TABLE 非常耗时，MySQL 执行大部分修改表结构操作的方法是用新的结构创建一张新表，从旧表中查出所有数据插入新表，然后删除旧表。尤其单内存不足而表由很大，而且还有很大索引的情况下，耗时更久。</li>
+</ul>
+<h3 id="创建高性能索引"><a href="#创建高性能索引" class="headerlink" title="创建高性能索引"></a>创建高性能索引</h3><p>索引是提高 MySQL 查询的一个重要途径。但是过多的索引可能会导致过高的磁盘使用以及过高的内存占用，从而影响应用程序的整体性能。应当尽量避免事后菜想起添加索引，因为事后可能需要监控大量的 SQL 才能定位到问题所在，而且添加索引的时间肯定要远大于初始添加索引所需要的时间，添加索引需要充分分析。</p>
+<h3 id="索引相关的数据结构和算法"><a href="#索引相关的数据结构和算法" class="headerlink" title="索引相关的数据结构和算法"></a>索引相关的数据结构和算法</h3><p>通常索引是指 B-Tree 索引，它是目前关系型数据库中查找数据最为常用的和有效的索引， 大多数存储引擎都支持这种索引。使用 B-Tree 这个术语，是因为 MySQL 在 CREATE TABLE 或者其他语句中使用了这个关键字，实际上不同的存储引擎可能使用不用的数据结构，比如 InnoDB 就是使用 B+Tree。</p>
+<h4 id="原理介绍"><a href="#原理介绍" class="headerlink" title="原理介绍"></a>原理介绍</h4><p>B+Tree 中的 B 是指 balance。 需要注意的是，B+Tree 索引并不能找到一个给定键只的具体行，他找到的只是被查找数据行所在的页，接着数据库会把页读入到内存，再在内存中进行查找，最后得到想要查找的数据。<br>B+Tree 是一种多路搜索树，其具有两个重要特征：1、所有关键字（数据）都存储在叶子节点（Leaf Page), 而非叶子节点（Index Page) 并不存储真正的数据，所有记录节点都是按键值大小顺序存放在同一层叶子节点上。其次所有叶子节点由指针链接。如下图所示<br><img src="/images/database/innodb-btree.jpg" alt="innodb-btree"><br>MySQL 将每个节点的大小设置为一个页的倍数，也就是在节点空间大小一定的情况下，每个节点点可以存储更多的内节点，这样每个节点能索引的范围更大更精确。所有的叶子节点使用指针链接的好处是可以进行区间访问。比如上图如果要查找大于20而小于30的节点，只需要找到节点20，就可以遍历指针依次找到25，30。如果没有叶子节点之间的指针的话，就无法进行区间查找。</p>
+<p>MySQL 为何要讲节点设置成页的整数倍大小，这个主要是从磁盘存储原理出发的，磁盘本身存取必内存慢很多，加上机械运动损耗，磁盘存取速度一般要比内存的存取慢万倍，为了减少磁盘的 I/O, 磁盘不是严格按需读取的，每次读的时候会预读一部分，即使是只需要一个字节，磁盘也会从这个位置开始，顺序向后读取一定长度的数据放入内存，预读的长度一般为页的整数倍。页是计算机管理存储器的逻辑块，硬件及OS往往将主存和磁盘存储区分割为连续大小相等的快，每个存储块一般称为页（一般页的大小为 4K). 内存和磁盘以页为单位进行数据交换。当程序需要的数据不在内存中时，会触发一个缺页异常，此时系统会向磁盘发出读盘信号，磁盘会找到数据的起始位置，并向后连续读取一页或几页载入内存中。</p>
+<p>MySQL 利用磁盘的预读原理，将一个节点的大小设置为一个页的大小，这样每个节点只需要一次 I/O就可以完全载入。为达到这个目的，每次新建节点时，会直接申请一个页的空间，这样就保证了一个节点物理存储上也在一个页里，加之计算机存储分配都是按页对齐的，就实现了读取一个节点只需一次I/O. 假设 B+Tree 的高度为h，一次检索最多需要 h-1 次 I/O(根节点常驻内存), 一般 B+Tree 的高度不会超过 3.</p>
+<h4 id="B-Tree-节点操作"><a href="#B-Tree-节点操作" class="headerlink" title="B+Tree 节点操作"></a>B+Tree 节点操作</h4><p>虽然索引可以大大提高查询效率，但是维护索引需要花费大量成本，因此合理创建索引尤为重要。节点操作的具体逻辑可以查<a href="https://dbaplus.cn/news-155-1531-1.html" target="_blank" rel="noopener">原文</a><br>简单示例，加入有如下数据表：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CREATE TABLE pepole(</span><br><span class="line">    last_name varchar(50) not null,</span><br><span class="line">    first_name varchar(50) not null,</span><br><span class="line">    dob date not null,</span><br><span class="line">    gender enum(`m`, `f`) not null,</span><br><span class="line">    key(last_name, first_name, dob)</span><br><span class="line">)</span><br></pre></td></tr></table></figure></p>
+<p>对于表中的 last_name, first_name, dob 三个字段建立了联合索引，下图展示了索引如何组织数据存储的<br><a href="/images/database/innodb-btree-index.jpg">innodb-index</a></p>
+<p>可以看到，索引首先根据last_name字段来排列顺序，当last_name 和 first_name 都相同时，再根据 dob 字段排序。 这就是索引的“最左原则”</p>
+<h2 id="高性能策略"><a href="#高性能策略" class="headerlink" title="高性能策略"></a>高性能策略</h2><ul>
+<li>MySQL 不会使用索引的情况：非独立的列<blockquote>
+<p>“非独立列” 是指索引列不能是表达式的一部分，也不能是函数的参数。 比如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM WHERE id + 1 = 5</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<blockquote>
+<p>我们很容易可以得出其 id = 4, 但是 MySQL 无法解析这个表达式，使用函数是同样的道理</p>
+</blockquote>
+<ul>
+<li><p>前缀索引</p>
+<blockquote>
+<p>如果列对应的长度很长，可以只给前面部分字符建立索引，这样可以有效节约索引空间，提高索引效率</p>
+</blockquote>
+</li>
+<li><p>多列索引和索引顺序</p>
+<blockquote>
+<p>在多数情况下，在多个列上建立独立索引并不能提高查询性能，理由非常简单，MySQL 不知道选择哪个索引的查询效率更好，所以在老版本，比如 MySQL5.0 之前就会随便选择一个列的索引，而新版本会采用合并索引的策略。<br>例如：在actor_id和film_id两个列上都建立了独立的索引</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT `film_id`,  `actor_id` from `film_actor` WHERE `actor_id`=1 or `film_id`=1</span><br></pre></td></tr></table></figure>
+</blockquote>
+</li>
+</ul>
+<p>老版本的 MySQL 会随机选择一个索引，但新版本会进行如下优化<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT `film_id`,  `actor_id` from `film_actor` WHERE `actor_id`=1</span><br><span class="line">UNION ALL</span><br><span class="line">SELECT `film_id`,  `actor_id` from `film_actor` WHERE  `film_id`=1 and actor_id &lt;&gt; 1</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<blockquote>
+<p>1、当出现多个索引做与查询（多个 AND 条件), 通常来说一个包含所有相关列的联合索引要优于多个独立索引<br>2、当出现多个索引做或查询（多个 OR 条件), 对于结果集的合并、排序操作需要耗费大量的 CPU 和内存资源，特别是当其中的某些索引选择性不高时，需要返回合并大量的数据时，查询成本更高，所以这种情况还不如走全表扫描</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>因此在 EXPLAIN 时，如果发现有索引合并（EXTRA 字段出现 USING UNION), 应该需要检查一下查询和表结构是否有调优的可能。如果查询和表都没有问题，需要考虑下所建立的索引是否合适，是否一个包含所有相关列的多列联合索引是否更合适。</p>
+</blockquote>
+<blockquote>
+<p>建立联合索引时，对应参与建立索引字段的顺序也是至关重要的，一般情况下应该把选择性跟高的字段放到索引前面，这样通过第一个字段就可以过滤掉大多数不符合条件的数据。选择性更高是指字段值重复率更低的字段，例如上面的 pepole 表中， last_name 重复的概率会低于 first_name(姓)， 而 first_name 的重复概率一般会低于 dob。所以说明 last_name 选择性更高， dob 选择性最低。所以建立索引是 last_name 是最前面的， dob 最后。<br>对于选择性哪个字段更好可以通过如下方式判断<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT COUNT(DISTINCT `last_name`) / COUNT(*) AS `last_name_selectivity`,</span><br><span class="line">COUNT(DISTINCT `first_name`) / COUNT(*) AS `first_name_selectivity`,</span><br><span class="line">COUNT(DISTINCT `dob`) / COUNT(*) AS `dob_selectivity`, COUNT(*) from  film_actor`</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>上面哪个字段的结果越接近 1 说明选择性越好。</p>
+</blockquote>
+<ul>
+<li>避免多个范围条件<br>实际开发中，我们经常会使用多个范围条件，比如像查询某个时间段登陆过的用户：<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT * FROM `user` WHERE `login_time`&gt;&quot;2019-07-01&quot; AND `age` BETWEEN 18 AND 30</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>这个查询有一个问题，他有两个范围条件， login_time 和 age 列， MySQL 可以使用 login_time 列的索引或者 age 列的索引，但是无法同时两个列的索引。</p>
+<ul>
+<li><p>覆盖索引<br>如果一个索引包含或者说覆盖所有需要查询的字段的值，那么久没有必要再回表查询，这就称为覆盖索引。覆盖索引是非常有用的工具，可以极大得提高性能，因为查询只需要扫描索引会带来许多好处：</p>
+<blockquote>
+<p>1、索引条目远小于数据行大小，如果只读取索引，极大减少数据访问量<br>2、索引是按照列值顺序存储的，对于I/O密集型的范围查询要比随机从磁盘读取每一行数据的 I/O 要少的多</p>
+</blockquote>
+</li>
+<li><p>使用索引扫描来排序</p>
+<blockquote>
+<p>MySQL 有两种方式可以产生有序的结果集，其一是对结果集进行排序操作，其二是按照索引顺序扫描得出的结果自然就是有序的。 如果 EXPLAIN 的结果中 type 列的值为 index 表示使用了索引扫描来做排序。<br>扫描索引本身很快，因为只需要从一条索引记录移动到相邻的下一条记录。如果索引本身不能覆盖所有需要查询的列，那么久不得不每扫描一条索引记录就回表查询一次对应行。这个读取操作基本上是随机 I/O, 因此按照索引顺序读取数据的速度通常要比顺序得扫描全表的速度慢。<br>设计索引时，如果一个索引既能够满足排序，又能满足查询，是最好的。 只有当索引列属性和 ORDER BY 子句的顺序完全一致，并且所有列的排序方向也是一样时，才能用索引索引来对结果做排序。如果查询需要关联多张表，则只有 ORDER BY 子句应用的字段全部都为一张表时，才能使用索引做排序。 ORDER BY 子句和查询的限制是一样的。都要满足最左前缀的要求，其他情况下都需要执行排序操作，无法利用索引排序。</p>
+</blockquote>
+</li>
+<li><p>冗余和重复索引</p>
+<blockquote>
+<p>冗余索引是指在相同的列上按照相同的顺序创建的相同类型的索引，应当尽量避免这种索引。比如： 有个索引（A,B), 再创建索引（A)就是冗余索引。 大多数情况下，都应该尽量扩展已有的索引而不是创建新索引。但有极少数情况下出现性能方面的考虑需要冗余索引，比如扩展已有的索引而导致其变得过大， 从而影响到其他使用该索引的查询。</p>
+</blockquote>
+</li>
+<li><p>删除长期未使用的索引</p>
+<blockquote>
+<p>定期删除一些长时间未使用过的索引是非常必须的。</p>
+</blockquote>
+</li>
+</ul>
+<h2 id="特定类型优化"><a href="#特定类型优化" class="headerlink" title="特定类型优化"></a>特定类型优化</h2><h3 id="优化-COUNT-查询"><a href="#优化-COUNT-查询" class="headerlink" title="优化 COUNT() 查询"></a>优化 COUNT() 查询</h3><p>COUNT() 函数有两种不同的作用，其一是统计某个列值的数量，其二是统计行数。统计列值时，要求列值是非空的，他不会统计 NULL。 如果确认括号中的表达式不可能为空时，实际上就是在统计行数。最简单的就是当使用 COUNT(<em>)时，并不是我们所想象的那样扩展成所有列，实际上它会忽略所有的列，而直接统计所有的行数。如果在括号内指定了一列却希望统计结果是行数，这样查询的性能并不会比 COUNT(\</em>)性能更好。相反 直接使用 COUNT(*), 意义清晰，性能更好</p>
+<h3 id="优化关联查询"><a href="#优化关联查询" class="headerlink" title="优化关联查询"></a>优化关联查询</h3><p>在大数据场景下，表与表之间通过一个冗余字段来关联，要比直接用 JOIN 有更好的性能。如果不可避免需要关联的情况下，需要注意：</p>
+<ul>
+<li>确保 ON 和 USING（两个要关联表的字段名是一样的情况可以使用）对应的字段有索引。 在创建索引的时候就要考虑到关联的顺序。当表 A 和表 B 用列 l 关联时，如果优化器关联的顺序是 A -&gt; B, 那么就不需要在 A 表的对应列上下创建索引。没有用到的索引会带来额外的负担， 一般来说，只需要在关联顺序得第二张表的相应列上创建索引。</li>
+<li><p>确保任何的 GROUP BY 和 ORDER BY 中的表达式置涉及到一个表中的列，这样 MySQL 才有可能使用索引来优化</p>
+<h3 id="优化-LIMIT-分页"><a href="#优化-LIMIT-分页" class="headerlink" title="优化 LIMIT 分页"></a>优化 LIMIT 分页</h3><p>当需要分页操作时，通常会使用 LIMIT 加上偏移量  OFFSET 的方法实现，同时加上合适的 ORDER BY 字句。如果有对应的索引，通常效率会不错， 否则， MySQL 需要做大量的的文件排序操作</p>
+</li>
+</ul>
+<p>另一个场景的场景，当偏移量非常大的时候， LIMIT 10000 OFFSET 20 这样的查询，MySQL 需要查询 10020 条记录后只返回 20 条记录。前面的 10000 条都被抛弃，这样的代价也非常高。优化这种查询的一个最简单办法是尽可能使用覆盖索引扫描，而不是查询所有的列。然后根据需要做一次关联查询，再返回所有的列。 对于偏移量很大时，这样做效率会提升比较大。</p>
+<p>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT `film_id` `description` FROM `film` ORDER BY `title` LIMIT 500 OFFSET 2000</span><br></pre></td></tr></table></figure></p>
+<p>如果这张表比较大，可以改成如下<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">SELECT `film`.`film_id`, `film`.`description` FROM `film` INNER JOIN (</span><br><span class="line">    SELECT `film_id` FROM `film` ORDER BY `title LIMIT 500 OFFSET 2000</span><br><span class="line">) AS tmp USING(`film_id`)</span><br></pre></td></tr></table></figure></p>
+<p>这样延迟关联将大大提升查询效率，让 MySQL 扫描尽可能少的页面，获取需要访问的记录后再根据关联列回原表查询所需要的列。</p>
+<p>如果可以使用书签记录上次取数据的位置，那么下次就可以直接从该书签的位置开始扫描，这样就可以避免使用 OFFSET, 例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT `film_id`, `description` FROM `film` LIMIT 500 OFFSET 2000</span><br></pre></td></tr></table></figure></p>
+<p>改为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SELECT `film_id`, `description` FROM `film` WHERE id &gt; 2000 LIMIT 500</span><br></pre></td></tr></table></figure></p>
+<p>其他优化的办法，还有使用预先计算的汇总表，或者关联到一个 冗余表，冗余表只包含主键列和需要做排序的列。</p>
+<h3 id="UNION-优化"><a href="#UNION-优化" class="headerlink" title="UNION 优化"></a>UNION 优化</h3><p>MySQL 处理 UNION 的策略是先创建临时表，然后再把各个查询结果插入到临时表中，最后再做查询。很多优化策略在 UNION 查询中都没有办法很好使用，经常需要将WHERE, LIMIT, ORDER BY 等子句，需要“下推”到这个子查询中，以便可以充分利用这些条件优化。</p>
+<p>除非确实需要服务器去重，否则就一定要使用 UNION ALL, 如果没有 ALL 关键字，MySQL 会给临时表加上 DISTINCT 选项，这会导致整个临时表的数据做唯一性检查，这样做得代价非常高。 </p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/mysql/" rel="tag">#mysql</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/04/08/front-pwa/" rel="next" title="PWA 简单实践分享">
+                <i class="fa fa-chevron-left"></i> PWA 简单实践分享
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2019/07/13/mysql-principle/" data-title="MySQL 原理整理" data-url="https://feifeiyum.github.io/2019/07/13/mysql-principle/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#声明"><span class="nav-number">1.</span> <span class="nav-text">声明</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-逻辑架构"><span class="nav-number"></span> <span class="nav-text">MySQL 逻辑架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MySQL-查询过程"><span class="nav-number"></span> <span class="nav-text">MySQL 查询过程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#客户端和服务端通信"><span class="nav-number">1.</span> <span class="nav-text">客户端和服务端通信</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询缓存"><span class="nav-number">2.</span> <span class="nav-text">查询缓存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语法解析和预处理"><span class="nav-number">3.</span> <span class="nav-text">语法解析和预处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询优化"><span class="nav-number">4.</span> <span class="nav-text">查询优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询执行引擎"><span class="nav-number">5.</span> <span class="nav-text">查询执行引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#返回结果"><span class="nav-number">6.</span> <span class="nav-text">返回结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询过程总结"><span class="nav-number">7.</span> <span class="nav-text">查询过程总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#性能优化策略"><span class="nav-number"></span> <span class="nav-text">性能优化策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Schema设计与数据类型优化"><span class="nav-number">1.</span> <span class="nav-text">Schema设计与数据类型优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#创建高性能索引"><span class="nav-number">2.</span> <span class="nav-text">创建高性能索引</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#索引相关的数据结构和算法"><span class="nav-number">3.</span> <span class="nav-text">索引相关的数据结构和算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#原理介绍"><span class="nav-number">3.1.</span> <span class="nav-text">原理介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#B-Tree-节点操作"><span class="nav-number">3.2.</span> <span class="nav-text">B+Tree 节点操作</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#高性能策略"><span class="nav-number"></span> <span class="nav-text">高性能策略</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#特定类型优化"><span class="nav-number"></span> <span class="nav-text">特定类型优化</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#优化-COUNT-查询"><span class="nav-number">1.</span> <span class="nav-text">优化 COUNT() 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化关联查询"><span class="nav-number">2.</span> <span class="nav-text">优化关联查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#优化-LIMIT-分页"><span class="nav-number">3.</span> <span class="nav-text">优化 LIMIT 分页</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UNION-优化"><span class="nav-number">4.</span> <span class="nav-text">UNION 优化</span></a></li></ol></li></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
