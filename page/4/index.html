@@ -294,6 +294,384 @@
             
               
                 
+                <a class="post-title-link" href="/2017/03/22/base-js-normal-skill/" itemprop="url">
+                  JavaScript 代码质量优化浅谈
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-03-22T21:35:29+08:00" content="2017-03-22">
+              2017-03-22
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/base/" itemprop="url" rel="index">
+                    <span itemprop="name">base</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/22/base-js-normal-skill/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/22/base-js-normal-skill/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>随着前端模块化技术的引入， 前端开发越来越趋向于后端的开发模式， 一个页面的 JavaScript 代码量在飞速增长， 特别是 WebApp 的开发。为了减少理解自己之前编写的代码的时间， 或节省同事读懂自己代码的时间 (减少被吐嘈的次数）， 如何编写高质量的代码是码农们都需要关注的。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/03/22/base-js-normal-skill/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </p></div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/03/06/node-koa2-web-typescript-md/" itemprop="url">
+                  基于 KOA2 + Typescript 的 web 开发框架介绍
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-03-06T16:34:18+08:00" content="2017-03-06">
+              2017-03-06
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/node/" itemprop="url" rel="index">
+                    <span itemprop="name">node</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/03/06/node-koa2-web-typescript-md/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/03/06/node-koa2-web-typescript-md/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>本文是对之前 <a href="https://feifeiyum.github.io/categories/node/">KOA2系列</a> 文章的一次总结、升级、优化， 也是基于 TypeScript 对之前 Web 框架的重写.   </p>
+<p>本文介绍的 KOA Web 框架特点：</p>
+<blockquote>
+<ul>
+<li>基于 JavaScript 超集 TypeScript 重写  </li>
+<li>Web Session 存储于 redis 缓存  </li>
+<li>引入 ORM 框架 node-orm2 管理 models 对象, 本文采用 mysql 数据库  </li>
+<li>引入数据库迁移管理工具 migrate-orm2  </li>
+<li>参考 Django 路径设计思路， 重新设计文件目录  </li>
+<li>使用 PM2 管理守护 Web 进程  </li>
+</ul>
+</blockquote>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><p>该工程可能在 windows 环境下不太友好<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/03/06/node-koa2-web-typescript-md/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </p></div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2017/02/19/essay-memory-sorrow/" itemprop="url">
+                  回忆是思念的愁
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2017-02-19T22:04:39+08:00" content="2017-02-19">
+              2017-02-19
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/essay/" itemprop="url" rel="index">
+                    <span itemprop="name">essay</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/02/19/essay-memory-sorrow/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/02/19/essay-memory-sorrow/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          <p>很久没有写过正经的文字了，大学毕业之后或许是随着年龄的增长自己越来越害怕去表露自己的内心，或许是在忙碌的生活中渐渐地迷失了自我，难以去静下心来去审视自我。单曲循环着赵雷的《成都》， 听着忧郁的吟唱，回忆着工作这两年的一幕幕，突然又回到了那曾经假装文青的自己。回忆是思念的愁，我将在何处停留。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2017/02/19/essay-memory-sorrow/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+        
+      
+    </p></div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2017/01/23/base-vimusage/" itemprop="url">
                   VIM 入门手册， (VS Code)
                 </a>
@@ -520,392 +898,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2017/01/04/front-verify-code/" itemprop="url">
-                  验证码组件 Yverifycode
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2017-01-04T09:19:42+08:00" content="2017-01-04">
-              2017-01-04
-            </time>
-          </span>
-
-          
-            <span class="post-category">
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/front/" itemprop="url" rel="index">
-                    <span itemprop="name">front</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2017/01/04/front-verify-code/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/04/front-verify-code/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>关键字： 验证码， js, javascript, 校验, code, </p>
-</blockquote>
-<blockquote>
-<p>本文将介绍一种基于js实现的一款验证码生成校验组件，<br>验证码输入忽略大小写<br><img src="/images/components/yverifycode1.png" alt="Yverifycode"><br><strong>注意</strong>： 如果对安全性要求高的应用不建议采用此组件， 无法抵御脚本攻击  </p>
-</blockquote>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2017/01/04/front-verify-code/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/12/25/base-css-test/" itemprop="url">
-                  CSS-文本视觉
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-12-25T16:43:29+08:00" content="2016-12-25">
-              2016-12-25
-            </time>
-          </span>
-
-          
-            <span class="post-category">
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/base/" itemprop="url" rel="index">
-                    <span itemprop="name">base</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/12/25/base-css-test/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/25/base-css-test/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>本文介绍 CSS 文本的样式控制 </p>
-</blockquote>
-<h2 id="字体样式"><a href="#字体样式" class="headerlink" title="字体样式"></a>字体样式</h2><blockquote>
-<p>字体选择是一个常见重要的特性，设置字体属性也是 CSS 最常见的用途之一。但是，目前还没有一种办法能够确保所有的 Web 页面上使用同一种字体<br>在编写样式表的时候，开发人员能够为 html 文档指定一种字体 例如： Times New Roman, 但用户机器上并没有安装这种字体， 浏览器就无法显示该种字体<br>如果说有设计师想在浏览器上选定一种特定的字体，请拒绝<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/12/25/base-css-test/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </p></blockquote></div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/12/25/base-css-vision/" itemprop="url">
-                  CSS-视觉
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">Posted on</span>
-            <time itemprop="dateCreated" datetime="2016-12-25T16:36:22+08:00" content="2016-12-25">
-              2016-12-25
-            </time>
-          </span>
-
-          
-            <span class="post-category">
-              &nbsp; | &nbsp;
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">In</span>
-              
-                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
-                  <a href="/categories/base/" itemprop="url" rel="index">
-                    <span itemprop="name">base</span>
-                  </a>
-                </span>
-
-                
-                
-
-              
-            </span>
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/12/25/base-css-vision/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/25/base-css-vision/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <blockquote>
-<p>本文主要介绍 CSS 视觉效果方面的内容</p>
-</blockquote>
-<h2 id="CSS-盒模型"><a href="#CSS-盒模型" class="headerlink" title="CSS 盒模型"></a>CSS 盒模型</h2><blockquote>
-<p>CSS 盒模型是一个盒子，用于封装HTML元素, 他包括:</p>
-<ul>
-<li>margin(外边距)： 上外边距，下外边距，左外边距，右外边距， 清除外边框的区域，透明  </li>
-<li>border(边框)： 上边框，下边框，左边框，右边框， 围绕在内边距的边框， 不透明  </li>
-<li>padding(内边距): 上内边距，下内边距，左内边距，右内边距， 清楚内容周围区域， 透明</li>
-<li>content(内容)： 显示具体的文本，图片等内容， 不透明 </li>
-</ul>
-</blockquote>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2016/12/25/base-css-vision/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -949,7 +941,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/">
-              <span class="site-state-item-count">37</span>
+              <span class="site-state-item-count">40</span>
               <span class="site-state-item-name">posts</span>
             </a>
           </div>
@@ -966,7 +958,7 @@
           
             <div class="site-state-item site-state-tags">
               
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">tags</span>
               
             </div>
@@ -1028,7 +1020,7 @@
         <div class="copyright">
   
   &copy;  2016 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

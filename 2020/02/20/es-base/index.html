@@ -1,0 +1,753 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="ES,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="摘要本文将主要聚焦于 ElasticSearch 数据层面的使用，包括数控创建，查询，聚合等">
+<meta name="keywords" content="ES">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ElasticSearch 查询基础">
+<meta property="og:url" content="https://feifeiyum.github.io/2020/02/20/es-base/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="摘要本文将主要聚焦于 ElasticSearch 数据层面的使用，包括数控创建，查询，聚合等">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-04-12T14:48:16.597Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ElasticSearch 查询基础">
+<meta name="twitter:description" content="摘要本文将主要聚焦于 ElasticSearch 数据层面的使用，包括数控创建，查询，聚合等">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> ElasticSearch 查询基础 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-database">
+          <a href="/categories/database/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-database"></i> <br>
+            
+            Database
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                ElasticSearch 查询基础
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2020-02-20T21:39:59+08:00" content="2020-02-20">
+              2020-02-20
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/database/" itemprop="url" rel="index">
+                    <span itemprop="name">database</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/02/20/es-base/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/02/20/es-base/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>本文将主要聚焦于 ElasticSearch 数据层面的使用，包括数控创建，查询，聚合等</p>
+<a id="more"></a>
+<h2 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h2><h3 id="Node-和-Cluster"><a href="#Node-和-Cluster" class="headerlink" title="Node 和 Cluster"></a>Node 和 Cluster</h3><p>ElasticSearch（ES) 一个基于开源搜索引擎 Lucene 实现的一个分布式数据库，可以快速的存储<strong>查询</strong>海量数据。</p>
+<p>Node(节点) 是一个运行的 ES 单点实例，提供存储相关数据的功能。<br>多有个具有相同的 cluster.name 的 Node 组成 Cluster(集群)。他们共同协作，共享数据并提供故障转移和扩展功能。</p>
+<h3 id="Shards-分片"><a href="#Shards-分片" class="headerlink" title="Shards (分片)"></a>Shards (分片)</h3><p>Shards 表示 ES 数据的切片，作用是吧整个数据分成多个分片，分散的存储在多个节点上。可以理解成 mysql 中分库分表的概念<br>默认情况下：ES 会将 Index（索引）分成 5 个分片</p>
+<h3 id="Index（索引）"><a href="#Index（索引）" class="headerlink" title="Index（索引）"></a>Index（索引）</h3><p>ES 如果将 Index 作为名词的话，其表示一个数据库，类似于关系型数据库中库（database) 的概念<br>作为动词的话，Index 把一个文档（Document) 存入一个 Index(名词) 中，使其可以被检索。</p>
+<h3 id="Document-文档"><a href="#Document-文档" class="headerlink" title="Document (文档)"></a>Document (文档)</h3><p>Index 中单条记录被称为 Document, Index 由多条 Document 组成。对比于关系型数据库 Document 就是数据库中一条数据<br>ES 中 Document 是由 JSON 格式表示, JSON 中的 Field (字段)可以对应关系型数据库中表的 Column(列) 的概念。</p>
+<h3 id="Type-类型"><a href="#Type-类型" class="headerlink" title="Type (类型)"></a>Type (类型)</h3><p>ES 中 Document 需要归属于某一种 Type，是一种虚拟逻辑分组。对比于关系型数据库中的 Table(表) 的概念</p>
+<p>概括地说，存储层面：一个 ES 集群由多个 Node 组成，Node 中由多个 Shards 组成。 逻辑成层面：一个 ES 集群可以包含多个 Index(数据库)， 每一个 Index 可以包含多个 Type(表)，一个类型下包含多个 Document(行)，每一行中包含多个 Field(列)。</p>
+<h2 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h2><h3 id="插入数据-创建索引，类型，文档"><a href="#插入数据-创建索引，类型，文档" class="headerlink" title="插入数据(创建索引，类型，文档)"></a>插入数据(创建索引，类型，文档)</h3><p>索引可以通过简单的添加一个文档的形式创建索引，这个索引使用默认设置，新的属性通过动态映射的方式添加到分类中<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">request:</span><br><span class="line">curl -L -X PUT -H &quot;Content-Type:application/json&quot; -d \</span><br><span class="line">&apos;&#123;</span><br><span class="line">  	&quot;first_name&quot;: &quot;John&quot;,</span><br><span class="line">	&quot;last_name&quot;: &quot;Smith&quot;,</span><br><span class="line">	&quot;age&quot;: 25,</span><br><span class="line">	&quot;about&quot;: &quot;I love to go rock climbing&quot;, </span><br><span class="line">  	&quot;interests&quot;: [ &quot;sports&quot;, &quot;music&quot; ],</span><br><span class="line">  	&quot;education&quot;: &#123;</span><br><span class="line">    	&quot;degree&quot;: &quot;master&quot;,</span><br><span class="line">    	&quot;major&quot;: &quot;es&quot;</span><br><span class="line">  	&#125;</span><br><span class="line">&#125;&apos; \</span><br><span class="line">&apos;/ssltd/employee/1&apos;</span><br><span class="line"> </span><br><span class="line">response:</span><br><span class="line">&#123;</span><br><span class="line">    &quot;_index&quot;:&quot;ssltd&quot;,</span><br><span class="line">    &quot;_type&quot;:&quot;employee&quot;,</span><br><span class="line">    &quot;_id&quot;:&quot;1&quot;,</span><br><span class="line">    &quot;_version&quot;:1,</span><br><span class="line">    &quot;result&quot;:&quot;created&quot;,</span><br><span class="line">    &quot;_shards&quot;:&#123;</span><br><span class="line">        &quot;total&quot;:2,</span><br><span class="line">        &quot;successful&quot;:1,</span><br><span class="line">        &quot;failed&quot;:0</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;_seq_no&quot;:2,</span><br><span class="line">    &quot;_primary_term&quot;:1</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>返回 http code 等于 201 说明创建成功。如果失败，则返回 400 获取其他状态码，body 会返回相应的错误信息<br>以上命令就创建一个索引 <strong>ssltd</strong>, 一种类型 <strong>employee</strong>, 一条 id 为1的文档。从创建索引，类型，文档一步完成。当然，这个最粗糙的操作。</p>
+<h3 id="按id检索文档"><a href="#按id检索文档" class="headerlink" title="按id检索文档"></a>按id检索文档</h3><p>ES 中检索按id检索文档比较简单，只要执行HTTP GET请求并指出文档的“地址”——索引、类型和id。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">request:</span><br><span class="line">curl -X GET &apos;http://localhost:9200/ssltd/employee/1?pretty</span><br><span class="line"></span><br><span class="line">response:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;_index&quot; : &quot;ssltd&quot;,</span><br><span class="line">  &quot;_type&quot; : &quot;employee&quot;,</span><br><span class="line">  &quot;_id&quot; : &quot;1&quot;,</span><br><span class="line">  &quot;_version&quot; : 1,</span><br><span class="line">  &quot;_seq_no&quot; : 0,</span><br><span class="line">  &quot;_primary_term&quot; : 1,</span><br><span class="line">  &quot;found&quot; : true,</span><br><span class="line">  &quot;_source&quot; : &#123;</span><br><span class="line">    &quot;first_name&quot; : &quot;John&quot;,</span><br><span class="line">    &quot;last_name&quot; : &quot;Smith&quot;,</span><br><span class="line">    &quot;age&quot; : 25,</span><br><span class="line">    &quot;about&quot; : &quot;I love to go rock climbing&quot;,</span><br><span class="line">    &quot;interests&quot; : [</span><br><span class="line">      &quot;sports&quot;,</span><br><span class="line">      &quot;music&quot;</span><br><span class="line">    ],</span><br><span class="line">    &quot;education&quot; : &#123;</span><br><span class="line">      &quot;degree&quot; : &quot;master&quot;,</span><br><span class="line">      &quot;major&quot; : &quot;es&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>响应的内容中包含一些文档的元信息，例如 _index 表示索引名， _type 表示类型名， _id 即文档id，_version 表示更新版本号，当前文档每更新一次，版本号就会加 1。<br>found 表示查询结果是否为空， false 表示没有查到相应结果。文档的有效信息都包含在 _source 字段中。</p>
+<h3 id="简单查询"><a href="#简单查询" class="headerlink" title="简单查询"></a>简单查询</h3><p>1、一个查询全部文档的请求:<br>查询方式同按 id 获取类似，只是在结尾使用关键字 _search 来取代原来的文档ID<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">request:</span><br><span class="line">curl -X GET &apos;/ssltd/employee/_search?pretty&apos;</span><br><span class="line"></span><br><span class="line">response:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;took&quot; : 66,</span><br><span class="line">  &quot;timed_out&quot; : false,</span><br><span class="line">  &quot;_shards&quot; : &#123;</span><br><span class="line">    &quot;total&quot; : 1,</span><br><span class="line">    &quot;successful&quot; : 1,</span><br><span class="line">    &quot;skipped&quot; : 0,</span><br><span class="line">    &quot;failed&quot; : 0</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;hits&quot; : &#123;</span><br><span class="line">    &quot;total&quot; : &#123;</span><br><span class="line">      &quot;value&quot; : 3,</span><br><span class="line">      &quot;relation&quot; : &quot;eq&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;max_score&quot; : 1.0,</span><br><span class="line">    &quot;hits&quot; : [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;_index&quot; : &quot;ssltd&quot;,</span><br><span class="line">        &quot;_type&quot; : &quot;employee&quot;,</span><br><span class="line">        &quot;_id&quot; : &quot;1&quot;,</span><br><span class="line">        &quot;_score&quot; : 1.0,</span><br><span class="line">        &quot;_source&quot; : &#123;</span><br><span class="line">          &quot;first_name&quot; : &quot;John&quot;,</span><br><span class="line">          &quot;last_name&quot; : &quot;Smith&quot;,</span><br><span class="line">          &quot;age&quot; : 25,</span><br><span class="line">          &quot;about&quot; : &quot;I love to go rock climbing&quot;,</span><br><span class="line">          &quot;interests&quot; : [</span><br><span class="line">            &quot;sports&quot;,</span><br><span class="line">            &quot;music&quot;</span><br><span class="line">          ],</span><br><span class="line">          &quot;education&quot; : &#123;</span><br><span class="line">            &quot;degree&quot; : &quot;master&quot;,</span><br><span class="line">            &quot;major&quot; : &quot;es&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      ...</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>响应的结果在 hits 数组中，默认情况下搜索会返回前10个结果。</p>
+<p>2、按条件查询<br>例：查询一个 last_name 为 Smith 的文档<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line">request:</span><br><span class="line">curl -X GET &apos;http://localhost:9200/ssltd/employee/_search?pretty&amp;q=last_name:Smith&apos;</span><br><span class="line"></span><br><span class="line">response:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;took&quot; : 28,</span><br><span class="line">  &quot;timed_out&quot; : false,</span><br><span class="line">  &quot;_shards&quot; : &#123;</span><br><span class="line">    &quot;total&quot; : 1,</span><br><span class="line">    &quot;successful&quot; : 1,</span><br><span class="line">    &quot;skipped&quot; : 0,</span><br><span class="line">    &quot;failed&quot; : 0</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;hits&quot; : &#123;</span><br><span class="line">    &quot;total&quot; : &#123;</span><br><span class="line">      &quot;value&quot; : 2,</span><br><span class="line">      &quot;relation&quot; : &quot;eq&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;max_score&quot; : 0.4700036,</span><br><span class="line">    &quot;hits&quot; : [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;_index&quot; : &quot;ssltd&quot;,</span><br><span class="line">        &quot;_type&quot; : &quot;employee&quot;,</span><br><span class="line">        &quot;_id&quot; : &quot;1&quot;,</span><br><span class="line">        &quot;_score&quot; : 0.4700036,</span><br><span class="line">        &quot;_source&quot; : &#123;</span><br><span class="line">          &quot;first_name&quot; : &quot;John&quot;,</span><br><span class="line">          &quot;last_name&quot; : &quot;Smith&quot;,</span><br><span class="line">          &quot;age&quot; : 25,</span><br><span class="line">          &quot;about&quot; : &quot;I love to go rock climbing&quot;,</span><br><span class="line">          &quot;interests&quot; : [</span><br><span class="line">            &quot;sports&quot;,</span><br><span class="line">            &quot;music&quot;</span><br><span class="line">          ],</span><br><span class="line">          &quot;education&quot; : &#123;</span><br><span class="line">            &quot;degree&quot; : &quot;master&quot;,</span><br><span class="line">            &quot;major&quot; : &quot;es&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      ...</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="使用DSL语句查询"><a href="#使用DSL语句查询" class="headerlink" title="使用DSL语句查询"></a>使用DSL语句查询</h3><p>ES 提供丰富且灵活的查询语言叫做DSL(Domain Search Language)查询(Query DSL),它允许构建更加复杂、强大的查询， DSL 以JSON请求体的形式出现.<br>例：查询一个 last_name 为 Smith 的文档<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br></pre></td><td class="code"><pre><span class="line">request:</span><br><span class="line">curl -L -X POST -H &quot;Content-Type:application/json&quot; -d \</span><br><span class="line">&apos;&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;last_name&quot;: &quot;Smith&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;&apos; \</span><br><span class="line">&apos;/ssltd/employee/_search?pretty&apos;</span><br><span class="line"> </span><br><span class="line">response</span><br><span class="line">&#123;</span><br><span class="line">  &quot;took&quot; : 2,</span><br><span class="line">  &quot;timed_out&quot; : false,</span><br><span class="line">  &quot;_shards&quot; : &#123;</span><br><span class="line">    &quot;total&quot; : 1,</span><br><span class="line">    &quot;successful&quot; : 1,</span><br><span class="line">    &quot;skipped&quot; : 0,</span><br><span class="line">    &quot;failed&quot; : 0</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;hits&quot; : &#123;</span><br><span class="line">    &quot;total&quot; : &#123;</span><br><span class="line">      &quot;value&quot; : 2,</span><br><span class="line">      &quot;relation&quot; : &quot;eq&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;max_score&quot; : 0.4700036,</span><br><span class="line">    &quot;hits&quot; : [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;_index&quot; : &quot;ssltd&quot;,</span><br><span class="line">        &quot;_type&quot; : &quot;employee&quot;,</span><br><span class="line">        &quot;_id&quot; : &quot;1&quot;,</span><br><span class="line">        &quot;_score&quot; : 0.4700036,</span><br><span class="line">        &quot;_source&quot; : &#123;</span><br><span class="line">          &quot;first_name&quot; : &quot;John&quot;,</span><br><span class="line">          &quot;last_name&quot; : &quot;Smith&quot;,</span><br><span class="line">          &quot;age&quot; : 25,</span><br><span class="line">          &quot;about&quot; : &quot;I love to go rock climbing&quot;,</span><br><span class="line">          &quot;interests&quot; : [</span><br><span class="line">            &quot;sports&quot;,</span><br><span class="line">            &quot;music&quot;</span><br><span class="line">          ],</span><br><span class="line">          &quot;education&quot; : &#123;</span><br><span class="line">            &quot;degree&quot; : &quot;master&quot;,</span><br><span class="line">            &quot;major&quot; : &quot;es&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;_index&quot; : &quot;ssltd&quot;,</span><br><span class="line">        &quot;_type&quot; : &quot;employee&quot;,</span><br><span class="line">        &quot;_id&quot; : &quot;2&quot;,</span><br><span class="line">        &quot;_score&quot; : 0.4700036,</span><br><span class="line">        &quot;_source&quot; : &#123;</span><br><span class="line">          &quot;first_name&quot; : &quot;lucy&quot;,</span><br><span class="line">          &quot;last_name&quot; : &quot;Smith&quot;,</span><br><span class="line">          &quot;age&quot; : 24,</span><br><span class="line">          &quot;about&quot; : &quot;I like to collect rock albums&quot;,</span><br><span class="line">          &quot;interests&quot; : [</span><br><span class="line">            &quot;music&quot;</span><br><span class="line">          ],</span><br><span class="line">          &quot;education&quot; : &#123;</span><br><span class="line">            &quot;degree&quot; : &quot;bachelor&quot;,</span><br><span class="line">            &quot;major&quot; : &quot;cs&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="空查询"><a href="#空查询" class="headerlink" title="空查询"></a>空查询</h4><p>空查询将会返回所有索引中所有的文档<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST -H &quot;Content-Type:application/json&quot; -d &#123;&#125; &apos;/_search?pretty&apos;</span><br></pre></td></tr></table></figure></p>
+<p>空查询，也可以指定索引和类型<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST -H &quot;Content-Type:application/json&quot; -d &#123;&#125; &apos;/index_2014*/type1,type2/_search?pretty&apos;</span><br></pre></td></tr></table></figure></p>
+<p>也可以使用 from 及 size 参数进行分页<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST -H &quot;Content-Type:application/json&quot; -d \</span><br><span class="line">&apos;&#123;</span><br><span class="line">    &quot;from&quot;: 2,</span><br><span class="line">    &quot;size&quot;: 10</span><br><span class="line">&#125;&apos; \</span><br><span class="line">&apos;/_search?pretty&apos;</span><br></pre></td></tr></table></figure></p>
+<h4 id="Query-DSL-语法"><a href="#Query-DSL-语法" class="headerlink" title="Query DSL 语法"></a>Query DSL 语法</h4><p>使用 DSL 查询，需要传递 query 参数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST -H &quot;Content-Type:application/json&quot; -d \</span><br><span class="line">&apos;&#123;</span><br><span class="line">    &quot;query&quot;: YOUR_QUERY_HERE</span><br><span class="line">&#125;&apos; \</span><br><span class="line">&apos;/_search?pretty&apos;</span><br></pre></td></tr></table></figure></p>
+<p>空查 {}, 用 DSL 可以使用 match_all 查询子句，匹配所有文档：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">curl -X POST -H &quot;Content-Type:application/json&quot; -d \</span><br><span class="line">&apos;&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;&apos; \</span><br><span class="line">&apos;/_search?pretty&apos;</span><br></pre></td></tr></table></figure></p>
+<p>一个查询子句结构，即简单子句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    QUERY_NAME: &#123;</span><br><span class="line">        ARGUMENT: VALUE,</span><br><span class="line">        ARGUMENT: VALUE,</span><br><span class="line">        ...</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>或指向一个指定的字段<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    QUERY_NAME: &#123;</span><br><span class="line">        FIELD_NAME: &#123;</span><br><span class="line">            ARGUMENT: VALUE,</span><br><span class="line">            ARGUMENT: VALUE,</span><br><span class="line">            ...</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>例如：查询用户 about 字段中包含 rock 文档，可以采用如下查询<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">request:</span><br><span class="line">curl -X POST -H &quot;Content-Type:application/json&quot; -d \</span><br><span class="line">&apos;&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;match&quot;: &#123;</span><br><span class="line">            &quot;about&quot;: &quot;rock&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;&apos; \</span><br><span class="line">&apos;/ssltd/employee/_search?pretty&apos;</span><br><span class="line"></span><br><span class="line">response:</span><br><span class="line">&#123;</span><br><span class="line">  &quot;took&quot; : 4,</span><br><span class="line">  &quot;timed_out&quot; : false,</span><br><span class="line">  &quot;_shards&quot; : &#123;</span><br><span class="line">    &quot;total&quot; : 1,</span><br><span class="line">    &quot;successful&quot; : 1,</span><br><span class="line">    &quot;skipped&quot; : 0,</span><br><span class="line">    &quot;failed&quot; : 0</span><br><span class="line">  &#125;,</span><br><span class="line">  &quot;hits&quot; : &#123;</span><br><span class="line">    &quot;total&quot; : &#123;</span><br><span class="line">      &quot;value&quot; : 2,</span><br><span class="line">      &quot;relation&quot; : &quot;eq&quot;</span><br><span class="line">    &#125;,</span><br><span class="line">    &quot;max_score&quot; : 0.4589591,</span><br><span class="line">    &quot;hits&quot; : [</span><br><span class="line">      &#123;</span><br><span class="line">        &quot;_index&quot; : &quot;ssltd&quot;,</span><br><span class="line">        &quot;_type&quot; : &quot;employee&quot;,</span><br><span class="line">        &quot;_id&quot; : &quot;1&quot;,</span><br><span class="line">        &quot;_score&quot; : 0.4589591,</span><br><span class="line">        &quot;_source&quot; : &#123;</span><br><span class="line">          &quot;first_name&quot; : &quot;John&quot;,</span><br><span class="line">          &quot;last_name&quot; : &quot;Smith&quot;,</span><br><span class="line">          &quot;age&quot; : 25,</span><br><span class="line">          &quot;about&quot; : &quot;I love to go rock climbing&quot;,</span><br><span class="line">          &quot;interests&quot; : [</span><br><span class="line">            &quot;sports&quot;,</span><br><span class="line">            &quot;music&quot;</span><br><span class="line">          ],</span><br><span class="line">          &quot;education&quot; : &#123;</span><br><span class="line">            &quot;degree&quot; : &quot;master&quot;,</span><br><span class="line">            &quot;major&quot; : &quot;es&quot;</span><br><span class="line">          &#125;</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      ...</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>多个简单子句可以组合成一个复杂的查询子句，复合子句间也可以相互嵌套，从而实现复查的查询逻辑<br>例如：bool 关键字允许合并其他子句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">curl -L -X POST -H &quot;Content-Type:application/json&quot; -d \</span><br><span class="line">&apos;&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">        &quot;must&quot;: &#123;&quot;match&quot;: &#123;&quot;last_name&quot;: &quot;Smith&quot;&#125;&#125;,</span><br><span class="line">        &quot;must_not&quot;: &#123;&quot;match&quot;: &#123;&quot;about&quot;: &quot;build&quot;&#125;&#125;,</span><br><span class="line">      	&quot;should&quot;: &#123;&quot;match&quot;: &#123;&quot;education.degree&quot;: &quot;master&quot;&#125;&#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;&apos; \</span><br><span class="line">&apos;/ssltd/employee/_search?pretty&apos;</span><br></pre></td></tr></table></figure></p>
+<h4 id="过滤关键字"><a href="#过滤关键字" class="headerlink" title="过滤关键字"></a>过滤关键字</h4><p>Elasticsearch 提供了丰富的查询过滤语句</p>
+<p>1、 term 过滤<br>term 主要用于精确匹配哪些值，比如数字，日期，布尔值或 not_analyzed 的字符串(未经分析的文本数据类型)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;term&quot;: &#123;&quot;age&quot;: 32&#125;,</span><br><span class="line">    &quot;term&quot;: &#123;&quot;education.major&quot;: &quot;cs&quot;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2、terms 过滤<br>terms 跟 term 有点类似，但 terms 允许指定多个匹配条件。如果某个字段指定了多个值，那么文档需要一起去做匹配<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;terms&quot;: &#123;&quot;interests&quot;: [&quot;music&quot;, &quot;sports&quot;]&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3、range 过滤<br>range 过滤允许我们按照指定范围查找一批数据<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;range&quot;: &#123;</span><br><span class="line">        &quot;age&quot;: &#123;</span><br><span class="line">            &quot;gte&quot;: 20,</span><br><span class="line">            &quot;lt&quot;: 30</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>范围操作符包含: gt: 大于，gte: 大于等于，lt: 小于，lte 小于等于</p>
+<p>4、exists 和 missing 过滤<br>exists 过滤可以用于查找文档中是否某个字段值不为 null 或 []，missing 过滤可以用于查找文档中某个字段值为 null 或 []，类似于 SQL 语句中红的 IS_NULL 条件. 注意：空字符串 “” 不为 exists 判定为 true.<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;exists&quot;: &#123;</span><br><span class="line">        &quot;field&quot;: &quot;about&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">curl  -L -X POST -H &quot;Content-Type:application/json&quot; </span><br><span class="line">&apos;&#123;</span><br><span class="line">  &quot;query&quot;:&#123;</span><br><span class="line">    &quot;exists&quot;: &#123;</span><br><span class="line">      &quot;field&quot;: &quot;education&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;&apos; \</span><br><span class="line">&apos;/ssltd/employee/_search&apos;</span><br></pre></td></tr></table></figure></p>
+<p>5、 bool 过滤<br>bool 过滤可以合并多个过滤条件，其包含如下相关关键字,</p>
+<ul>
+<li><p>must: 相当于 and, 多个查询条件需同时匹配</p>
+</li>
+<li><p>must_not: 相当于 not, 多个查询条件都不匹配</p>
+</li>
+<li><p>should: 相当于 or, 至少匹配一个查询条件</p>
+</li>
+</ul>
+<h4 id="查询关键字"><a href="#查询关键字" class="headerlink" title="查询关键字"></a>查询关键字</h4><p>1、match_all 查询<br>使用 match_all 可以查询 ES 集群中所有的文档，是没有查询条件下的默认语句<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>2、match 查询<br>match 查询是一个标准查询，不管是使用全文检索还是精确查询都会用到它。<br>如果是全文检索，其会在查询之前使用分词解析器（analysis) 生成 match 的字符<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;match&quot; &#123;</span><br><span class="line">        &quot;about&quot;: &quot;rock&quot;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>如果用 match 指定了一个确切值，在遇到数字，日期，布尔值或者 not_analyzed 的字符串时，它将会搜索给定的值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">        &quot;age&quot;: 29</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>3、multi_match 查询<br>multi_match 允许在 match 查询的基础上同时搜索多个字段<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">        &quot;query&quot;: &quot;rock&quot;,</span><br><span class="line">        &quot;fields&quot;: [&quot;interests&quot;, &quot;about&quot;]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">curl -L -X POST -H &quot;Content-Type:application/json&quot; -d \</span><br><span class="line">&apos;&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;multi_match&quot;: &#123;</span><br><span class="line">      &quot;query&quot;: &quot;rock&quot;,</span><br><span class="line">      &quot;fields&quot;: [&quot;interests&quot;, &quot;about&quot;]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;&apos; \</span><br><span class="line">&apos;http://localhost:9200/ssltd/employee/_search&apos;</span><br></pre></td></tr></table></figure></p>
+<p>4、bool 查询<br>bool 查询与 bool 过滤相似，用于合并多个查询子句。不同的是， bool 过滤可以直接给出是否匹配成功， 而 bool 查询要计算每一个查询子句的 _score (相关性分值)。</p>
+<ul>
+<li>must 查询指定文档一定要被包含</li>
+<li>must_not 查询指定文档一定不要被包含</li>
+<li>should 查询指定文档，有则可以为文档相关性加分</li>
+</ul>
+<p>Note: 如果 bool 查询下没有 must 子句，那至少应该有一个 should 子句。但是 如果有 must 子句，那么没 有 should 子句也可以进行查询。</p>
+<h3 id="查询与过滤条件的合并"><a href="#查询与过滤条件的合并" class="headerlink" title="查询与过滤条件的合并"></a>查询与过滤条件的合并</h3><p>查询语句和过滤语句可以放在各自的上下文中，这些语句既可以包含单条 query 语句，也可以包含一条 filter 子句，或者说这些语句需要首先创建一个 query 或 filter 的上下文关系</p>
+<h4 id="带过滤的查询语句"><a href="#带过滤的查询语句" class="headerlink" title="带过滤的查询语句"></a>带过滤的查询语句</h4>
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ES/" rel="tag">#ES</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/07/13/mysql-principle/" rel="next" title="MySQL 原理整理">
+                <i class="fa fa-chevron-left"></i> MySQL 原理整理
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/24/es-dsl/" rel="prev" title="Elasticsearch DSL QUERY">
+                Elasticsearch DSL QUERY <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2020/02/20/es-base/" data-title="ElasticSearch 查询基础" data-url="https://feifeiyum.github.io/2020/02/20/es-base/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#基本概念"><span class="nav-number"></span> <span class="nav-text">基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Node-和-Cluster"><span class="nav-number">1.</span> <span class="nav-text">Node 和 Cluster</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shards-分片"><span class="nav-number">2.</span> <span class="nav-text">Shards (分片)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Index（索引）"><span class="nav-number">3.</span> <span class="nav-text">Index（索引）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Document-文档"><span class="nav-number">4.</span> <span class="nav-text">Document (文档)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Type-类型"><span class="nav-number">5.</span> <span class="nav-text">Type (类型)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基本操作"><span class="nav-number"></span> <span class="nav-text">基本操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#插入数据-创建索引，类型，文档"><span class="nav-number">1.</span> <span class="nav-text">插入数据(创建索引，类型，文档)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#按id检索文档"><span class="nav-number">2.</span> <span class="nav-text">按id检索文档</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单查询"><span class="nav-number">3.</span> <span class="nav-text">简单查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#使用DSL语句查询"><span class="nav-number">4.</span> <span class="nav-text">使用DSL语句查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#空查询"><span class="nav-number">4.1.</span> <span class="nav-text">空查询</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Query-DSL-语法"><span class="nav-number">4.2.</span> <span class="nav-text">Query DSL 语法</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#过滤关键字"><span class="nav-number">4.3.</span> <span class="nav-text">过滤关键字</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#查询关键字"><span class="nav-number">4.4.</span> <span class="nav-text">查询关键字</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询与过滤条件的合并"><span class="nav-number">5.</span> <span class="nav-text">查询与过滤条件的合并</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#带过滤的查询语句"><span class="nav-number">5.1.</span> <span class="nav-text">带过滤的查询语句</span></a></li></ol></li></ol></li></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>

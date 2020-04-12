@@ -1,0 +1,951 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="ES,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="本文将主要介绍 Elasticsearch 的 DSL(Domain Special Language) 基本概念后用法。 根据 ElasticSearch v7.6 官方文档 Query DSL 整理而成。">
+<meta name="keywords" content="ES">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch DSL QUERY">
+<meta property="og:url" content="https://feifeiyum.github.io/2020/02/24/es-dsl/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="本文将主要介绍 Elasticsearch 的 DSL(Domain Special Language) 基本概念后用法。 根据 ElasticSearch v7.6 官方文档 Query DSL 整理而成。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-04-12T14:48:20.704Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Elasticsearch DSL QUERY">
+<meta name="twitter:description" content="本文将主要介绍 Elasticsearch 的 DSL(Domain Special Language) 基本概念后用法。 根据 ElasticSearch v7.6 官方文档 Query DSL 整理而成。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> Elasticsearch DSL QUERY | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-space-shuttle"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-database">
+          <a href="/categories/database/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-database"></i> <br>
+            
+            Database
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                Elasticsearch DSL QUERY
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2020-02-24T10:28:55+08:00" content="2020-02-24">
+              2020-02-24
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/database/" itemprop="url" rel="index">
+                    <span itemprop="name">database</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/02/24/es-dsl/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/02/24/es-dsl/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文将主要介绍 Elasticsearch 的 DSL(Domain Special Language) 基本概念后用法。 根据 ElasticSearch v7.6 官方文档 <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html" target="_blank" rel="noopener">Query DSL</a> 整理而成。</p>
+<a id="more"></a>
+<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>Elasticsearch 基于 JSON 提供了完整的查询 DSL 用来定义查询。可以把 DSL 查询当做是一种 抽象语法树 AST(Abstract Syntax Tree) 查询，由两种类型的语句组成。</p>
+<h3 id="Leaf-query-clauses"><a href="#Leaf-query-clauses" class="headerlink" title="Leaf query clauses"></a>Leaf query clauses</h3><p>叶子查询语句，用于查询某一个特定字段的特定值，例如：查询关键字 match, term 和 range，这些查询可以单独使用。</p>
+<h3 id="Compound-query-clauses"><a href="#Compound-query-clauses" class="headerlink" title="Compound query clauses"></a>Compound query clauses</h3><p>组合查询语句，由叶子查询语句或者其他组合查询语句组合而成，用于构成复杂查询逻辑。其主要通过查询关键字 bool， dis_max 或 constant_score 来组合包装叶子查询语句</p>
+<p>查询语句在查询上下文 (query context) 或者过滤上下文(filter context) 中有不同的表现</p>
+<h2 id="Query-and-filter-context"><a href="#Query-and-filter-context" class="headerlink" title="Query and filter context"></a>Query and filter context</h2><h3 id="相关性评分（relevance-score"><a href="#相关性评分（relevance-score" class="headerlink" title="相关性评分（relevance score)"></a>相关性评分（relevance score)</h3><p>默认情况下，ES 根据相关性评分来对查询的结果进行排序，用来表示查询结果和查询目标的匹配程度。</p>
+<p>相关性评分是一个正的浮点数，在每条返回文档的元字段（meta-field) 中的 _score 字段值就是该条数据的相关性评分。评分越高，说明返回的文档的相关性越高。不同的查询类型的计算的相关性评分是不同的。</p>
+<h3 id="查询上下文-Query-context"><a href="#查询上下文-Query-context" class="headerlink" title="查询上下文(Query context)"></a>查询上下文(Query context)</h3><p>在查询上下文中，查询语句所表达的意思类似于：”当前文档与查询语句所表达的意思的匹配度是多少”。除了判断文档是否匹配，查询语句还会计算相关评分，并在 _score 元字段中返回。</p>
+<p>查询上下文是通过将查询语句传入 query 参数来实现的。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot; : &#123;</span><br><span class="line">        &quot;match&quot; : &#123; &quot;about&quot; : &quot;rock&quot; &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="过滤上下文-Filter-context"><a href="#过滤上下文-Filter-context" class="headerlink" title="过滤上下文(Filter context)"></a>过滤上下文(Filter context)</h3><p>在过滤上下文中，查询语句锁表达的意思类似于：“当前文档与查询语句是否匹配”，只判断文档是否匹配，而不会去计算相关性评分。过滤上下文常用于过滤结构化的数据，例如：</p>
+<ul>
+<li>时间戳 timestamp 是否在时间区间 2019~2020 内</li>
+<li>文档的 status 字段值是否是 “published”</li>
+</ul>
+<p>频繁使用的过滤上下文会被 ES 自动缓存，来提升查询速度。<br>过滤上下文是用过在查询语句中传入 filter 参数来实现的。例如： 在 bool 查询中的 filter 和 must_not 参数，constant_score 中的 filter 参数 和 聚合（aggregation) 中的 filter<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123; </span><br><span class="line">    &quot;bool&quot;: &#123; </span><br><span class="line">      &quot;filter&quot;: [ </span><br><span class="line">        &#123; &quot;range&quot;:  &#123; &quot;age&quot;: &#123;&quot;lte&quot;: 30 &#125;&#125;&#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>例： 过滤语句和查询语句结合使用<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123; </span><br><span class="line">    &quot;bool&quot;: &#123; </span><br><span class="line">      &quot;must&quot;: [</span><br><span class="line">        &#123;&quot;match&quot;: &#123;&quot;about&quot;: &quot;rock&quot;&#125;&#125;</span><br><span class="line">      ],</span><br><span class="line">      &quot;filter&quot;:[</span><br><span class="line">        &#123; &quot;range&quot;:  &#123; &quot;age&quot;: &#123;&quot;lte&quot;: 30 &#125;&#125;&#125;</span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="组合查询-Compound-queries"><a href="#组合查询-Compound-queries" class="headerlink" title="组合查询 (Compound queries)"></a>组合查询 (Compound queries)</h2><p>组合查询用户封装其他组合查询或者叶子查询，其一是可以合并查询的结果和相关性评分，其二是可以改变查询的行为，例如从查询上下文切换至过滤上下文。</p>
+<p>用于组合查询的查询关键字，如下：</p>
+<h3 id="bool-查询"><a href="#bool-查询" class="headerlink" title="bool 查询"></a>bool 查询</h3><p>bool 查询是用于组合其他查询的一个关键字，其由一个或多个布尔查询子句组成。bool 参数如下</p>
+<ul>
+<li>must: 选填，匹配的文档必须符合查询语句中表达的条件，在查询上下文中执行，影响相关性评分。如果 must 中包含多个查询语句，必须同时满足所有查询条件，相当于 and </li>
+<li>filter: 选填，匹配的文档必须符合过滤语句中表达的条件，在过滤上下文中执行，不影响相关性评分。如果 must 中包含多个过滤语句，必须同时满足所有过滤条件。相当于 and</li>
+<li>should: 选填，匹配的文档中必须符合所有查询条件中的一个或多个条件，在查询上下文中执行，影响相关性评分。相当于 or</li>
+<li>must_not: 选填，匹配的文档中不能符合所有查询条件中表达的条件，在过滤上下文中执行，不影响 _score 值.</li>
+</ul>
+<p>bool 查询采用 more-matches-is-better（匹配的条件越多越好）的策略，因此，每个匹配文档的相关性评分来自于不同查询语句（must 或者 should）的评分会相加之和。</p>
+<h4 id="使用-minimum-should-match"><a href="#使用-minimum-should-match" class="headerlink" title="使用 minimum_should_match"></a>使用 minimum_should_match</h4><p>我们可以使用参数 minimum_should_match 来指定 should 查询中文档需要匹配的查询语句的条数或百分比。例如：should 中共包含 4 条查询语句，如果 minimum_should_match 值为 2 或 50%，这说明文档必须匹配其中的两条查询语句。</p>
+<p>如果 bool 查询中只包含一种 should 查询语句，没有 must 或 filter 语句，minimum_should_match 默认值是 1，否则默认值是 0.</p>
+<h3 id="Boosting-查询"><a href="#Boosting-查询" class="headerlink" title="Boosting 查询"></a>Boosting 查询</h3><p>Boosting 查询返回匹配 positive 查询条件的文档，但是，如果又同时匹配 negative 查询，该文档的相关性评分将会减少。</p>
+<p>我们可以使用 boosting 查询来在放回结果中，降级某些文档（使其排序靠后）而不是直接排除他们。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123; </span><br><span class="line">    &quot;boosting&quot;: &#123;</span><br><span class="line">        &quot;positive&quot;: &#123;</span><br><span class="line">            &quot;match&quot;: &#123;</span><br><span class="line">                &quot;about&quot;: &quot;rock&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;negative&quot;: &#123;</span><br><span class="line">            &quot;match&quot;: &#123;</span><br><span class="line">                &quot;about&quot;: &quot;albums&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;negative_boost&quot; : 0.2</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<ul>
+<li>positive: 必填，需要放回的文档的查询条件。符合条件的文档会全部返回。</li>
+<li>negative: 必填，用来减少相关性评分的查询条件。计算方法：将 positive 查询中获得的评分 乘以 negative_boost 的值</li>
+<li>negative_value: 必填，0~1.0 直接的浮点数，用于降级加权。</li>
+</ul>
+<h3 id="constant-score-query"><a href="#constant-score-query" class="headerlink" title="constant_score query"></a>constant_score query</h3><p>constant_score 查询封装了 filter 查询，正如其名，返回的结果文档中，其相关性评分固定为一个常量，这个常量由参数 boost 决定。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123; </span><br><span class="line">    &quot;constant_score&quot;: &#123;</span><br><span class="line">        &quot;filter&quot;: &#123;&quot;match&quot;: &#123;&quot;about&quot;: &quot;rock&quot;&#125;&#125;,</span><br><span class="line">         &quot;boost&quot; : 1.2</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参数：</p>
+<ul>
+<li>filter: 必填，过滤条件，任何匹配查询条件的文档都会返回。过滤查询，不计算相关性评分</li>
+<li>boost: 选填，浮点数，指定的相关性评分，默认值为 1.0</li>
+</ul>
+<h3 id="dis-max-query-分离最大化查询"><a href="#dis-max-query-分离最大化查询" class="headerlink" title="dis_max query(分离最大化查询)"></a>dis_max query(分离最大化查询)</h3><p>Disjunction max 查询，返回匹配一个或多个查询条件的文档返回。如果返回的文档匹配多个查询条件，dis_max 查询将会取其中得分最高的查询，加上其他匹配项捆绑系数，作为文档相关性评分。</p>
+<p>我们可以使用 dis_max 查询来实现需要不同 boost 因子的查询。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123; </span><br><span class="line">    &quot;dis_max&quot;: &#123;</span><br><span class="line">        &quot;queries&quot;: [</span><br><span class="line">            &#123;&quot;match&quot;: &#123;&quot;about&quot;: &quot;rock&quot;&#125;&#125;,</span><br><span class="line">            &#123;&quot;match&quot;: &#123;&quot;about&quot;: &quot;albums&quot;&#125;&#125;</span><br><span class="line">        ],</span><br><span class="line">        &quot;tie_breaker&quot;: 0.1</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>参数说明：</p>
+<ul>
+<li>queries: 必填，查询条件数组，有一个或多个查询条件语句组成。返回匹配一条或多条查询语句的文档。如果文档匹配了多条查询语句，ES 将会使用其中相关性评分最高的查询的评分位置该文档的相关性评分。</li>
+<li>tie_breaker: 选填，浮点数，取值 0 ~ 1.0 之间，默认 0。用于增加匹配多条查询语句的文档相关性评分。</li>
+</ul>
+<p>tie_breaker 算法使用需满足某个文档匹配了多条查询语句的场景</p>
+<blockquote>
+<p>1、取所有匹配的查询语句中相关性评分最高的评分: h_score<br>2、将 tie_breaker 值与所有匹配的其他查询语句（得分最高除外）的相关性评分相乘, 获得 t_scores<br>3、h_score 和 t_scores 所有值相加，获得 _score，作为文档的相关性评分</p>
+</blockquote>
+<h3 id="function-score-query"><a href="#function-score-query" class="headerlink" title="function_score query"></a>function_score query</h3><p>function_score 查询 允许我们改变检索出来文档的相关性评分。使用 function_score 我们需要定义个查询语句和一个或多个函数。其中函数用于重新计算查询语句返回的文档的相关性得分。</p>
+<p>详情介绍课参考文章<a href="https://www.scienjus.com/elasticsearch-function-score-query/" target="_blank" rel="noopener">通过Function Score Query优化Elasticsearch搜索结果</a>, 或<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-function-score-query.html" target="_blank" rel="noopener">官方文档</a></p>
+<h2 id="全文检索（Full-text-queries"><a href="#全文检索（Full-text-queries" class="headerlink" title="全文检索（Full text queries)"></a>全文检索（Full text queries)</h2><p>全文检索提供了我们分析文本信息的能力。查询的字符所使用的分析器(analyzer)和创建索引的时候使用的是一样的。</p>
+<p>全文检索的关键字有如下：</p>
+<h3 id="Intervals-query"><a href="#Intervals-query" class="headerlink" title="Intervals query"></a>Intervals query</h3><p>Intervals 查询使用一个或多个匹配规则组成，这些规则都是作用于某个特定的字段的。其主要功能是实现精确控制词在文档中出现的先后关系，实现了对 查询目标之间顺序、距离以及他们之间的包含关系灵活控制。该关键字有 es 7.0 中引入。</p>
+<p>详细介绍参考 【elasticsearch 7.0 新特性之Intervals query](<a href="https://www.jianshu.com/p/39146f535bad)" target="_blank" rel="noopener">https://www.jianshu.com/p/39146f535bad)</a>, 或<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-intervals-query.html#intervals-query-ex-request" target="_blank" rel="noopener">官方文档</a></p>
+<h3 id="match-query"><a href="#match-query" class="headerlink" title="match query"></a>match query</h3><p>match 查询根据提供的文本，日期，布尔值来匹配文档。文本在查询之前会经过解析器（analyzes) 分析。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123; </span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;about&quot;: &#123;</span><br><span class="line">        &quot;query&quot;: &quot;rock&quot;</span><br><span class="line">      &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">or</span><br><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123; </span><br><span class="line">    &quot;match&quot;: &#123;</span><br><span class="line">      &quot;about&quot;: &quot;rock&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>match 一级参数 field: 必填，即需要查找的字段名</p>
+<p>二级参数：</p>
+<ul>
+<li><p>query: 必填，即需要在一级 field 字段中需要查找的值，值类型可为 text, number, boolean 或 date。match 查询在开始执行之前，提供的 text 类型的值会经过解析器（analyzes) 分析，因此，match 查询的 text 值不是精确匹配的。</p>
+</li>
+<li><p>analyzer: 选填, 类型string，指定解析器用于解析 query 字段的 text 类型值。默认使用建索引使用的解析器。</p>
+</li>
+<li>auto_generate_synonyms_phrase_query： 选填，bool，默认 true。是否自动生成短语查询</li>
+<li>fuzziness: 选填，string，允许的最大编辑距离（edit distance)。编辑距离（Edit Distance），又称Levenshtein距离，是指两个字串之间，由一个转成另一个所需的最少编辑操作次数.</li>
+<li>max_expansions: 选填，integer，默认 0. 查询允许扩展的 terms(词组) 最大数量。</li>
+<li>prefix_length: 选填，integer，默认 0. 用与 模糊匹配的最大前缀长度</li>
+<li>transpositions: 选填， boolean, 默认 true. 是否模糊匹配时允许换位两个相邻的词（ab-&gt;ba)</li>
+<li>fuzzy_rewrite: 选填, string, 指定查询重写的方法</li>
+<li>lenient: 选填，boolean, 默认 false. 如果设置为true将导致基于格式的失败（例如向数字字段提供文本）被忽略</li>
+<li>operator: 选填，枚举[OR, AND], 默认 OR. 假如查询的值为 capital of Hungary , operator=OR: 会被解释为 capital OR of OR Hungary. operator=AND: 会被解释成 capital AND of AND Hungary.</li>
+<li>minimum_should_match: 选填，string。在所有查询条件中最小匹配的查询条件的条数或百分比</li>
+<li>zero_terms_query: 选填，枚举[none, all], 默认 none. 如果查询条件为空时。none: 不返回文档。all: 返回所有文档，类似 match_all.</li>
+</ul>
+<h3 id="match-bool-prefix-查询"><a href="#match-bool-prefix-查询" class="headerlink" title="match_bool_prefix 查询"></a>match_bool_prefix 查询</h3><p>match_bool_prefix 查询内部将输入文本进过解析器（analyzes) 分离成多个 term（词）。除了最后一个词，其他词都执行 term 查询，最后一个词使用 prefix 查询。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;match_bool_prefix&quot; : &#123;</span><br><span class="line">            &quot;about&quot; : &quot;I like c&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">equals to </span><br><span class="line"></span><br><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">        &quot;should&quot; : [</span><br><span class="line">            &#123;&quot;term&quot;: &#123;&quot;about&quot;: &quot;I&quot;&#125;&#125;,</span><br><span class="line">            &#123;&quot;term&quot;: &#123;&quot;about&quot;: &quot;like&#125;&#125;,</span><br><span class="line">            &#123;&quot;prefix&quot;: &#123;&quot;about&quot;: &quot;c&quot;&#125;&#125;</span><br><span class="line">        ]</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="match-phrase-查询"><a href="#match-phrase-查询" class="headerlink" title="match_phrase 查询"></a>match_phrase 查询</h3><p>match_phrase 查询的目标文档，必须包含所提供的查询参数的所有词，而且每个词的顺序和提供的参数中一致。例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;match_phrase&quot;: &#123;</span><br><span class="line">            &quot;about&quot;: &quot;collect rock albums&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>上例中能被匹配的文档必须满足一下条件：</p>
+<blockquote>
+<p>1、about 字段中必须 collect、rock、albums 三个词全部都需要有<br>2、rock 的位置必须比 collect 的位置大 1<br>3、albums 的位置必须比 collect 的位置大 2</p>
+</blockquote>
+<h3 id="match-phrase-prefix"><a href="#match-phrase-prefix" class="headerlink" title="match_phrase_prefix"></a>match_phrase_prefix</h3><p>match_phrase_prefix 与 match_phrase 类似，不同点在于其参数值得最后一个词，必须作为前缀来处理。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;match_phrase_prefix&quot;: &#123;</span><br><span class="line">            &quot;about&quot;: &quot;collect rock a&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="multi-match-query"><a href="#multi-match-query" class="headerlink" title="multi_match query"></a>multi_match query</h3><p>multi_match 查询允许一个查询值，匹配多个字段<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;multi_match&quot;: &#123;</span><br><span class="line">            &quot;query&quot;: &quot;smith&quot;,</span><br><span class="line">            &quot;fields&quot;: [&quot;title&quot;, &quot;*_name&quot;] // 查询字段 title, 以_name 结尾的字段（例：first_name, last_name)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>multi_match 查询类型</p>
+<ul>
+<li>best_fields: 默认，所有字段都匹配一次，单最后使用相关性评分最高的字段作为该文档的相关性评分 （dis_max 可以实现同样效果)</li>
+<li>most_fields: 所有字段匹配后的相关评分相加后作为该文档的相关性评分 (bool.should 可以实现同样效果)</li>
+<li>cross_fields: 所有字段使用同一的解析器(analyzer or 分词器)，将他们当成一个大字段处理</li>
+<li>phrase: 使用 match_phrase 方式分别查询各个字段，使用相关性评分最高的</li>
+<li>phrase_prefix：使用 match_phrase_prefix 方式分别查询各个字段，使用相关性评分最高的</li>
+<li>bool_prefix: 使用 match_bool_prefix 方式分别查询各个字段，将获得相关性评分相加后作为其文档评分</li>
+</ul>
+<h3 id="query-string-查询"><a href="#query-string-查询" class="headerlink" title="query_string 查询"></a>query_string 查询</h3><p>query_string 查询可以执行一个复杂的查询，它能跨多个字段进行查询（也可以无需指定字段），使用通配符进行查询。查询语句验证严格遵循查询语法，根据特定的操作符进行分词。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">GET /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;query_string&quot; : &#123;</span><br><span class="line">            &quot;query&quot; : &quot;(climbing) OR (collect rock)&quot;,</span><br><span class="line">            &quot;default_field&quot; : &quot;about&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参数说明：</p>
+<ul>
+<li>query: 必填，string， 查询匹配的内容，有特定的查询语法</li>
+<li>default_field: 选填 string. 如果未指定前缀字段，则为查询字词的默认字段。 默认为index.query.default_field索引设置，默认为 <em>，当值为 </em> 时，文档中的所有字段可以被查询和过滤</li>
+<li>allow_leading_wildcard: 选填，boolean, 设置为 *或？ 被允许作为第一个字符。 默认为true</li>
+<li>analyze_wildcard: 选填，boolean, 默认情况下，不分析查询字符串中的通配符术语。 将此值设置为true，将尽力分析这些值</li>
+<li>analyzer: 选填，string 用于分析查询字符串的分析器</li>
+<li>auto_generate_phrase_queries: 选填，boolean, 是否自动生成短语查询,默认False</li>
+<li>boost: 选填，float, 设置查询的提升值。 默认为1.0</li>
+<li>default_operator: 选填，枚举[AND，OR] 假如查询的值为 capital of Hungary , operator=OR: 会被解释为 capital OR of OR Hungary. operator=AND: 会被解释成 capital AND of AND Hungary</li>
+<li>enable_position_increments: 选填，boolean, 设置为true可在结果查询中启用位置增量。 默认为true</li>
+<li>fields: 选填, []string。 指定想要查找的字段名列表</li>
+<li>fuzziness：选填，string， 设置模糊查询的模糊性。 默认为AUTO</li>
+<li>fuzzy_max_expansions: 选填，integer, 控制模糊查询将扩展到的术语数。 默认值为50 </li>
+<li>fuzzy_prefix_length: 选填，integer, 设置模糊查询的前缀长度。 默认值为0</li>
+<li>fuzzy_transposition: 选填，boolean, 是否模糊匹配时允许换位两个相邻的词（ab-&gt;ba)</li>
+<li>lenient: 选填，boolean, 如果设置为true将导致基于格式的失败（例如向数字字段提供文本）被忽略</li>
+<li>max_determinized_states: 选填，interge, 限制允许创建多少个自动机状态regexp查询。 这防止了太难的（例如指数级的）正则表达式。 默认为10000</li>
+<li>minimum_should_match: 选填，string, 用于控制在生成的布尔查询中应该匹配多少个叶子查询。 它可以是绝对值（2），百分比（30％）或两者的组合。</li>
+<li>quote_analyzer: 选填，string, 指定引用文本的解析器, 默认为 search_quote_analyzer</li>
+<li>quote_field_suffix: 选填，string，引文的前缀</li>
+<li>phrase_slop: 选填，integer, 设置短语的默认斜率。 如果为零，则需要精确的短语匹配。 默认值为0</li>
+<li>rewrite: 选填，string, 指定重写查询的方法</li>
+<li>time_zone: 选填，string, 要应用于与日期相关的任何范围查询的时区</li>
+</ul>
+<h4 id="query-查询语法"><a href="#query-查询语法" class="headerlink" title="query 查询语法"></a>query 查询语法</h4><p>1、查询 status 字段包括 active, status:active<br>2、查询 title 字段包含 quick 或者 brown, title:(quick OR brown)<br>3、查询 author 字段包括准确的短语 “john smith”, author:”John Smith”<br>4、查询 first name 字段是否包含 Alice, first\ name:Alice, 空格需要反斜杠转义<br>5、查询字段 book.title, book.date, book.content 包含 quick 或 brown， book.*:(quick OR brown), 注意 在 * 之前需要 反斜杠<br>6、查询 title 字段是否有 non-null 值， <em>exists</em>:title</p>
+<h3 id="simple-query-string-查询"><a href="#simple-query-string-查询" class="headerlink" title="simple_query_string 查询"></a>simple_query_string 查询</h3><p>simple_query_string 查询与 query_string 查询功能类似，但是，如果输入的查询语句语法不合法，其不会抛出不合法的错误，而是直接忽略不合法的部分。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123;</span><br><span class="line">    &quot;simple_query_string&quot; : &#123;</span><br><span class="line">        &quot;query&quot;: &quot;\&quot;fried eggs\&quot; +(eggplant | potato) -frittata&quot;,</span><br><span class="line">        &quot;fields&quot;: [&quot;title^5&quot;, &quot;body&quot;],</span><br><span class="line">        &quot;default_operator&quot;: &quot;and&quot;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>simple_string_query 查询参数和 string_query 查询参数类似，有query, fields, default_operator,<br>all_fields, 等。</p>
+<p>其 query 参数的查询语法与 string_query 是不同的。</p>
+<ul>
+<li>+：表示 AND 操作符</li>
+<li>|: 表示 OR 操作符</li>
+<li>-: 相当于 NOT 操作符</li>
+<li>“: 用于将多个 token 封装成短语查询</li>
+<li><em>: 用于表示某个前缀查询， pre_\</em></li>
+<li>( ): 提升优先级</li>
+<li>~N: 在单词之后表示编辑距离， 短语之后表示短语倾斜旅</li>
+</ul>
+<p>进一步详细介绍参考<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#simple-query-string-boost" target="_blank" rel="noopener">官方文档</a></p>
+<h2 id="Term-level-查询"><a href="#Term-level-查询" class="headerlink" title="Term-level 查询"></a>Term-level 查询</h2><p>Term-level 查询可以用于精确地查找结构化的查询。例如查询 id, 价格，时间区间等。<br>与全文检索的查询不同</p>
+<p>与全文检索类型的检索类型不同，term-level 查询不会使用解析器(analyzer), 而是使用精确匹配查询的字段。</p>
+<p>Term-level 查询类型</p>
+<h3 id="exists-查询"><a href="#exists-查询" class="headerlink" title="exists 查询"></a>exists 查询</h3><p>exists 查询用于查询特点字段是否存在被索引的值。<br>一个字段是否被索引可以通过以下条件判断</p>
+<ul>
+<li>在 JSON 中字段的值为 null 或者 [] 不被索引</li>
+<li>在 mapping（索引管理）中设置了该字段 “index”: false, 该字段不被索引</li>
+<li>字段值长度超过 mapping 设置的 ignore_above 值，该字段不被索引</li>
+<li>字段值不符合格式（malformed)的，且 mapping 中设置了 ignore_malformed, 该字段不被索引</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;exists&quot;: &#123;</span><br><span class="line">            &quot;field&quot;: &quot;education&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>field 字段一下场景也会会索引</p>
+<ul>
+<li>空字符串， 例如 “” 或者 “-“</li>
+<li>数组中包含 null 和其他值， 例如：[null, “foo”]</li>
+<li>在 mapping 中设置的 null-value</li>
+</ul>
+<h3 id="fuzzy-查询"><a href="#fuzzy-查询" class="headerlink" title="fuzzy 查询"></a>fuzzy 查询</h3><p>fuzzy 查询：根据编辑距离(edit distance) 来查询字段值值相似的文档。为了找出相似的词，fuzzy 查询会在指定的编辑距离内生成-组可能的词，然后去精确匹配查询。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;fuzzy&quot;: &#123;</span><br><span class="line">            &quot;about&quot;: &#123;</span><br><span class="line">                &quot;value&quot;: &quot;ro&quot;,</span><br><span class="line">                &quot;fuzziness&quot;: &quot;AUTO&quot;,</span><br><span class="line">                &quot;max_expansions&quot;: 50,</span><br><span class="line">                &quot;prefix_length&quot;: 0,</span><br><span class="line">                &quot;transpositions&quot;: true,</span><br><span class="line">                &quot;rewrite&quot;: &quot;constant_score&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一级参数: field, 必填，object, 想要搜索的字段<br>二级参数，field 参数：</p>
+<ul>
+<li>value: 必填，string, 想要在 field 字段检索的词</li>
+<li>fuzziness: 选填，string, 最大的编辑距离设置， 首选选择 “AUTO”</li>
+<li>max_expansions: 选填，integer, 生成用于查询的相似词的数量，默认 50</li>
+<li>prefix_length: 选填，integer, 在生成查询相似词时，不能修改的前缀位数，默认 0</li>
+<li>rewrite: 选填，string, 用于重写查询的方法。</li>
+</ul>
+<h3 id="ids-查询"><a href="#ids-查询" class="headerlink" title="ids 查询"></a>ids 查询</h3><p>ids 查询： 根据文档 _id 字段进行查询，返回匹配文档<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;ids&quot;: &#123;</span><br><span class="line">            &quot;values&quot;: [&quot;1&quot;, &quot;3&quot;]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="prefix-查询"><a href="#prefix-查询" class="headerlink" title="prefix 查询"></a>prefix 查询</h3><p>prefix 查询： 根据指定前缀查询特定字段的词，返回匹配的文档<br>例如，查询 last_name 字段以 sm 开头的词<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;prefix&quot;: &#123;</span><br><span class="line">            &quot;user&quot;: &#123;</span><br><span class="line">                &quot;value&quot;: &quot;sm&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">or</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;prefix&quot;: &#123;</span><br><span class="line">            &quot;user&quot;: &quot;sm&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>一级参数： field 字段名，用于查询的字段名<br>二级参数： value: 想要在 field 字段查询的值；rewrite: 重新查询的方法</p>
+<h3 id="range-查询"><a href="#range-查询" class="headerlink" title="range 查询"></a>range 查询</h3><p>range 查询: 根据指定的范围查询某一字段，返回匹配文档<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;range&quot;: &#123;</span><br><span class="line">            &quot;age&quot;: &#123;</span><br><span class="line">                &quot;gte&quot;: 20,</span><br><span class="line">                &quot;lt&quot;: 30,</span><br><span class="line">                &quot;boost&quot;: 2.0</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>一级参数： field, 目标查询字段<br>二级参数：</p>
+<ul>
+<li>gt: 选填， 大于</li>
+<li>gte: 选填， 大于等于</li>
+<li>lt: 选填，小于</li>
+<li>lte: 选填，小于等于</li>
+<li>format: 选填，string，时间格式化，用于日期搜索</li>
+<li>relation: 选填, string， 定义区间查询的方式。INTERSECTS(默认), CONTAINS, WITHIN(??)</li>
+<li>time_zone:  选填，string, 设置时区</li>
+<li>boost: 选填，float, 用于相加或减少相关性评分，默认 1.0</li>
+</ul>
+<h3 id="regexp-查询"><a href="#regexp-查询" class="headerlink" title="regexp 查询"></a>regexp 查询</h3><p>regexp 查询：使用正则表达式查询特定字段，返回匹配文档</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;regexp&quot;: &#123;</span><br><span class="line">            &quot;user&quot;: &#123;</span><br><span class="line">                &quot;value&quot;: &quot;k.*y&quot;,</span><br><span class="line">                &quot;flags&quot; : &quot;ALL&quot;,</span><br><span class="line">                &quot;max_determinized_states&quot;: 10000,</span><br><span class="line">                &quot;rewrite&quot;: &quot;constant_score&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一级参数： field, 目标查询字段<br>二级参数 for field:</p>
+<ul>
+<li>value: 必填，string，正则表达式，尊重正则表达式语法，默认情况下表达式限制为 1000 个字符</li>
+<li>flags: 选填，string, 选择正则查询模式</li>
+<li>max_determinized_states: 选填，integer,查询最大自动状态机（automaton states) ，默认 10000</li>
+<li>rewrite: 选填, string, 查询重写方法</li>
+</ul>
+<h3 id="term-查询"><a href="#term-查询" class="headerlink" title="term 查询"></a>term 查询</h3><p>term 查询：在特定字段中，去精确匹配某个词的方式进行查询，返回匹配文档<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  &quot;query&quot;: &#123; </span><br><span class="line">    &quot;term&quot;: &#123;</span><br><span class="line">      &quot;last_name&quot;: &quot;rock&quot;,</span><br><span class="line">      &quot;boost&quot;: 1.0</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>一级参数: field，目标查询字段<br>二级参数:</p>
+<ul>
+<li>value: 必填，string, 在目标字段需要查询的词，精确匹配，包括空格，大小写</li>
+<li>boost: 选填，float, 用于相加或减少相关性评分，默认 1.0</li>
+</ul>
+<p>note: 应该避免使用 term 查询去查询 text 类型的字段。</p>
+<h3 id="terms-查询"><a href="#terms-查询" class="headerlink" title="terms 查询"></a>terms 查询</h3><p>terms 查询：根据提供的多个词（term), 在特定字段中有一个或多个词能精确匹配，则返回文档<br>terms 查询和 term 查询原则一样，区别在于 terms 提供了一组词<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123; </span><br><span class="line">        &quot;terms&quot;: &#123;</span><br><span class="line">            &quot;last_name&quot;: [&quot;rock&quot;, &quot;smith&quot;],</span><br><span class="line">            &quot;boost&quot;: 1.0</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>terms 查询参数与 term 查询一样。</p>
+<h3 id="terms-set-查询"><a href="#terms-set-查询" class="headerlink" title="terms_set 查询"></a>terms_set 查询</h3><p>terms_set 查询：根据提供的多个词，在特定的字段中进行精确匹配，如果匹配数量不少于指定的最小数量，则返回文档。<br>terms_set 与 terms 查询类似，区域在于 terms_set 指定了匹配的最小数量</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">// 创建记录</span><br><span class="line">PUT /_doc/2?refresh</span><br><span class="line">&#123;</span><br><span class="line">    &quot;name&quot;: &quot;Jason Response&quot;,</span><br><span class="line">    &quot;programming_languages&quot;: [&quot;java&quot;, &quot;php&quot;],</span><br><span class="line">    &quot;required_matches&quot;: 2</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;terms_set&quot;: &#123;</span><br><span class="line">            &quot;programming_languages&quot;: &#123;</span><br><span class="line">                &quot;terms&quot;: [&quot;c++&quot;, &quot;java&quot;, &quot;php&quot;],</span><br><span class="line">                &quot;minimum_should_match_field&quot;: &quot;required_matches&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>一级参数： field，目标查询字段<br>二级参数：</p>
+<ul>
+<li>terms: 必填, []string, 用于匹配的多个词</li>
+<li>minimum_should_match_field: 选填，string, 指定数字类型字段，例如 required_matches</li>
+<li>minimum_should_match_script: 选填，string, 用于计算最低匹配数量的通用脚本，适用于当terms 数组中词数量动态变化的时候，具体见<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-terms-set-query.html#terms-set-query-script" target="_blank" rel="noopener">How to use the minimum_should_match_script parameter</a></li>
+</ul>
+<h3 id="type-查询"><a href="#type-查询" class="headerlink" title="type 查询"></a>type 查询</h3><p>type 查询：根据 mapping 中设置的类型进行查询，将被移除。</p>
+<h3 id="wildcard-查询"><a href="#wildcard-查询" class="headerlink" title="wildcard 查询"></a>wildcard 查询</h3><p>wildcard 查询：根据通配符查询词，返回匹配文档<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;wildcard&quot;: &#123;</span><br><span class="line">            &quot;last_name&quot;: &#123;</span><br><span class="line">                &quot;value&quot;: &quot;ki*y&quot;,</span><br><span class="line">                &quot;boost&quot;: 1.0,</span><br><span class="line">                &quot;rewrite&quot;: &quot;constant_score&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>一级参数：field, 查询目标字段<br>二级参数 for field:</p>
+<ul>
+<li>value: 必填，string, 使用通配符构成的值，？匹配一个字符，*匹配0或多个字符，</li>
+<li>boost: 选填，float, 用于相加或减少相关性评分，默认 1.0 </li>
+<li>rewrite: 选填, string, 查询重写方法</li>
+</ul>
+<h2 id="Geo-空间-查询"><a href="#Geo-空间-查询" class="headerlink" title="Geo(空间) 查询"></a>Geo(空间) 查询</h2><p>ES 支持两种类型的 geo 数据, 1、geo_point：支持lat/lon 2、geo_shape: 支持多点，线，圆，多边形，类多边形(multi-polygons) 等。</p>
+<p>查询关键字如下：</p>
+<h3 id="geo-bounding-box-查询"><a href="#geo-bounding-box-查询" class="headerlink" title="geo_bounding_box 查询"></a>geo_bounding_box 查询</h3><p>geo_bounding_box 查询： 允许使用包围盒的方式来查询对应的文档<br>例：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">创建索引 </span><br><span class="line">PUT /my_locations</span><br><span class="line">&#123;</span><br><span class="line">    &quot;mappings&quot;: &#123;</span><br><span class="line">        &quot;properties&quot;: &#123;</span><br><span class="line">            &quot;pin&quot;: &#123;</span><br><span class="line">                &quot;properties&quot;: &#123;</span><br><span class="line">                    &quot;location&quot;: &#123;</span><br><span class="line">                        &quot;type&quot;: &quot;geo_point&quot;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">// 插入数据</span><br><span class="line">PUT /my_locations/_doc/1</span><br><span class="line">&#123;</span><br><span class="line">    &quot;pin&quot;: &#123;</span><br><span class="line">        &quot;location&quot;: &#123;</span><br><span class="line">            &quot;lat&quot;: 40.12,</span><br><span class="line">            &quot;lon&quot;: -71.34</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">// 查询</span><br><span class="line">POST /my_locations/_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;bool&quot;: &#123;</span><br><span class="line">            &quot;must&quot;: &#123;</span><br><span class="line">                &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;filter&quot;: &#123;</span><br><span class="line">                &quot;geo_bounding_box&quot;: &#123;</span><br><span class="line">                    &quot;pin.location&quot;: &#123;</span><br><span class="line">                        &quot;top_left&quot;: &#123;</span><br><span class="line">                            &quot;lat&quot;: 40.73,</span><br><span class="line">                            &quot;lon&quot;: -74.1</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &quot;bottom_right&quot;: &#123;</span><br><span class="line">                            &quot;lat&quot;: 40.01,</span><br><span class="line">                            &quot;lon&quot;: -71.12</span><br><span class="line">                        &#125;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>geo_bounding_box 查询参数（必须在 filter 上下文使用?)</p>
+<ul>
+<li>_name: 必填，string, 用于过滤的字段名，例如：pin.location</li>
+<li>validation_method: 选填，查询模式 STRICT（默认): 严格模式校验坐标格式，COERCE: 尝试将错误坐标格式转为正确的，IGNORE_MALFORMED: 容忍错误的坐标格式</li>
+<li>type: 选填, 枚举（indexed, memory), 定义过滤是操作是在 memory 还是 indexed</li>
+</ul>
+<p>_name 下二级参数： top_left 左上坐标， bottom_right 右下坐标</p>
+<p>note: geo_bounding_box 允许的坐标格式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">// lat lon as properties</span><br><span class="line">&#123;</span><br><span class="line">    &quot;geo_bounding_box&quot;: &#123;</span><br><span class="line">        &quot;pin.location&quot;: &#123;</span><br><span class="line">            &quot;top_left&quot;: &#123;</span><br><span class="line">                &quot;lat&quot;: 40.73,</span><br><span class="line">                &quot;lon&quot;: -74.1</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;bottom_right&quot;: &#123;</span><br><span class="line">                &quot;lat&quot;: 40.01,</span><br><span class="line">                &quot;lon&quot;: -71.12</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// format in [lon, lat]</span><br><span class="line">&#123;</span><br><span class="line">    &quot;geo_bounding_box&quot;: &#123;</span><br><span class="line">        &quot;pin.location&quot;: &#123;</span><br><span class="line">            &quot;top_left&quot;: [-74.1, 40.73],</span><br><span class="line">            &quot;bottom_right&quot;: [-71.12, 40.01]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">// format in lat, lon</span><br><span class="line">&#123;</span><br><span class="line">    &quot;geo_bounding_box&quot;: &#123;</span><br><span class="line">        &quot;pin.location&quot;: &#123;</span><br><span class="line">            &quot;top_left&quot;: &quot;40.73, -74.1&quot;,</span><br><span class="line">            &quot;bottom_right&quot;: &quot;40.01, -71.12&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">// Well-Known Text</span><br><span class="line">&#123;</span><br><span class="line">    &quot;geo_bounding_box&quot;: &#123;</span><br><span class="line">        &quot;pin.location&quot;: &#123;</span><br><span class="line">            &quot;wkt&quot;: &quot;BBOX (-74.1, -71.12, 40.73, 40.01)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">// GeoHash</span><br><span class="line">&#123;</span><br><span class="line">    &quot;geo_bounding_box&quot;: &#123;</span><br><span class="line">        &quot;pin.location&quot;: &#123;</span><br><span class="line">            &quot;top_left&quot;: &quot;dr5r9ydj2y73&quot;,</span><br><span class="line">            &quot;bottom_right&quot;: &quot;drj7teegpus6&quot;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Vertices</span><br><span class="line">&#123;</span><br><span class="line">    &quot;geo_bounding_box&quot;: &#123;</span><br><span class="line">        &quot;pin.location&quot;: &#123;</span><br><span class="line">            &quot;top&quot;: 40.73,</span><br><span class="line">            &quot;left&quot;: -74.1,</span><br><span class="line">            &quot;bottom&quot;: 40.01,</span><br><span class="line">            &quot;right&quot;: -71.12</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="geo-distance-查询"><a href="#geo-distance-查询" class="headerlink" title="geo-distance 查询"></a>geo-distance 查询</h3><p>geo-distance 查询：指定一个坐标点和距离，返回距离辐射之内的坐标的文档<br>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;bool&quot;: &#123;</span><br><span class="line">        &quot;must&quot;: &#123;</span><br><span class="line">            &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        &quot;filter&quot;: &#123;</span><br><span class="line">            &quot;geo_distance&quot;: &#123;</span><br><span class="line">                &quot;distance&quot;: &quot;200km&quot;,</span><br><span class="line">                &quot;pin.location&quot;: &#123;</span><br><span class="line">                    &quot;lat&quot;: 40,</span><br><span class="line">                    &quot;lon&quot;: -70</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>geo_distance 参数</p>
+<ul>
+<li>distance: 必填，string, 指定距离，可用<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/common-options.html#distance-units" target="_blank" rel="noopener">单位</a></li>
+<li>distance_type: 选填，string, 指定距离计算方式，arc(默认)：考虑了地球弧度， plane: 不准确，计算速度快</li>
+<li>_name: 必填，string, 指定过滤的字段名</li>
+<li>validation_method: 选填，查询模式 STRICT（默认): 严格模式校验坐标格式，COERCE: 尝试将错误坐标格式转为正确的，IGNORE_MALFORMED: 容忍错误的坐标格式</li>
+</ul>
+<p>NOTE：查询中接受的坐标格式和 geo_bounding_box 一直</p>
+<h3 id="geo-polygon-查询"><a href="#geo-polygon-查询" class="headerlink" title="geo-polygon 查询"></a>geo-polygon 查询</h3><p>geo-polygon 查询：提供多个坐标点，返回落在坐标点内的文档<br>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">POST /_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;bool&quot;: &#123;</span><br><span class="line">            &quot;must&quot;: &#123;</span><br><span class="line">                &quot;match_all&quot;: []</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;filter&quot;: &#123;</span><br><span class="line">                &quot;pin.locations&quot;: &#123;</span><br><span class="line">                    &quot;points&quot;: [</span><br><span class="line">                        &#123;&quot;lat&quot; : 40, &quot;lon&quot; : -70&#125;,</span><br><span class="line">                        &#123;&quot;lat&quot; : 30, &quot;lon&quot; : -80&#125;,</span><br><span class="line">                        &#123;&quot;lat&quot; : 20, &quot;lon&quot; : -90&#125;</span><br><span class="line">                    ]</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>geo_polygon 参数：</p>
+<ul>
+<li>_name: 必填，string, 指定过滤的字段名</li>
+<li>validation_method: 选填，查询模式 STRICT（默认): 严格模式校验坐标格式，COERCE: 尝试将错误坐标格式转为正确的，IGNORE_MALFORMED: 容忍错误的坐标格式</li>
+</ul>
+<p>NOTE: 其他表示坐标格式化方式, 参见<a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-geo-polygon-query.html" target="_blank" rel="noopener">官方文档</a></p>
+<h3 id="geo-shape-查询"><a href="#geo-shape-查询" class="headerlink" title="geo_shape 查询"></a>geo_shape 查询</h3><p>geo_shape 查询： 根据提供的地图图形，以一定规则查询文档。使用 geo_shape 查询需要被查询的字段使用 geo_shape 的字段类型。<br>例如：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">// 创建索引</span><br><span class="line">PUT /my_locations</span><br><span class="line">&#123;</span><br><span class="line">    &quot;mappings&quot;: &#123;</span><br><span class="line">        &quot;properties&quot;: &#123;</span><br><span class="line">            &quot;location&quot;: &#123;</span><br><span class="line">                &quot;type&quot;: &quot;geo_shape&quot;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">// 插入数据</span><br><span class="line">PUT /my_locations/_doc/1</span><br><span class="line">&#123;</span><br><span class="line">    &quot;area&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;Wind &amp; Wetter, Berlin, Germany&quot;,</span><br><span class="line">        &quot;location&quot;: &#123;</span><br><span class="line">            &quot;type&quot;: &quot;point&quot;,</span><br><span class="line">            &quot;coordinates&quot;: [13.400544, 52.530286]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PUT /my_locations/_doc/2</span><br><span class="line">&#123;</span><br><span class="line">    &quot;area&quot;: &#123;</span><br><span class="line">        &quot;name&quot;: &quot;Berlin, Germany&quot;</span><br><span class="line">        &quot;location&quot;: &#123;</span><br><span class="line">            &quot;type&quot;: &quot;envelope&quot;,</span><br><span class="line">            &quot;coordinates&quot; : [[13.0, 53.0], [14.0, 52.0]]</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>例如：定义一个矩形的空间区域，找到再该区域内的文档<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">POST /my_locations/area/_search</span><br><span class="line">&#123;</span><br><span class="line">    &quot;query&quot;: &#123;</span><br><span class="line">        &quot;bool&quot;: &#123;</span><br><span class="line">            &quot;must&quot;: &#123;</span><br><span class="line">                &quot;match_all&quot;: &#123;&#125;</span><br><span class="line">            &#125;,</span><br><span class="line">            &quot;filter&quot;: &#123;</span><br><span class="line">                &quot;geo_shape&quot;: &#123;</span><br><span class="line">                    &quot;location&quot;: &#123;</span><br><span class="line">                        &quot;shape&quot;: &#123;</span><br><span class="line">                            &quot;type&quot;: &quot;envelope&quot;,</span><br><span class="line">                            &quot;coordinates&quot; : [[13.0, 53.0], [14.0, 52.0]]</span><br><span class="line">                        &#125;,</span><br><span class="line">                        &quot;relation&quot;: &quot;within&quot;</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>geo_shape 查询中 relation 参数取值：</p>
+<ul>
+<li>INTERSECTS： 默认， 查询几何相交的所有文档</li>
+<li>WITHIN: 返回查询内几何范围内的所有文档</li>
+<li>CONTAINS: 返回包含查询几何的所有文件</li>
+<li>DISJOINT: 返回不在几何辐射范围内的文档？</li>
+</ul>
+<p>geo_shape 还支持一种称为 pre-indexed shape(预索引形状)的查询。我们可以预先定义好一个空间图形，并未这个图形定义一个逻辑名称，这样每次查询就不需要都提供坐标。详见<a href="https://www.elastic.co/guide/en/elasticsearch/reference/5.6/query-dsl-geo-shape-query.html#_pre_indexed_shape" target="_blank" rel="noopener">官方文档</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ES/" rel="tag">#ES</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/20/es-base/" rel="next" title="ElasticSearch 查询基础">
+                <i class="fa fa-chevron-left"></i> ElasticSearch 查询基础
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/02/27/es-mapping/" rel="prev" title="Elasticsearch 映射配置（Mapping)">
+                Elasticsearch 映射配置（Mapping) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2020/02/24/es-dsl/" data-title="Elasticsearch DSL QUERY" data-url="https://feifeiyum.github.io/2020/02/24/es-dsl/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">40</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">6</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">12</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#概念"><span class="nav-number">1.</span> <span class="nav-text">概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Leaf-query-clauses"><span class="nav-number">1.1.</span> <span class="nav-text">Leaf query clauses</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Compound-query-clauses"><span class="nav-number">1.2.</span> <span class="nav-text">Compound query clauses</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Query-and-filter-context"><span class="nav-number">2.</span> <span class="nav-text">Query and filter context</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#相关性评分（relevance-score"><span class="nav-number">2.1.</span> <span class="nav-text">相关性评分（relevance score)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询上下文-Query-context"><span class="nav-number">2.2.</span> <span class="nav-text">查询上下文(Query context)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤上下文-Filter-context"><span class="nav-number">2.3.</span> <span class="nav-text">过滤上下文(Filter context)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组合查询-Compound-queries"><span class="nav-number">3.</span> <span class="nav-text">组合查询 (Compound queries)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#bool-查询"><span class="nav-number">3.1.</span> <span class="nav-text">bool 查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#使用-minimum-should-match"><span class="nav-number">3.1.1.</span> <span class="nav-text">使用 minimum_should_match</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Boosting-查询"><span class="nav-number">3.2.</span> <span class="nav-text">Boosting 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#constant-score-query"><span class="nav-number">3.3.</span> <span class="nav-text">constant_score query</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dis-max-query-分离最大化查询"><span class="nav-number">3.4.</span> <span class="nav-text">dis_max query(分离最大化查询)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#function-score-query"><span class="nav-number">3.5.</span> <span class="nav-text">function_score query</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#全文检索（Full-text-queries"><span class="nav-number">4.</span> <span class="nav-text">全文检索（Full text queries)</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Intervals-query"><span class="nav-number">4.1.</span> <span class="nav-text">Intervals query</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#match-query"><span class="nav-number">4.2.</span> <span class="nav-text">match query</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#match-bool-prefix-查询"><span class="nav-number">4.3.</span> <span class="nav-text">match_bool_prefix 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#match-phrase-查询"><span class="nav-number">4.4.</span> <span class="nav-text">match_phrase 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#match-phrase-prefix"><span class="nav-number">4.5.</span> <span class="nav-text">match_phrase_prefix</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#multi-match-query"><span class="nav-number">4.6.</span> <span class="nav-text">multi_match query</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#query-string-查询"><span class="nav-number">4.7.</span> <span class="nav-text">query_string 查询</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#query-查询语法"><span class="nav-number">4.7.1.</span> <span class="nav-text">query 查询语法</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#simple-query-string-查询"><span class="nav-number">4.8.</span> <span class="nav-text">simple_query_string 查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Term-level-查询"><span class="nav-number">5.</span> <span class="nav-text">Term-level 查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#exists-查询"><span class="nav-number">5.1.</span> <span class="nav-text">exists 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fuzzy-查询"><span class="nav-number">5.2.</span> <span class="nav-text">fuzzy 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ids-查询"><span class="nav-number">5.3.</span> <span class="nav-text">ids 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#prefix-查询"><span class="nav-number">5.4.</span> <span class="nav-text">prefix 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#range-查询"><span class="nav-number">5.5.</span> <span class="nav-text">range 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#regexp-查询"><span class="nav-number">5.6.</span> <span class="nav-text">regexp 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#term-查询"><span class="nav-number">5.7.</span> <span class="nav-text">term 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#terms-查询"><span class="nav-number">5.8.</span> <span class="nav-text">terms 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#terms-set-查询"><span class="nav-number">5.9.</span> <span class="nav-text">terms_set 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#type-查询"><span class="nav-number">5.10.</span> <span class="nav-text">type 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#wildcard-查询"><span class="nav-number">5.11.</span> <span class="nav-text">wildcard 查询</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Geo-空间-查询"><span class="nav-number">6.</span> <span class="nav-text">Geo(空间) 查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#geo-bounding-box-查询"><span class="nav-number">6.1.</span> <span class="nav-text">geo_bounding_box 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#geo-distance-查询"><span class="nav-number">6.2.</span> <span class="nav-text">geo-distance 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#geo-polygon-查询"><span class="nav-number">6.3.</span> <span class="nav-text">geo-polygon 查询</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#geo-shape-查询"><span class="nav-number">6.4.</span> <span class="nav-text">geo_shape 查询</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
