@@ -1,0 +1,903 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="database,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.ico?v=5.0.1">
+
+
+
+
+
+
+<meta name="description" content="摘要本文主要介绍 sqly 是一款基于 golang 官方的 database/sql 包的扩展，其主要目标是简化官方包的查询操作和事务操作等，其设计思想参考了python 轻量级 MySQLdb 封装模块 torndb。">
+<meta name="keywords" content="database">
+<meta property="og:type" content="article">
+<meta property="og:title" content="sqly - database&#x2F;sql 的扩展">
+<meta property="og:url" content="https://feifeiyum.github.io/2020/09/05/go-sqly/index.html">
+<meta property="og:site_name" content="Feifeiyu Blog">
+<meta property="og:description" content="摘要本文主要介绍 sqly 是一款基于 golang 官方的 database/sql 包的扩展，其主要目标是简化官方包的查询操作和事务操作等，其设计思想参考了python 轻量级 MySQLdb 封装模块 torndb。">
+<meta property="og:locale" content="en">
+<meta property="og:updated_time" content="2020-09-07T13:28:07.195Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="sqly - database&#x2F;sql 的扩展">
+<meta name="twitter:description" content="摘要本文主要介绍 sqly 是一款基于 golang 官方的 database/sql 包的扩展，其主要目标是简化官方包的查询操作和事务操作等，其设计思想参考了python 轻量级 MySQLdb 封装模块 torndb。">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"right","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: undefined,
+      author: 'Author'
+    }
+  };
+</script>
+
+  <title> sqly - database/sql 的扩展 | Feifeiyu Blog </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="en">
+
+  
+
+
+
+  <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?5a371a2226c6314a87526ead1ac12e96";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-right page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta custom-logo">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Feifeiyu Blog</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle">Chance Favors Only the Prepared Mind</p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-node">
+          <a href="/categories/node/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-anchor"></i> <br>
+            
+            Nodejs
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-front">
+          <a href="/categories/front/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-question-circle"></i> <br>
+            
+            Front
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-base">
+          <a href="/categories/base/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-arrows"></i> <br>
+            
+            基础
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-python">
+          <a href="/categories/python/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-python"></i> <br>
+            
+            Python
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-golang">
+          <a href="/categories/golang/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-code"></i> <br>
+            
+            Golang
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-database">
+          <a href="/categories/database/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-database"></i> <br>
+            
+            Database
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-essay">
+          <a href="/categories/essay/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br>
+            
+            随笔
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/." rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                sqly - database/sql 的扩展
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">Posted on</span>
+            <time itemprop="dateCreated" datetime="2020-09-05T10:18:54+08:00" content="2020-09-05">
+              2020-09-05
+            </time>
+          </span>
+
+          
+            <span class="post-category">
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">In</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2020/09/05/go-sqly/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2020/09/05/go-sqly/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h3 id="摘要"><a href="#摘要" class="headerlink" title="摘要"></a>摘要</h3><p>本文主要介绍 <a href="https://github.com/FeifeiyuM/sqly" target="_blank" rel="noopener">sqly</a> 是一款基于 golang 官方的 database/sql 包的扩展，其主要目标是简化官方包的查询操作和事务操作等，其设计思想参考了python 轻量级 MySQLdb 封装模块 <a href="https://torndb.readthedocs.io/en/latest/" target="_blank" rel="noopener">torndb</a>。</p>
+<a id="more"></a>
+<h3 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h3><p>最初有编写 sqly 这个想法，是笔者在自学 go 语言过程中发现 database/sql 这个包对于用惯了 torndb 和 Django ORM 的笔者来说实在是太不友好了。<br>本着对 torndb 这个包的欣赏，笔者决定用 golang 来模仿一个类似的包, 同时也能像 golang 中的 json 包一样像 json.Unmarshal 方法一样方便 将sql 查询结果反射成 struct 对象。</p>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>开始介绍 sqly 之前我们先来看一下采用 Golang 官方的 database/sql 包如何实现数据的查询和响应 go 对象(struct) 的反序列化。   </p>
+<p>例1<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> user <span class="keyword">struct</span> &#123;</span><br><span class="line">    ID <span class="keyword">int64</span> <span class="string">`json:"id"`</span></span><br><span class="line">    Name <span class="keyword">string</span> <span class="string">`json:"name"`</span></span><br><span class="line">    Gender <span class="keyword">int8</span> <span class="string">`json:"gender"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">db, err := sql.Open(<span class="string">"mysql"</span>, <span class="string">"addr"</span>)</span><br><span class="line">u := user&#123;&#125;</span><br><span class="line">rows := db.QueryRow(<span class="string">"SELECT `id`, `name`, `gender` FROM `user` WHERE `id`=?"</span>, <span class="number">1</span>)</span><br><span class="line">rows.Scan(&amp;u.ID, &amp;u.Name, &amp;u.Sex)</span><br></pre></td></tr></table></figure></p>
+<p>从例1中，我们可以看出，采用官方包的查询需要将 user 对象中的各个属性字段和查询语句中对应的字段一一对应起来，例如： u.ID 对应 <code>id</code>字段，u.Name 对应 <code>name</code> 字段，假如 user 表字段比较多的情况下，字段的一一对应在开发过程中将会是很大的一分部工作量，而且很容易出现错误。  更有甚者，在采用 SELECT * 语句的情况下，这将更是一种灾难了。    </p>
+<p>有没有一种方案能够自动完成 struct 中属性字段和数据库中字段的一一映射，实现从数据库数据到 go 对象的反向序列化。此时我们可以联想到 Golang 的反射 <a href="https://golang.org/pkg/reflect/" target="_blank" rel="noopener">reflect</a> 就可以解决这个问题，当然由于反射效率较低，执行速度肯定会比原生的方式慢。 如 例2。</p>
+<p>例2，一个简单的根据reflect 方法来实现 struct 对象反序列化例子<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">ToStruct</span><span class="params">(rows *sql.Rows, to <span class="keyword">interface</span>&#123;&#125;)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">    v := reflect.ValueOf(to)</span><br><span class="line">    <span class="keyword">if</span> v.Elem().Type().Kind() != reflect.Sturct &#123;</span><br><span class="line">        <span class="keyword">return</span> errors.New(<span class="string">"Expect a struct"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    dist := []<span class="keyword">interface</span>&#123;&#125;&#123;&#125;</span><br><span class="line">    cols, err := rows.Columns()</span><br><span class="line">    addrMap := <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;  <span class="comment">// 用于承载赋值指针</span></span><br><span class="line">    <span class="keyword">for</span> i := <span class="number">0</span>; i &lt; v.Elem().NumField(); i++ &#123;</span><br><span class="line">        <span class="comment">// 反射出各个字段的赋值地址</span></span><br><span class="line">        val := v.Elem().Field(i)</span><br><span class="line">        col := v.Elem().Type().Field(i).Tag.Get(<span class="string">"sql"</span>)</span><br><span class="line">        addrMap[col] = val.Addr().Interface()</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> _, col := <span class="keyword">range</span> cols &#123;</span><br><span class="line">        <span class="comment">// 将struct 中各个字段的地址与 sql 结果中的各个字段一一对应</span></span><br><span class="line">        dist = <span class="built_in">append</span>(dist, addrMap[col])</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> rows.Scan(scan_dest...)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">type</span> user <span class="keyword">struct</span> &#123;</span><br><span class="line">        ID <span class="keyword">int64</span> <span class="string">`json:"id" sql:"id"`</span> <span class="comment">//sql tag 就是反射时候去的值，与数据库列名一致</span></span><br><span class="line">        Name <span class="keyword">string</span> <span class="string">`json:"name" sql:"name"`</span></span><br><span class="line">        Gender <span class="keyword">int8</span> <span class="string">`json:"gender" sql:"gender`</span></span><br><span class="line">    &#125;</span><br><span class="line">    db, err := sql.Open(<span class="string">"mysql"</span>, <span class="string">"addr"</span>)</span><br><span class="line">    rows, err := db.Query(<span class="string">"SELECT `id`, `name`, `gender` FROM `user` WHERE `id`=?"</span>, <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        <span class="built_in">panic</span>(err)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> rows.Next() &#123;</span><br><span class="line">        u := &amp;user&#123;&#125;</span><br><span class="line">        ToStruct(rows, u)</span><br><span class="line">        fmt.Println(u.ID, u.Name, u.Gender)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>本文的主角 sqly 核心原理就基于此</p>
+</blockquote>
+<p>通过反射实现 sql 查询结果到 struct 对象反序列化的库还有 <a href="https://github.com/jmoiron/sqlx" target="_blank" rel="noopener">sqlx</a>, <a href="https://github.com/huandu/go-sqlbuilder" target="_blank" rel="noopener">go-sqlbuilder</a> 等。<br>大家是否发现 sqly 是否和 sqlx 有一定渊源，在笔者开发 sqly 过程中偶然发现了 sqlx 这包，经研究发现其实现的功能和我要开发的功能也有一定类似，而且恰好笔者姓名拼音中有较多的 “y”, 就愉快地命名为 sqly。</p>
+<h3 id="功能特点"><a href="#功能特点" class="headerlink" title="功能特点"></a>功能特点</h3><ul>
+<li><p>简化 database/sql 原生的查询结果到 struct 的赋值方式，可以像 json.Unmarshal 一样方便得将数据库查询结果反射成 golang 友好的数据类型。  </p>
+</li>
+<li><p>抽象出了 Query, Get, Update, Insert, Delete 方法和保留了原有的 Exec 方法  </p>
+</li>
+<li><p>支持事务操作的封装，通过闭包函数封装了开启事务，提交事务的所有过程</p>
+</li>
+<li><p>支持胶囊操作，屏蔽事务操作和非事务操作在语句编写上的差异，避免事务和非事务数据库连接混用的问题</p>
+</li>
+</ul>
+<h3 id="sqly-使用"><a href="#sqly-使用" class="headerlink" title="sqly 使用"></a>sqly 使用</h3><h4 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h4><p>go get github.com/FeifeiyuM/sqly   </p>
+<p>在 go.mod 中添加 github.com/FeifeiyuM/sqly latest</p>
+<h4 id="连接数据库"><a href="#连接数据库" class="headerlink" title="连接数据库"></a>连接数据库</h4><p>func New(opt <em>sqly.Option) (</em>SqlY, error)<br>例3，数据库连接<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">   opt := &amp;sqly.Option&#123;</span><br><span class="line">	Dsn:             <span class="string">"test:mysql123@tcp(127.0.0.1:3306)/test_db?charset=utf8mb4&amp;collation=utf8mb4_unicode_ci&amp;parseTime=true&amp;loc=Local"</span>,</span><br><span class="line">	DriverName:      <span class="string">"mysql"</span>,</span><br><span class="line">	MaxIdleConns:    <span class="number">0</span>,</span><br><span class="line">	MaxOpenConns:    <span class="number">0</span>,</span><br><span class="line">	ConnMaxLifeTime: <span class="number">0</span>,</span><br><span class="line">&#125;</span><br><span class="line">   db, err := sqly.New(opt)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"test error"</span>)</span><br><span class="line">   &#125;</span><br><span class="line">   ...</span><br></pre></td></tr></table></figure></p>
+<p>配置属性字段说明：</p>
+<ul>
+<li>Dsn: 格式化的数据库服务访问参数 例如：<a href="https://github.com/go-sql-driver/mysql" target="_blank" rel="noopener">mysql</a> 格式化方式如下 [username[:password]@][protocol[(address)]]/dbname[?param1=value1&amp;…&amp;paramN=valueN]</li>
+<li>DriverName: 使用的数据库驱动类型 例如： mysql, postgres, sqlite3 等,(在使用 sqly 时需要引入具体驱动包)</li>
+<li>MaxIdleConns: 最大空闲连接数</li>
+<li>MaxOpenConns: 最大连接池大小</li>
+<li>ConnMaxLifeTime: 连接的生命周期</li>
+</ul>
+<blockquote>
+<blockquote>
+<p>tips: 如果要使用 time.Time 的字段类型, 连接数据库的 dsn 配置中加上 parseTime=true  </p>
+</blockquote>
+</blockquote>
+<p>详细配置可以查看 【Go database/sql tutorial](<a href="http://go-database-sql.org/connection-pool.html)" target="_blank" rel="noopener">http://go-database-sql.org/connection-pool.html)</a>, <a href="https://github.com/go-sql-driver/mysql" target="_blank" rel="noopener">go-sql-driver/mysql</a> 等。</p>
+<h4 id="非事务操作"><a href="#非事务操作" class="headerlink" title="非事务操作"></a>非事务操作</h4><blockquote>
+<p>通用执行操作，执行任意一条sql语句（插入，更新，删除，建表等），查询语句可以执行，但不返回结果   </p>
+</blockquote>
+<p>func (s <em>SqlY) Exec(query string, args …interface{}) (</em>Affected, error)<br>func (s <em>SqlY) ExecCtx(ctx context.Context, query string, args …interface{}) (</em>Affected, error)</p>
+<p>例4，使用 Exec 方法建表<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">query := <span class="string">"CREATE TABLE `account` ("</span> +</span><br><span class="line">		<span class="string">"`id` int(10) unsigned NOT NULL AUTO_INCREMENT,"</span> +</span><br><span class="line">		<span class="string">"`nickname` varchar(32) COLLATE utf8mb4_unicode_ci NOT NULL,"</span> +</span><br><span class="line">		<span class="string">"`avatar` varchar(200) COLLATE utf8mb4_unicode_ci DEFAULT NULL COMMENT 'avatar url',"</span> +</span><br><span class="line">		<span class="string">"`mobile` varchar(16) COLLATE utf8mb4_unicode_ci NOT NULL COMMENT 'mobile number',"</span> +</span><br><span class="line">		<span class="string">"`email` varchar(320) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'email',"</span> +</span><br><span class="line">		<span class="string">"`password` varchar(64) COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '' COMMENT 'password',"</span> +</span><br><span class="line">		<span class="string">"`role` tinyint(4) DEFAULT NULL COMMENT 'role',"</span> +</span><br><span class="line">		<span class="string">"`expire_time` datetime DEFAULT NULL COMMENT 'expire_time',"</span> +</span><br><span class="line">		<span class="string">"`is_valid` tinyint(4) DEFAULT NULL COMMENT 'is_valid',"</span> +</span><br><span class="line">		<span class="string">"`create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,"</span> +</span><br><span class="line">		<span class="string">"PRIMARY KEY (`id`),"</span> +</span><br><span class="line">		<span class="string">"UNIQUE KEY `mobile_index` (`mobile`),"</span> +</span><br><span class="line">		<span class="string">"KEY `email_index` (`email`)"</span> +</span><br><span class="line">		<span class="string">") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;"</span></span><br><span class="line">aff, err = db.Exec(query)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"create table error"</span>)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(aff)</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>affected 对象介绍</p>
+</blockquote>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Affected <span class="keyword">struct</span> &#123;</span><br><span class="line">    LastId <span class="keyword">int64</span>  <span class="comment">// 影响的最后一条记录id</span></span><br><span class="line">    RowsAffected   <span class="comment">// 总共影响的行数</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>插入一条数据     </p>
+</blockquote>
+<p>func (s <em>SqlY) Insert(query string, args …interface{}) (</em>Affected, error)<br>func (s <em>SqlY) InsertCtx(ctx context.Context, query string, args …interface{}) (</em>Affected, error)   </p>
+<p>例5, 插入一条数据<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">query := <span class="string">"INSERT INTO `account` (`nickname`, `mobile`, `email`, `role`) VALUES (?, ?, ?, ?);"</span></span><br><span class="line"></span><br><span class="line">aff, err := db.Insert(query, <span class="string">"nick_test3"</span>, <span class="string">"18812311235"</span>, <span class="string">"test@foxmail.com"</span>, <span class="number">1</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"failed to insert data"</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> aff != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"auto_id: %v, affected_rows: %v\n"</span>, aff.LastId, aff.RowsAffected)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>插入多条数据   </p>
+</blockquote>
+<p>func (s <em>SqlY) InsertMany(query string, args [][]interface{}) (</em>Affected, error)<br>func (s <em>SqlY) InsertManyCtx(ctx context.Context, query string, args [][]interface{}) (</em>Affected, error)   </p>
+<p>例6，插入多条数据<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">query := <span class="string">"INSERT INTO `account` (`nickname`, `mobile`, `email`, `role`) VALUES (?, ?, ?, ?);"</span></span><br><span class="line"><span class="keyword">var</span> vals = [][]<span class="keyword">interface</span>&#123;&#125;&#123;</span><br><span class="line">    &#123;<span class="string">"testq1"</span>, <span class="string">"18112342345"</span>, <span class="string">"testq1@foxmail.com"</span>, <span class="number">1</span>&#125;,</span><br><span class="line">    &#123;<span class="string">"testq2"</span>, <span class="string">"18112342346"</span>, <span class="string">"testq2@foxmail.com"</span>, <span class="literal">nil</span>&#125;,</span><br><span class="line">&#125;</span><br><span class="line">aff, err = db.InsertMany(query, vals)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    fmt.Sprintln(<span class="string">"create account error"</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    fmt.Sprintln(<span class="string">"create accounts error"</span>)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(aff)</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>更新一条数据    </p>
+</blockquote>
+<p>func (s <em>SqlY) Update(query string, args …interface{}) (</em>Affected, error)<br>func (s <em>SqlY) ExecCtx(ctx context.Context, query string, args …interface{}) (</em>Affected, error)   </p>
+<p>例7，更新一条数据<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">query := <span class="string">"UPDATE `account` SET `nickname`=? WHERE `mobile`=?;"</span></span><br><span class="line">aff, err := db.Update(query, <span class="string">"lucy"</span>, <span class="string">"18812311231"</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"update accounts error"</span>)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(aff)</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>执行多条更新语句（其本质是将多条update语句以封号隔开后一次性提交）</p>
+</blockquote>
+<p>func (s <em>SqlY) UpdateMany(query string, args [][]interface{}) (</em>Affected, error)<br>func (s <em>SqlY) UpdateManyCtx(ctx context.Context, query string, args [][]interface{}) (</em>Affected, error)</p>
+<p>例8，多条更新语句<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">query := <span class="string">"UPDATE `account` SET `password`=? WHERE `id`=?"</span>  </span><br><span class="line"><span class="keyword">var</span> params [][]<span class="keyword">interface</span>&#123;&#125;</span><br><span class="line"><span class="keyword">for</span> _, id := <span class="keyword">range</span> ids &#123;</span><br><span class="line">	hash := sha1.New()</span><br><span class="line">	_, _ = hash.Write([]<span class="keyword">byte</span>(strconv.FormatInt(id.ID, <span class="number">10</span>)))</span><br><span class="line">	passwd := hex.EncodeToString(hash.Sum(<span class="literal">nil</span>))</span><br><span class="line">	params = <span class="built_in">append</span>(params, []<span class="keyword">interface</span>&#123;&#125;&#123;passwd, id.ID&#125;)</span><br><span class="line">&#125;</span><br><span class="line">aff, err := db.UpdateMany(query, params)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"update accounts error"</span>)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(aff)</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>删除操作</p>
+</blockquote>
+<p>func (s <em>SqlY) Delete(query string, args …interface{}) (</em>Affected, error)<br>func (s <em>SqlY) DeleteCtx(ctx context.Context, query string, args …interface{}) (</em>Affected, error)   </p>
+<p>例9，删除操作<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">query := <span class="string">"DELETE FROM `account` WHERE `mobile`=?;"</span></span><br><span class="line">aff, err := db.Delete(query, <span class="string">"18812311231"</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Sprintln(<span class="string">"delete account error"</span>)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(aff)</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>查询一条数据 (dest 传值是指针类型)</p>
+</blockquote>
+<p>func (s <em>SqlY) Get(dest interface{}, query string, args …interface{}) error<br>func (s </em>SqlY) GetCtx(ctx context.Context, dest interface{}, query string, args …interface{}) error</p>
+<p>例10，查询单条数据<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// account 对象定义， </span></span><br><span class="line"><span class="comment">// sql tag 对应的就是 例4中对应的 account 表各个字段名</span></span><br><span class="line"><span class="keyword">type</span> Account <span class="keyword">struct</span> &#123;</span><br><span class="line">	ID         <span class="keyword">int64</span>      <span class="string">`sql:"id" json:"id"`</span></span><br><span class="line">	Nickname   <span class="keyword">string</span>     <span class="string">`sql:"nickname" json:"nickname"`</span></span><br><span class="line">	Avatar     sqly.NullString <span class="string">`sql:"avatar" json:"avatar"`</span></span><br><span class="line">	Email      <span class="keyword">string</span>     <span class="string">`sql:"email" json:"email"`</span></span><br><span class="line">	Mobile     <span class="keyword">string</span>     <span class="string">`sql:"mobile" json:"mobile"`</span></span><br><span class="line">	Role       sqly.NullInt32     <span class="string">`sql:"role" json:"role"`</span></span><br><span class="line">	Password   <span class="keyword">string</span>     <span class="string">`sql:"password" json:"password"`</span></span><br><span class="line">	ExpireTime sqly.NullTime <span class="string">`sql:"expire_time" json:"expire_time"`</span></span><br><span class="line">	IsValid sqly.NullBool <span class="string">`sql:"is_valid" json:"is_valid"`</span></span><br><span class="line">	CreateTime time.Time  <span class="string">`sql:"create_time" json:"create_time"`</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 先实例化 Account</span></span><br><span class="line">acc := <span class="built_in">new</span>(Account)</span><br><span class="line"><span class="comment">// 查询语句</span></span><br><span class="line">query := <span class="string">"SELECT * FROM `account` WHERE `mobile`=?"</span></span><br><span class="line"><span class="comment">// Get 函数能将查询结果自动反射至 acc 对象</span></span><br><span class="line">err := db.Get(acc, query, <span class="string">"18812311235"</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"query account error"</span>)</span><br><span class="line">&#125;</span><br><span class="line">accStr, err := json.Marshal(acc1)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"marshal acc error"</span>)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(accStr)</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>查询数据 （dest 必须为数组指针）</p>
+</blockquote>
+<p>func (s <em>SqlY) Query(dest interface{}, query string, args …interface{}) error<br>func (s </em>SqlY) QueryCtx(ctx context.Context, dest interface{}, query string, args …interface{}) error   </p>
+<p>例11，查询多条数据<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> accs []*Account <span class="comment">// Account 为例10 定义的 Account 结构体</span></span><br><span class="line"></span><br><span class="line">query := <span class="string">"SELECT * FROM `account` WHERE `mobile` IN ?"</span></span><br><span class="line"><span class="keyword">var</span> mobiles = []<span class="keyword">string</span>&#123;<span class="string">"18812311235"</span>, <span class="string">"18112342346"</span>&#125;</span><br><span class="line"></span><br><span class="line">err := db.Query(&amp;accs, query, mobiles)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    fmt.Printf(<span class="string">"query accounts error"</span>)</span><br><span class="line">&#125;</span><br><span class="line">accsStr, _ := json.Marshal(accs)</span><br><span class="line">fmt.Println(<span class="string">"marshal acc error"</span>)</span><br></pre></td></tr></table></figure></p>
+<h4 id="事务操作"><a href="#事务操作" class="headerlink" title="事务操作"></a>事务操作</h4><p>sqly 的事务封装和非事务封装方法基本类似，其最主要的特点是支持将事务操作封装成回调函数，在闭包内执行，屏蔽事务开启，提交，回滚等一系列操作。    </p>
+<blockquote>
+<p>开启事务</p>
+</blockquote>
+<p>func (s <em>SqlY) NewTrans() (</em>Trans, error)</p>
+<blockquote>
+<p>事务提交   </p>
+</blockquote>
+<p>func (t *Trans) Commit() error</p>
+<blockquote>
+<p>事务回滚   </p>
+</blockquote>
+<p>func (t *Trans) Rollback()</p>
+<blockquote>
+<p>事务通用执行    </p>
+</blockquote>
+<p>func (t <em>Trans) Exec(query string, args …interface{}) (</em>Affected, error)<br>func (t <em>Trans) ExecCtx(ctx context.Context, query string, args …interface{}) (</em>Affected, error) </p>
+<blockquote>
+<p>事务插入   </p>
+</blockquote>
+<p>func (t <em>Trans) Insert(query string, args …interface{}) (</em>Affected, error)<br>func (t <em>Trans) InsertCtx(ctx context.Context, query string, args …interface{}) (</em>Affected, error)</p>
+<blockquote>
+<p>事务插入多条    </p>
+</blockquote>
+<p>func (t <em>Trans) InsertMany(query string, args [][]interface{}) (</em>Affected, error)<br>func (t <em>Trans) InsertManyCtx(ctx context.Context, query string, args [][]interface{}) (</em>Affected, error)</p>
+<blockquote>
+<p>事务更新    </p>
+</blockquote>
+<p>func (t <em>Trans) Update(query string, args …interface{}) (</em>Affected, error)<br>func (t <em>Trans) UpdateCtx(ctx context.Context, query string, args …interface{}) (</em>Affected, error)</p>
+<blockquote>
+<p>事务更新多条    </p>
+</blockquote>
+<p>func (t <em>Trans) UpdateMany(query string, args [][]interface{}) (</em>Affected, error)<br>func (t <em>Trans) UpdateManyCtx(ctx context.Context, query string, args [][]interface{}) (</em>Affected, error)</p>
+<blockquote>
+<p>事务删除    </p>
+</blockquote>
+<p>func (t <em>Trans) Delete(query string, args …interface{}) (</em>Affected, error)<br>func (t <em>Trans) DeleteCtx(ctx context.Context, query string, args …interface{}) (</em>Affected, error)</p>
+<blockquote>
+<p>事务查询单条数据    </p>
+</blockquote>
+<p>func (t <em>Trans) Get(dest interface{}, query string, args …interface{}) error<br>func (t </em>Trans) GetCtx(ctx context.Context, dest interface{}, query string, args …interface{}) error</p>
+<blockquote>
+<p>事务查询  </p>
+</blockquote>
+<p>func (t <em>Trans) Query(dest interface{}, query string, args …interface{}) error<br>func (t </em>Trans) QueryCtx(ctx context.Context, dest interface{}, query string, args …interface{}) error</p>
+<p>例12，事务操作<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">db, err := sqly.New(opt)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"test error"</span>)</span><br><span class="line">&#125;</span><br><span class="line">   <span class="comment">// 开始事务</span></span><br><span class="line">tx, err := sqly.NewTrans()</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"failed to begin transaction"</span>)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line">   <span class="comment">// 回滚</span></span><br><span class="line"><span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">	_ = tx.Rollback()</span><br><span class="line">&#125;()</span><br><span class="line"><span class="comment">// 执行事务</span></span><br><span class="line"><span class="comment">// 查询</span></span><br><span class="line">acc := <span class="built_in">new</span>(Account)</span><br><span class="line">query = <span class="string">"SELECT * FROM `account` WHERE `mobile`=?"</span></span><br><span class="line">ctx := context.TODO()</span><br><span class="line">err = tx.GetCtx(ctx, acc, query, <span class="string">"18812311235"</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Printf(<span class="string">"get accout error"</span>)</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line">   <span class="comment">// 更新</span></span><br><span class="line">query = <span class="string">"UPDATE `account` SET `is_valid`=? WHERE id=?"</span></span><br><span class="line">aff, err := tx.UpdateCtx(ctx, query, <span class="literal">true</span>, acc.ID)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"update account error"</span>)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(aff)</span><br><span class="line"><span class="comment">// 删除</span></span><br><span class="line">query = <span class="string">"DELETE FROM `account` WHERE id!=?"</span></span><br><span class="line">_, err = tx.DeleteCtx(ctx, query, acc.ID)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"delete accounts error"</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 插入</span></span><br><span class="line">query = <span class="string">"INSERT INTO `account` (`nickname`, `mobile`, `email`, `role`) VALUES (?, ?, ?, ?);"</span></span><br><span class="line">aff, err = tx.InsertCtx(ctx, query, <span class="string">"nick_ruby"</span>, <span class="string">"13565656789"</span>, <span class="literal">nil</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"insert account error"</span>)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(aff)</span><br><span class="line"><span class="comment">// 提交</span></span><br><span class="line">_ = tx.Commit()</span><br></pre></td></tr></table></figure></p>
+<p>从例12 事务操作中可以看出，1、事务操作函数 query, delete, update, insert, exec 用法和非事务操作一致；2、在开发过程中需要显式初始化事务，提交事务，回滚事务。     </p>
+<p>为了简化事务操作，sqly 通过回调函数的方式封装了事务初始化，提交，回滚的相关操作，因而不需要每次在一个事务中都编写这部分逻辑   </p>
+<blockquote>
+<p>事务封装   </p>
+</blockquote>
+<p>type TxFunc func(tx <em>Trans) (interface{}, error)  // 回调函数，业务逻辑都在回调函数内执行<br>func (s </em>SqlY) Transaction(txFunc TxFunc) (interface{}, error)  </p>
+<p>例13，事务封装操作<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line">db, err := sqly.New(opt)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"test error"</span>)</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 通过 Transaction 进入事务操作</span></span><br><span class="line"><span class="comment">// 如果返回的 err 不为空，会执行回滚操作</span></span><br><span class="line">res, err := db.Transaction(<span class="function"><span class="keyword">func</span><span class="params">(tx *sqly.Trans)</span> <span class="params">(<span class="keyword">interface</span>&#123;&#125;, error)</span></span> &#123;</span><br><span class="line">    ctx := context.TODO()</span><br><span class="line">    <span class="comment">// 查询</span></span><br><span class="line">    acc := <span class="built_in">new</span>(Account)</span><br><span class="line">    query = <span class="string">"SELECT * FROM `account` WHERE `mobile`=?"</span></span><br><span class="line">    err = tx.GetCtx(ctx, acc, query, <span class="string">"18812311235"</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Printf(<span class="string">"get account error"</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 更新</span></span><br><span class="line">    query = <span class="string">"UPDATE `account` SET `is_valid`=? WHERE id=?"</span></span><br><span class="line">    aff, err := tx.UpdateCtx(ctx, query, <span class="literal">true</span>, acc.ID)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">"update account error"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(aff)</span><br><span class="line">    <span class="comment">// 删除</span></span><br><span class="line">    query = <span class="string">"DELETE FROM `account` WHERE id!=?"</span></span><br><span class="line">    _, err = tx.DeleteCtx(ctx, query, acc.ID)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">"delete accounts error"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 插入</span></span><br><span class="line">    query = <span class="string">"INSERT INTO `account` (`nickname`, `mobile`, `email`, `role`) VALUES (?, ?, ?, ?);"</span></span><br><span class="line">    aff, err = tx.InsertCtx(ctx, query, <span class="string">"nick_ruby"</span>, <span class="string">"13565656789"</span>, <span class="literal">nil</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">"insert account error"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    fmt.Println(aff)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">if</span> err := <span class="literal">nil</span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">"do transaction error"</span>)</span><br><span class="line">&#125;   </span><br><span class="line">fmt.Println(res)</span><br></pre></td></tr></table></figure></p>
+<h4 id="胶囊操作"><a href="#胶囊操作" class="headerlink" title="胶囊操作"></a>胶囊操作</h4><p>从例13中可以看出，在执行事务操作的时候，事务句柄 tx 需要显式传递，有时候常常不注意会将事务和非事务操作混用。 严重时会导致数据库死锁的发生，下面聊聊笔者真实线上发生一次事故。   </p>
+<p>例14，事务和非事务混用的死锁案例<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 开始数据库连接时，允许最大连接数为 3</span></span><br><span class="line">opt := &amp;sqly.Option&#123;</span><br><span class="line">	Dsn:             <span class="string">"test:mysql123@tcp(127.0.0.1:3306)/test_db?charset=utf8mb4&amp;collation=utf8mb4_unicode_ci&amp;parseTime=true&amp;loc=Local"</span>,</span><br><span class="line">	DriverName:      <span class="string">"mysql"</span>,</span><br><span class="line">	MaxIdleConns:    <span class="number">0</span>,</span><br><span class="line">	MaxOpenConns:    <span class="number">2</span>,</span><br><span class="line">	ConnMaxLifeTime: <span class="number">0</span>,</span><br><span class="line">&#125;</span><br><span class="line">db, err := sqly.New(opt)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"test error"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">updateAccount</span><span class="params">(mobile <span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">interface</span>, error)</span></span> &#123;</span><br><span class="line">       <span class="keyword">return</span> db.Transaction(<span class="function"><span class="keyword">func</span><span class="params">(tx *sqly.Trans)</span> <span class="params">(<span class="keyword">interface</span>&#123;&#125;, error)</span></span> &#123;</span><br><span class="line">           ctx := context.TODO()</span><br><span class="line">           <span class="comment">// 查询</span></span><br><span class="line">           acc := <span class="built_in">new</span>(Account)</span><br><span class="line">           query = <span class="string">"SELECT * FROM `account` WHERE `mobile`=?"</span></span><br><span class="line">           <span class="comment">// 此处采用非事务查询</span></span><br><span class="line">           err = db.GetCtx(ctx, acc, query, <span class="string">"18812311235"</span>)</span><br><span class="line">           <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">           &#125;</span><br><span class="line">           <span class="comment">// 更新</span></span><br><span class="line">           query = <span class="string">"UPDATE `account` SET `is_valid`=? WHERE id=?"</span></span><br><span class="line">           aff, err := tx.UpdateCtx(ctx, query, <span class="literal">true</span>, acc.ID)</span><br><span class="line">           <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">               <span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">return</span> aff, <span class="literal">nil</span></span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>查询连接数分析：<br>1、创建数据库连接的时候，定义了最大连接池大小为 2。<br>2、在 updateAccount 方法中，在执行 db.Transaction() 的时候会申请一个数据库连接(用于事务的连接)，并且该连接会保持至函数执行结束后释放。<br>3、在回调函数内，db.GetCtx() 由于没有使用事务句柄，会重新申请一个数据库连接，查询执行完后立即释放。<br>在函数 updateAccount 没有并发的情况下，可以正常执行。如果存在并发调用 updateAccount 函数时，db.Transaction() 执行的时候就会将连接数耗尽，当代码执行至 db.GetCtx()方法时会一直等待获取连接池中释放的连接，GetCtx() 的等待又会造成 db.Transaction() 函数一直无法结束，无法释放其申请的连接，从而造成了一个典型的死锁。</p>
+<p>为了解决开发中由于编写代码时的疏忽而造成类似的问题， sqly 封装了<strong>胶囊操作</strong>，尽可能屏蔽了事务操作和非事务操作的差异。只要开启了事务，所有查询都只能使用事务的 Query()等方法，非事务操作采用非事务的 Query() 等方法，而且不需要显式得再函数直接传递事务句柄 tx。</p>
+<h5 id="胶囊操作原理"><a href="#胶囊操作原理" class="headerlink" title="胶囊操作原理"></a>胶囊操作原理</h5><p>从例13，中可以观察到，在执行查询，更新，插入，删除等方法的时候，除了变量 tx 句柄，还有个 go 的 上下文 context 参数 ctx。ctx 可以用于携带上下文信息，利用 ctx 这个特点，我们可以将是否开启事务和事务句柄等信息封装入 ctx 中传递。</p>
+<h5 id="胶囊操作方法"><a href="#胶囊操作方法" class="headerlink" title="胶囊操作方法"></a>胶囊操作方法</h5><blockquote>
+<p>初始化胶囊句柄</p>
+</blockquote>
+<p>func NewCapsule(sqlY <em>SqlY) </em>Capsule </p>
+<blockquote>
+<p>胶囊封装(用法和事务封装 Transaction() 类似)</p>
+</blockquote>
+<p>type CapFunc func(ctx context.Context) (interface{}, error)<br>func (c *Capsule) StartCapsule(ctx context.Context, isTrans bool, capFunc CapFunc) (interface{}, error)<br>StartCapsule 开启胶囊操作，参数 ctx 上下文用于携带胶囊句柄，isTrans 是否开始事务 true 开启。 CapFunc 回调函数，所有逻辑都在该回调内实现</p>
+<blockquote>
+<p>胶囊通用执行</p>
+</blockquote>
+<p>func (c <em>Capsule) Exec(ctx context.Context, query string, args …interface{}) (</em>Affected, error)   </p>
+<blockquote>
+<p>胶囊插入</p>
+</blockquote>
+<p>func (c <em>Capsule) Insert(ctx context.Context, query string, args …interface{}) (</em>Affected, error)   </p>
+<blockquote>
+<p>胶囊插入多条数据</p>
+</blockquote>
+<p>func (c <em>Capsule) InsertMany(ctx context.Context, query string, args [][]interface{}) (</em>Affected, error)</p>
+<blockquote>
+<p>胶囊更新</p>
+</blockquote>
+<p>func (c <em>Capsule) Update(ctx context.Context, query string, args …interface{}) (</em>Affected, error)</p>
+<blockquote>
+<p>胶囊更新多条</p>
+</blockquote>
+<p>func (c <em>Capsule) UpdateMany(ctx context.Context, query string, args [][]interface{}) (</em>Affected, error)   </p>
+<blockquote>
+<p>胶囊删除</p>
+</blockquote>
+<p>func (c <em>Capsule) Delete(ctx context.Context, query string, args …interface{}) (</em>Affected, error)</p>
+<blockquote>
+<p>胶囊查询单条数据</p>
+</blockquote>
+<p>func (c *Capsule) Get(ctx context.Context, dest interface{}, query string, args …interface{}) error</p>
+<blockquote>
+<p>胶囊查询</p>
+</blockquote>
+<p>func (c *Capsule) Query(ctx context.Context, dest interface{}, query string, args …interface{}) error</p>
+<p>例15，胶囊事务操作<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">db, err := New(opt)  <span class="comment">// 初始化sqly(数据库连接）</span></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	t.Error(err)</span><br><span class="line">&#125;</span><br><span class="line">capsule := NewCapsule(db)  <span class="comment">// 创建一个胶囊句柄</span></span><br><span class="line">ctx := context.TODO()  <span class="comment">// 胶囊查询必须携带 context 参数</span></span><br><span class="line">   <span class="comment">// isTrans=true 开始事务查询</span></span><br><span class="line">ret, err := capsule.StartCapsule(ctx, <span class="literal">true</span>, <span class="function"><span class="keyword">func</span><span class="params">(ctx context.Context)</span> <span class="params">(<span class="keyword">interface</span>&#123;&#125;, error)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 在回调函数内执行相关数据库操作</span></span><br><span class="line">	<span class="keyword">var</span> accs []*Account</span><br><span class="line">	query := <span class="string">"SELECT `id`, `nickname`, `avatar`, `email`, `mobile`, `password`, `role` "</span> +</span><br><span class="line">		<span class="string">"FROM `account`"</span></span><br><span class="line">	err := capsule.Query(ctx, &amp;accs, query, <span class="string">"18812311232"</span>)  <span class="comment">// 执行查询</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	query = <span class="string">"UPDATE `account` SET `nickname`=? WHERE `id`=?"</span> </span><br><span class="line">	_, err = capsule.Update(ctx, query, <span class="string">"nick_trans2"</span>, accs[<span class="number">0</span>].ID)  <span class="comment">// 更新</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	query = <span class="string">"UPDATE `account` SET `avatar`=? WHERE `id`=?"</span></span><br><span class="line">	aff, err := capsule.Update(ctx, query, <span class="string">"test2.png"</span>, accs[<span class="number">1</span>].ID) <span class="comment">// 更新</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	query = <span class="string">"INSERT INTO `account` (`nickname`, `mobile`, `email`, `role`) "</span> +</span><br><span class="line">		<span class="string">"VALUES (?, ?, ?, ?);"</span></span><br><span class="line">	aff, err = capsule.Insert(ctx, query, <span class="string">"nick_test2"</span>, <span class="string">"18712311235"</span>, <span class="string">"testx1@foxmail.com"</span>, <span class="number">1</span>)  <span class="comment">// 插入</span></span><br><span class="line">       <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">           <span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">       &#125;</span><br><span class="line">	<span class="keyword">return</span> aff, <span class="literal">nil</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">       fmt.Println(<span class="string">"err"</span>, err.Error())</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(ret)</span><br></pre></td></tr></table></figure></p>
+<p>例16，胶囊非事务操作<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">   db, err := New(opt)  <span class="comment">// 初始化sqly(数据库连接）</span></span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	t.Error(err)</span><br><span class="line">&#125;</span><br><span class="line">capsule := NewCapsule(db)  <span class="comment">// 创建一个胶囊句柄</span></span><br><span class="line">ctx := context.TODO()  <span class="comment">// 胶囊查询必须携带 context 参数</span></span><br><span class="line">   <span class="comment">// isTrans=false 不开启事务</span></span><br><span class="line">ret, err := capsule.StartCapsule(ctx, <span class="literal">false</span>, <span class="function"><span class="keyword">func</span><span class="params">(ctx context.Context)</span> <span class="params">(<span class="keyword">interface</span>&#123;&#125;, error)</span></span> &#123;</span><br><span class="line">       <span class="comment">// 在回调函数内执行相关数据库操作</span></span><br><span class="line">	<span class="keyword">var</span> accs []*Account</span><br><span class="line">	query := <span class="string">"SELECT `id`, `nickname`, `avatar`, `email`, `mobile`, `password`, `role` "</span> +</span><br><span class="line">		<span class="string">"FROM `account`"</span></span><br><span class="line">	err := capsule.Query(ctx, &amp;accs, query, <span class="string">"18812311232"</span>)  <span class="comment">// 查询</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	query = <span class="string">"UPDATE `account` SET `nickname`=? WHERE `id`=?"</span></span><br><span class="line">	_, err = capsule.Update(ctx, query, <span class="string">"nick_trans3"</span>, accs[<span class="number">0</span>].ID) <span class="comment">// 更新</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	query = <span class="string">"UPDATE `account` SET `avatar`=? WHERE `id`=?"</span></span><br><span class="line">	aff, err := capsule.Update(ctx, query, <span class="string">"test3.png"</span>, accs[<span class="number">1</span>].ID)  <span class="comment">// 更新</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	query = <span class="string">"INSERT INTO `account` (`nickname`, `mobile`, `email`, `role`) "</span> +</span><br><span class="line">		<span class="string">"VALUES (?, ?, ?, ?);"</span></span><br><span class="line">	aff, err = capsule.Insert(ctx, query, <span class="string">"nick_test3"</span>, <span class="string">"18712311235"</span>, <span class="string">"testx1@foxmail.com"</span>, <span class="number">1</span>)  <span class="comment">// 插入</span></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, err</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> aff, <span class="literal">nil</span></span><br><span class="line">&#125;)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"err"</span>, err.Error())</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(ret)</span><br></pre></td></tr></table></figure></p>
+<p>从例15和例16两个例子中观察可以发现，采用胶囊操作时，事务操作和非事务操作区别仅在于 StartCapsule 中是否开启事务，其他操作都一致。因此开发过程中只需要在开始时考虑事务的问题，其他时候都不需要关注是否开启事务，减少出错的环节。</p>
+<h3 id="sqly-支持的数据类型"><a href="#sqly-支持的数据类型" class="headerlink" title="sqly 支持的数据类型"></a>sqly 支持的数据类型</h3><h4 id="struct"><a href="#struct" class="headerlink" title="struct"></a>struct</h4><ul>
+<li><p>在 struct 中定义的属性必须是可以被 database/sql Scan 的数据类型，int64, float64, bool, []byte, string, time.Time, nil 等</p>
+</li>
+<li><p>假如数据库中 Email 字段允许为空，且其值为空时，在 Scan 的时候会出现异常，因此 sql 官方封装了 sql.NullTime, sql.NullBool, sql.NullFloat64, sql.NullInt64, sql.NullInt32, sql.NullString。sqly 对其进行了进一步封装，sqly.NullTime, sqly.NullBool, sqly.NullFloat64, sqly.NullInt64, sqly.NullInt32, sqly.NullString。 其特点是在使用 json.Marshal 时对应字段为空的会自动解析为 null; json 字符串使用 json.UnMarshal 时，会自动解析为对应的 sqly.NullTime 等扩展类型</p>
+</li>
+<li><p>如果使用 tinyint 或 int 类表示 bool 字段类型，例如：0 为 false, 1或<strong>其它</strong>为 true, 在定义字段类型时，可以使用 sqly.Boolean 类型来支持，在 scan 的时候会字段将 int 类型转换成 bool, 如果值只有 0 或 1 可以使用原生 bool</p>
+</li>
+</ul>
+<p>例17 定义一个 struct 对象(来自例10)<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// sql tag 对应的就是 例4中对应的 account 表各个字段名</span></span><br><span class="line"><span class="keyword">type</span> Account <span class="keyword">struct</span> &#123;</span><br><span class="line">	ID         <span class="keyword">int64</span>      <span class="string">`sql:"id" json:"id"`</span></span><br><span class="line">	Nickname   <span class="keyword">string</span>     <span class="string">`sql:"nickname" json:"nickname"`</span></span><br><span class="line">	Avatar     sqly.NullString <span class="string">`sql:"avatar" json:"avatar"`</span></span><br><span class="line">	Email      <span class="keyword">string</span>     <span class="string">`sql:"email" json:"email"`</span></span><br><span class="line">	Mobile     <span class="keyword">string</span>     <span class="string">`sql:"mobile" json:"mobile"`</span></span><br><span class="line">	Role       sqly.NullInt32     <span class="string">`sql:"role" json:"role"`</span></span><br><span class="line">	Password   <span class="keyword">string</span>     <span class="string">`sql:"password" json:"password"`</span></span><br><span class="line">	ExpireTime sqly.NullTime <span class="string">`sql:"expire_time" json:"expire_time"`</span></span><br><span class="line">	IsValid sqly.NullBool <span class="string">`sql:"is_valid" json:"is_valid"`</span></span><br><span class="line">	CreateTime time.Time  <span class="string">`sql:"create_time" json:"create_time"`</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">acc := Account&#123;</span><br><span class="line">	ID:         <span class="number">1</span>,</span><br><span class="line">	Nickname:   <span class="string">"nickname"</span>,</span><br><span class="line">	Avatar:     NullString&#123;String: <span class="string">""</span>, Valid: <span class="literal">false</span>&#125;,</span><br><span class="line">	Email:      <span class="string">"123@gmail.com"</span>,</span><br><span class="line">	Mobile:     <span class="string">""</span>,</span><br><span class="line">	Role:       NullInt32&#123;Int32: <span class="number">1</span>, Valid: <span class="literal">true</span>&#125;,</span><br><span class="line">	Password:   <span class="string">""</span>,</span><br><span class="line">	IsValid:    NullBool&#123;Bool: <span class="literal">true</span>, Valid: <span class="literal">true</span>&#125;,</span><br><span class="line">	CreateTime: time.Now(),</span><br><span class="line">	AddTime:    NullTime&#123;Time: time.Now(), Valid: <span class="literal">true</span>&#125;,</span><br><span class="line">	Birthday:   NullTime&#123;&#125;,</span><br><span class="line">&#125;</span><br><span class="line">   <span class="comment">// 传入的一定需要 acc 对象的指针</span></span><br><span class="line">b, err := json.Marshal(&amp;acc)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	t.Error(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(<span class="keyword">string</span>(b))</span><br><span class="line"><span class="comment">// output &#123;"id":1,"nickname":"nickname","avatar":null,"email":"123@gmail.com","mobile":"","role":1,"password":"","is_valid":true,"stature":null,"create_time":"2020-09-07T15:58:28.113861+08:00","add_time":"2020-09-07T15:58:28.113861+08:00","birthday":null&#125;</span></span><br><span class="line">   </span><br><span class="line"><span class="comment">// 如果是值传入，无法达到预期的效果</span></span><br><span class="line">b, err = json.Marshal(acc)</span><br><span class="line">fmt.Println(<span class="keyword">string</span>(b))</span><br><span class="line"><span class="comment">// output &#123;"id":1,"nickname":"nickname","avatar":&#123;"String":"","Valid":false&#125;,"email":"123@gmail.com","mobile":"","role":&#123;"Int32":1,"Valid":true&#125;,"password":"","is_valid":&#123;"Bool":true,"Valid":true&#125;,"stature":&#123;"Float64":0,"Valid":false&#125;,"create_time":"2020-09-07T16:00:52.217445+08:00","add_time":&#123;"Time":"2020-09-07T16:00:52.217445+08:00","Valid":true&#125;,"birthday":&#123;"Time":"0001-01-01T00:00:00Z","Valid":false&#125;&#125;</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="struct-嵌套支持"><a href="#struct-嵌套支持" class="headerlink" title="struct 嵌套支持"></a>struct 嵌套支持</h4><p>例18，嵌套 struct 支持<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">db, err := New(opt)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	<span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> Contact <span class="keyword">struct</span> &#123;</span><br><span class="line">	Email  <span class="keyword">string</span> <span class="string">`sql:"email" json:"email"`</span></span><br><span class="line">	Mobile <span class="keyword">string</span> <span class="string">`sql:"mobile" json:"mobile"`</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> Base <span class="keyword">struct</span> &#123;</span><br><span class="line">	Contact  Contact    <span class="string">`json:"contact"`</span></span><br><span class="line">	Nickname <span class="keyword">string</span>     <span class="string">`sql:"nickname" json:"nickname"`</span></span><br><span class="line">	Avatar   NullString <span class="string">`sql:"avatar" json:"avatar"`</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> Acc <span class="keyword">struct</span> &#123;</span><br><span class="line">	ID         <span class="keyword">int64</span>     <span class="string">`sql:"id" json:"id"`</span></span><br><span class="line">	Role       NullInt32 <span class="string">`sql:"role" json:"role"`</span></span><br><span class="line">	Base       Base      <span class="string">`json:"base"`</span></span><br><span class="line">	Password   <span class="keyword">string</span>    <span class="string">`sql:"password" json:"password"`</span></span><br><span class="line">	IsValid    NullBool  <span class="string">`sql:"is_valid" json:"is_valid"`</span></span><br><span class="line">       CreateTime time.Time <span class="string">`sql:"create_time" json:"create_time"`</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> accs []*Acc</span><br><span class="line">query := <span class="string">"SELECT `id`, `avatar`, `email`, `mobile`, `nickname`, `password`, `role`, `create_time`, `is_valid` FROM `account`;"</span></span><br><span class="line">err = db.Query(&amp;accs, query)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	fmt.Println(<span class="string">"query account error"</span>)</span><br><span class="line">       reutrn </span><br><span class="line">&#125;</span><br><span class="line">resStr, _ := json.Marshal(accs)</span><br><span class="line">fmt.Println(<span class="keyword">string</span>(resStr))</span><br></pre></td></tr></table></figure></p>
+<h4 id="可-scan-类型及其数组支持"><a href="#可-scan-类型及其数组支持" class="headerlink" title="可 scan 类型及其数组支持"></a>可 scan 类型及其数组支持</h4><p>支持 int, int32, int64, string, time.Time,<br>和其数组 []int, []int32, []int64, []string, []time.Time</p>
+<p>例19，可Scan 类型支持<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">   db, err := New(opt)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	t.Error(err)</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="comment">// int</span></span><br><span class="line">query := <span class="string">"SELECT COUNT(*) FROM `account`;"</span></span><br><span class="line"><span class="keyword">var</span> num <span class="keyword">int</span></span><br><span class="line">err = db.Get(&amp;num, query)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	t.Error(err)</span><br><span class="line">&#125;</span><br><span class="line">   fmt.Println(<span class="string">"num"</span>, num)</span><br><span class="line">   <span class="comment">// time</span></span><br><span class="line">   query := <span class="string">"SELECT `create_time` FROM `account` limit 1;"</span></span><br><span class="line">create := &amp;NullTime&#123;&#125;</span><br><span class="line">err = db.Get(create, query)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	t.Error(err)</span><br><span class="line">&#125;</span><br><span class="line">fmt.Println(<span class="string">"create"</span>, create)</span><br></pre></td></tr></table></figure></p>
+<h4 id="map-string-inteface"><a href="#map-string-inteface" class="headerlink" title="map[string]inteface{}"></a>map[string]inteface{}</h4><p>(目前支持只 MySQL)，支持还不完善，不推荐使用<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">db, err := New(opt)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	t.Error(err)</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> accs []<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;</span><br><span class="line">query := <span class="string">"SELECT * FROM `account`;"</span></span><br><span class="line"></span><br><span class="line">err = db.Query(&amp;accs, query, <span class="literal">nil</span>)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">	t.Error(err)</span><br><span class="line">&#125;</span><br><span class="line">accStr, _ := json.Marshal(accs)</span><br><span class="line">fmt.Printf(<span class="string">"rows %s"</span>, accStr)</span><br></pre></td></tr></table></figure></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>sqly 只是一个简化数据库操作的工具，其设计逻辑同 torndb 类似，需要手写 sql 语句，不提供类似 go-sqlbuilder 或 gorm 这些框架强大的生成 sql 的 api。   </p>
+<p>sqly 仓库地址： <a href="https://github.com/FeifeiyuM/sqly" target="_blank" rel="noopener">https://github.com/FeifeiyuM/sqly</a>  欢迎来踩，贡献您的宝贵建议</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/database/" rel="tag">#database</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/27/es-mapping/" rel="next" title="Elasticsearch 映射配置（Mapping)">
+                <i class="fa fa-chevron-left"></i> Elasticsearch 映射配置（Mapping)
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2020/09/05/go-sqly/" data-title="sqly - database/sql 的扩展" data-url="https://feifeiyum.github.io/2020/09/05/go-sqly/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/portrait/me2.jpg" alt="Feifeiyu">
+          <p class="site-author-name" itemprop="name">Feifeiyu</p>
+          <p class="site-description motion-element" itemprop="description">HTML/CSS/JS, Node.js, Python/Django, FPGA</p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/">
+              <span class="site-state-item-count">41</span>
+              <span class="site-state-item-name">posts</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              
+                <span class="site-state-item-count">7</span>
+                <span class="site-state-item-name">categories</span>
+              
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              
+                <span class="site-state-item-count">13</span>
+                <span class="site-state-item-name">tags</span>
+              
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/feifeiyum" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Friendly Link
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://program.dengshilong.org/" title="邓世龙学习笔记" target="_blank">邓世龙学习笔记</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#摘要"><span class="nav-number">1.</span> <span class="nav-text">摘要</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#背景"><span class="nav-number">2.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">3.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#功能特点"><span class="nav-number">4.</span> <span class="nav-text">功能特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sqly-使用"><span class="nav-number">5.</span> <span class="nav-text">sqly 使用</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#安装依赖"><span class="nav-number">5.1.</span> <span class="nav-text">安装依赖</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#连接数据库"><span class="nav-number">5.2.</span> <span class="nav-text">连接数据库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非事务操作"><span class="nav-number">5.3.</span> <span class="nav-text">非事务操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#事务操作"><span class="nav-number">5.4.</span> <span class="nav-text">事务操作</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#胶囊操作"><span class="nav-number">5.5.</span> <span class="nav-text">胶囊操作</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#胶囊操作原理"><span class="nav-number">5.5.1.</span> <span class="nav-text">胶囊操作原理</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#胶囊操作方法"><span class="nav-number">5.5.2.</span> <span class="nav-text">胶囊操作方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#sqly-支持的数据类型"><span class="nav-number">6.</span> <span class="nav-text">sqly 支持的数据类型</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#struct"><span class="nav-number">6.1.</span> <span class="nav-text">struct</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#struct-嵌套支持"><span class="nav-number">6.2.</span> <span class="nav-text">struct 嵌套支持</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#可-scan-类型及其数组支持"><span class="nav-number">6.3.</span> <span class="nav-text">可 scan 类型及其数组支持</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#map-string-inteface"><span class="nav-number">6.4.</span> <span class="nav-text">map[string]inteface{}</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2016 - 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Feifeiyu</span>
+</div>
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="http://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"feifeiyu"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+
+
+
+
+
+  
+  
+  
+
+  
+
+  
+<script type="text/javascript" async src="//push.zhanzhang.baidu.com/push.js">
+</script>
+
+
+</body>
+</html>
